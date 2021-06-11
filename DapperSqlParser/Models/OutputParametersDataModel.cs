@@ -9,5 +9,6 @@ namespace DapperSqlParser.Models
         [JsonProperty("StoredProcedureName")] public string Name { get; set; }
         [JsonProperty("ParameterName")] public string ParameterName { get; set; }
         [JsonProperty("SystemTypeName")] public string TypeName { get; set; }
+        [JsonProperty("MaxLength")] public int MaxLength { get; set; }
     }
 }
