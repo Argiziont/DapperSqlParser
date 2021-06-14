@@ -46,6 +46,7 @@ namespace DapperSqlParser.Services
             {
                 return await ExecuteAsync(spName);
             }
+
             await using var connection = new SqlConnection(_connectionString); 
 
             return await connection.QueryAsync<TOutParams>(spName, param: inputParams, commandType: CommandType.StoredProcedure);

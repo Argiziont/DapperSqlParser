@@ -1,13 +1,11 @@
-﻿using System;
+﻿using DapperSqlParser.Extensions;
 using DapperSqlParser.Models;
-using System.Collections.Generic;
+using DapperSqlParser.Services;
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DapperSqlParser.Extensions;
-using DapperSqlParser.Services;
-using SpClient;
 
 namespace DapperSqlParser
 {
@@ -16,57 +14,44 @@ namespace DapperSqlParser
         private const string ConnectionString = "Server= .\\SQLExpress;Database=DapperSPTestDb;Trusted_Connection=True;MultipleActiveResultSets=true";
         private const string NameSpaceName = "SpClient";
 
-        //private static async Task Main()
-        //{
-        //    var spService = new StoredProcedureService(ConnectionString);
-
-        //    // var result =await GetSpDataAsync("sp_GetNestedCategoryByParentIdAndCompanyId");
-        //    var spList = await spService.GetSpListAsync();
-        //    var paramsList = new List<StoredProcedureParameters>();
-        //    foreach (var sp in spList)
-        //    {
-        //        var spParameter = await spService.GetSpDataAsync(sp.Name);
-        //        paramsList.Add(spParameter);
-        //    }
-
-        //    var spNamespace = await CreateSpClient(paramsList.ToArray(), NameSpaceName);
-
-        //    // This will get the current PROJECT directory
-        //    var projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent?.Parent?.FullName;
-        //    var filePath = Path.Combine(projectPath ?? throw new InvalidOperationException(), @"GeneratedFile\spClient.cs");
-
-        //    await File.WriteAllTextAsync(filePath, spNamespace);
-        //}
-
         private static async Task Main()
         {
-            #region onlyInput(working)
+            var spService = new StoredProcedureService(ConnectionString);
 
-            var dapperExecutorIn = new DapperExecutor<sp_UpdateProductStateInput>(ConnectionString);
-            var spUpdateProductStateClient = new sp_UpdateProductState(dapperExecutorIn);
-
-            await spUpdateProductStateClient.Execute(new sp_UpdateProductStateInput() { ProductId = 6, ProductState = 2 });
-
-            #endregion
-
-            #region onlyOutput(working)
-
-            var dapperExecutorOut = new DapperExecutor<EmptyInputParams, sp_GetAllProductsOutput>(ConnectionString);
-            var spGetAllProductsClient = new sp_GetAllProducts(dapperExecutorOut);
-
-            var spGetAllProductsClientResult = await spGetAllProductsClient.Execute();
-
-            #endregion
-
-            #region InputOutput(working)
-
-            var dapperExecutor = new DapperExecutor<sp_CountProductsWithCompanyInput, sp_CountProductsWithCompanyOutput>(ConnectionString);
-            var spCountProductsWithCompanyClient = new sp_CountProductsWithCompany(dapperExecutor);
-
-            var spCountProductsWithCompanyResult = await spCountProductsWithCompanyClient.Execute(new sp_CountProductsWithCompanyInput(){CompanyId = 1});
-
-            #endregion
+            var paramsList = await spService.GenerateModelsListAsync();
+            var spNamespace = await CreateSpClient(paramsList.ToArray(), NameSpaceName);
+            await WriteGeneratedNamespaceToClientFile(spNamespace);
         }
+
+        //private static async Task Main()
+        //{
+        //    #region onlyInput(working)
+
+        //    var dapperExecutorIn = new DapperExecutor<sp_UpdateProductStateInput>(ConnectionString);
+        //    var spUpdateProductStateClient = new sp_UpdateProductState(dapperExecutorIn);
+
+        //    await spUpdateProductStateClient.Execute(new sp_UpdateProductStateInput() { ProductId = 6, ProductState = 2 });
+
+        //    #endregion
+
+        //    #region onlyOutput(working)
+
+        //    var dapperExecutorOut = new DapperExecutor<EmptyInputParams, sp_GetAllProductsOutput>(ConnectionString);
+        //    var spGetAllProductsClient = new sp_GetAllProducts(dapperExecutorOut);
+
+        //    var spGetAllProductsClientResult = await spGetAllProductsClient.Execute();
+
+        //    #endregion
+
+        //    #region InputOutput(working)
+
+        //    var dapperExecutor = new DapperExecutor<sp_CountProductsWithCompanyInput, sp_CountProductsWithCompanyOutput>(ConnectionString);
+        //    var spCountProductsWithCompanyClient = new sp_CountProductsWithCompany(dapperExecutor);
+
+        //    var spCountProductsWithCompanyResult = await spCountProductsWithCompanyClient.Execute(new sp_CountProductsWithCompanyInput(){CompanyId = 1});
+
+        //    #endregion
+        //}
 
         public static async Task<string> CreateSpDataModelForOutputParams(StoredProcedureParameters parameters)
         {
@@ -77,7 +62,7 @@ namespace DapperSqlParser
 
             foreach (var field in parameters.OutputParametersDataModels.Select(p =>
                 new string(
-                         $"\t\t{(p.ParameterName == null ?$"": $"[Newtonsoft.Json.JsonProperty(\"{p.ParameterName}\")]")} " +//If not nullable -> required
+                         $"\t\t{(p.ParameterName == null ? $"" : $"[Newtonsoft.Json.JsonProperty(\"{p.ParameterName}\")]")} " +//If not nullable -> required
                            $"{(p.IsNullable ? "" : "[System.ComponentModel.DataAnnotations.Required()] ")}" +//Json field
                            $"public {p.TypeName} " +//Type name
                            $"{(p.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{p.ParameterName.Replace("-", "_")}")} " +//Param name
@@ -160,7 +145,7 @@ namespace DapperSqlParser
                     $"\n\t\t\treturn _dapperExecutor.ExecuteAsync(\"{parameters.StoredProcedureInfo.Name}\");" +
                     $"\n\t\t}}");
             }
-              
+
 
             outputClass.Append("\t}\n");
             return await Task.FromResult(outputClass.ToString());
@@ -181,12 +166,21 @@ namespace DapperSqlParser
                 outputNamespace.AppendLine(outputModelClass);
                 outputNamespace.AppendLine(inputModelClass);
                 outputNamespace.AppendLine(clientClass);
-                
+
                 outputNamespace.AppendLine("\t#endregion");//region
             }
 
             outputNamespace.Append("}");
             return await Task.FromResult(outputNamespace.ToString());
         }
+        public static async Task WriteGeneratedNamespaceToClientFile(string namespaceString)
+        {
+            // This will get the current PROJECT directory
+            var projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent?.Parent?.FullName;
+            var filePath = Path.Combine(projectPath ?? throw new InvalidOperationException(), @"GeneratedFile\spClient.cs");
+
+            await File.WriteAllTextAsync(filePath, namespaceString);
+        }
+
     }
 }

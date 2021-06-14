@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Collections.Generic;
+using Dapper;
 using DapperSqlParser.Models;
 using Newtonsoft.Json;
 using System.Data;
@@ -37,6 +38,20 @@ namespace DapperSqlParser.Services
             commandType: CommandType.Text);
 
             return JsonConvert.DeserializeObject<StoredProcedureModel[]>(string.Join("", queryResultChunks));
+        }
+
+        public async Task<List<StoredProcedureParameters>> GenerateModelsListAsync()
+        {
+            var spList = await GetSpListAsync();
+            var paramsList = new List<StoredProcedureParameters>();
+
+            foreach (var sp in spList)
+            {
+                var spParameter = await GetSpDataAsync(sp.Name);
+                paramsList.Add(spParameter);
+            }
+
+            return paramsList;
         }
     }
 }
