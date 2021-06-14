@@ -55,3 +55,70 @@ namespace DapperSqlParser.Services
         }
     }
 }
+
+
+//when 'bigint'  then 'System.Int64'
+
+//when 'binary' then 'System.Byte[]'
+
+//when 'bit' then 'System.Boolean'
+
+//when 'char' then 'System.String'
+
+//when 'date' then 'System.DateTime'
+
+//when 'datetime' then 'System.DateTime'
+
+//when 'datetime2' then 'System.DateTime'
+
+//when 'datetimeoffset' then 'System.DateTimeOffset'
+
+//when 'decimal' then 'System.Decimal'
+
+//when 'filestream' then 'System.Byte[]'
+
+//when 'float' then 'System.Double'
+
+//when 'image' then 'System.Byte[]'
+
+//when 'int'  then 'System.Int32'
+
+//when 'money' then 'System.Decimal'
+
+//when 'nchar' then 'System.String'
+
+//when 'varchar' then 'System.String'
+
+//when 'nvarchar' then 'System.String'
+
+//when 'ntext' then 'System.String'
+
+//when 'numeric' then 'System.Decimal'
+
+//when 'real' then 'System.Single'
+
+//when 'rowversion' then 'System.Byte[]'
+
+//when 'smalldatetime' then 'System.DateTime'
+
+//when 'smallint' then 'System.Int16'
+
+//when 'smallmoney' then 'System.Decimal'
+
+//when 'sql_variant' then 'System.Object'
+
+//when 'text' then 'System.String'
+
+//when 'time' then 'System.TimeSpan'
+
+//when 'timestamp' then 'System.Byte[]'
+
+//when 'tinyint' then 'System.Byte'
+
+//when 'uniqueidentifier' then 'System.Guid'
+
+//when 'varbinary' then 'System.Byte[]'
+
+//when 'xml' then 'System.String'
+
+//else 'System.Object'

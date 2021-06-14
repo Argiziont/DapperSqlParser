@@ -2,6 +2,7 @@
 using DapperSqlParser.Models;
 using DapperSqlParser.Services;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -150,7 +151,7 @@ namespace DapperSqlParser
             outputClass.Append("\t}\n");
             return await Task.FromResult(outputClass.ToString());
         }
-        public static async Task<string> CreateSpClient(StoredProcedureParameters[] parameters, string namespaceName)
+        public static async Task<string> CreateSpClient(IEnumerable<StoredProcedureParameters> parameters, string namespaceName)
         {
 
             var outputNamespace = new StringBuilder();
@@ -158,16 +159,17 @@ namespace DapperSqlParser
 
             foreach (var spParameter in parameters)
             {
-                outputNamespace.AppendLine($"\n\t#region {spParameter.StoredProcedureInfo.Name}");//region
+                outputNamespace.AppendLine($"\n\t#region {spParameter.StoredProcedureInfo.Name}");//Wrapping every sp into region
 
                 var outputModelClass = await CreateSpDataModelForOutputParams(spParameter);
                 var inputModelClass = await CreateSpDataModelForInputParams(spParameter);
                 var clientClass = await CreateSpClientClass(spParameter);
+
                 outputNamespace.AppendLine(outputModelClass);
                 outputNamespace.AppendLine(inputModelClass);
                 outputNamespace.AppendLine(clientClass);
 
-                outputNamespace.AppendLine("\t#endregion");//region
+                outputNamespace.AppendLine("\t#endregion");
             }
 
             outputNamespace.Append("}");
