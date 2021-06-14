@@ -12,7 +12,7 @@ namespace DapperSqlParser
 {
     internal static class Program
     {
-        private const string ConnectionString = "Server= .\\SQLExpress;Database=DapperSPTestDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+        private const string ConnectionString = "Server= .\\SQLExpress;Database=ShopParserDb;Trusted_Connection=True;MultipleActiveResultSets=true";
         private const string NameSpaceName = "SpClient";
 
         private static async Task Main()
