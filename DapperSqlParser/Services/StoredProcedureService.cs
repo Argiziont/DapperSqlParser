@@ -12,23 +12,44 @@ namespace DapperSqlParser.Services
     public class StoredProcedureService
     {
         private readonly string _connectionString;
-        private readonly string[] _sqlServerTypes =
+
+        private readonly Dictionary<string, string> _sqlServerTypesTocSharpTypes = new Dictionary<string, string>()
         {
-            "bigint", "binary", "bit", "char", "date", "datetime", "datetime2", "datetimeoffset", "decimal",
-            "filestream", "float", "geography", "geometry", "hierarchyid", "image", "int", "money", "nchar", "ntext",
-            "numeric", "nvarchar", "real", "rowversion", "smalldatetime", "smallint", "smallmoney", "sql_variant",
-            "text", "time", "timestamp", "tinyint", "uniqueidentifier", "varbinary", "varchar", "xml"
-        };
-        private readonly string[] _cSharpTypes =
-        {
-            "System.Int64", "System.Byte[]", "System.Boolean", "System.Char", "System.DateTime", "System.DateTime",
-            "System.DateTime", "System.DateTimeOffset", "System.Decimal", "System.Byte[]", "System.Double",
-            "Microsoft.SqlServer.Types.SqlGeography", "Microsoft.SqlServer.Types.SqlGeometry",
-            "Microsoft.SqlServer.Types.SqlHierarchyId", "System.Byte[]", "System.Int32", "System.Decimal", "System.String",
-            "System.String", "System.Decimal", "System.String", "System.Single", "System.Byte[]", "System.DateTime",
-            "System.Int16", "System.Decimal", "System.Object", "System.String",
-            "System.TimeSpan", "System.Byte[]", "System.Byte", "System.Guid", "System.Byte[]", "System.String",
-            "System.String"
+            {"bigint", "System.Int64"},
+            {"binary", "System.Byte[]"},
+            {"bit", "System.Boolean"},
+            {"char", "System.Char"},
+            {"date", "System.DateTime"},
+            {"datetime", "System.DateTime"},
+            {"datetime2", "System.DateTime"},
+            {"datetimeoffset", "System.DateTimeOffset"},
+            {"decimal", "System.Decimal"},
+            {"filestream", "System.Byte[]"},
+            {"float", "System.Double"},
+            {"geography", "Microsoft.SqlServer.Types.SqlGeography"},
+            {"geometry", "Microsoft.SqlServer.Types.SqlGeometry"},
+            {"hierarchyid", "Microsoft.SqlServer.Types.SqlHierarchyId"},
+            {"image", "System.Byte[]"},
+            {"int", "System.Int32"},
+            {"money", "System.Decimal"},
+            {"nchar", "System.String"},
+            {"ntext", "System.String"},
+            {"numeric", "System.Decimal"},
+            {"nvarchar", "System.String"},
+            {"real", "System.Single"},
+            {"rowversion", "System.Byte[]"},
+            {"smalldatetime", "System.DateTime"},
+            {"smallint", "System.Int16"},
+            {"smallmoney", "System.Decimal"},
+            {"sql_variant", "System.Object"},
+            {"text", "System.String"},
+            {"time", "System.TimeSpan"},
+            {"timestamp", "System.Byte[]"},
+            {"tinyint", "System.Byte"},
+            {"uniqueidentifier", "System.Guid"},
+            {"varbinary", "System.Byte[]"},
+            {"varchar", "System.String"},
+            {"xml", "System.String"}
         };
 
         public StoredProcedureService(string connectionString)
@@ -88,14 +109,8 @@ namespace DapperSqlParser.Services
 
         public string ConvertSqlServerFormatToCSharp(string typeName)
         {
-            var index = Array.IndexOf(_sqlServerTypes, typeName);
-
-            return index > -1
-                ? _cSharpTypes[index]
-                : "System.Object";
+            return _sqlServerTypesTocSharpTypes.ContainsKey(typeName) ? _sqlServerTypesTocSharpTypes[typeName] : "System.Object";
         }
 
     }
 }
-
-
