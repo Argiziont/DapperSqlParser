@@ -7,52 +7,27 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NJsonSchema;
+using NJsonSchema.CodeGeneration.CSharp;
 
 namespace DapperSqlParser
 {
     internal static class Program
     {
         private const string ConnectionString = "Server= .\\SQLExpress;Database=ShopParserDb;Trusted_Connection=True;MultipleActiveResultSets=true";
-        private const string NameSpaceName = "SpClient";
+        private const string NameSpaceName = "ShopParserApi.Services.GeneratedClientFile";
 
         private static async Task Main()
         {
+
+
+
             var spService = new StoredProcedureService(ConnectionString);
 
             var paramsList = await spService.GenerateModelsListAsync();
             var spNamespace = await CreateSpClient(paramsList.ToArray(), NameSpaceName);
             await WriteGeneratedNamespaceToClientFile(spNamespace);
         }
-
-        //private static async Task Main()
-        //{
-        //    #region onlyInput(working)
-
-        //    var dapperExecutorIn = new DapperExecutor<sp_UpdateProductStateInput>(ConnectionString);
-        //    var spUpdateProductStateClient = new sp_UpdateProductState(dapperExecutorIn);
-
-        //    await spUpdateProductStateClient.Execute(new sp_UpdateProductStateInput() { ProductId = 6, ProductState = 2 });
-
-        //    #endregion
-
-        //    #region onlyOutput(working)
-
-        //    var dapperExecutorOut = new DapperExecutor<EmptyInputParams, sp_GetAllProductsOutput>(ConnectionString);
-        //    var spGetAllProductsClient = new sp_GetAllProducts(dapperExecutorOut);
-
-        //    var spGetAllProductsClientResult = await spGetAllProductsClient.Execute();
-
-        //    #endregion
-
-        //    #region InputOutput(working)
-
-        //    var dapperExecutor = new DapperExecutor<sp_CountProductsWithCompanyInput, sp_CountProductsWithCompanyOutput>(ConnectionString);
-        //    var spCountProductsWithCompanyClient = new sp_CountProductsWithCompany(dapperExecutor);
-
-        //    var spCountProductsWithCompanyResult = await spCountProductsWithCompanyClient.Execute(new sp_CountProductsWithCompanyInput(){CompanyId = 1});
-
-        //    #endregion
-        //}
 
         public static async Task<string> CreateSpDataModelForOutputParams(StoredProcedureParameters parameters)
         {
@@ -61,6 +36,36 @@ namespace DapperSqlParser
             var outputClass = new StringBuilder();
             outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name}Output \n\t{{");
 
+            if (parameters.OutputParametersDataModels.First().ParameterName.Contains("JSON_"))
+            {
+                if (Guid.TryParse(parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""), out _))
+                {
+                    //Schema parsing
+                    var schemaJson =
+                        "{\n  \"$schema\": \"http://json-schema.org/draft-04/schema#\",\n  \"title\": \"ProductJson\",\n  \"type\": \"object\",\n  \"additionalProperties\": false,\n  \"properties\": {\n    \"nameForCatalog\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"id\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"urlForProductCatalog\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"priceCurrency\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"keywords\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"descriptionPlain\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"discountedPrice\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"priceUSD\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"sku\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"price\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"hasDiscount\": {\n      \"type\": \"boolean\"\n    },\n    \"discountPercent\": {\n      \"type\": [\n        \"integer\",\n        \"null\"\n      ],\n      \"format\": \"int32\"\n    },\n    \"Presence\": {\n      \"oneOf\": [\n        {\n          \"type\": \"null\"\n        },\n        {\n          \"$ref\": \"#/definitions/PresenceData\"\n        }\n      ]\n    },\n    \"OptPrice\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"ImageUrls\": {\n      \"type\": [\n        \"array\",\n        \"null\"\n      ],\n      \"items\": {\n        \"type\": \"string\"\n      }\n    },\n    \"SyncDate\": {\n      \"type\": \"string\",\n      \"format\": \"date-time\"\n    },\n    \"ExpirationDate\": {\n      \"type\": \"string\",\n      \"format\": \"date-time\"\n    },\n    \"JsonCategory\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"StringCategory\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"JsonCategorySchema\": {\n      \"type\": [\n        \"null\",\n        \"string\"\n      ]\n    },\n    \"ProductAttribute\": {\n      \"type\": [\n        \"array\",\n        \"null\"\n      ],\n      \"items\": {\n        \"$ref\": \"#/definitions/ProductAttribute\"\n      }\n    },\n    \"ProductPaymentOptions\": {\n      \"type\": [\n        \"array\",\n        \"null\"\n      ],\n      \"items\": {\n        \"$ref\": \"#/definitions/ProductPaymentOption\"\n      }\n    },\n    \"ProductDeliveryOptions\": {\n      \"type\": [\n        \"array\",\n        \"null\"\n      ],\n      \"items\": {\n        \"$ref\": \"#/definitions/ProductDeliveryOption\"\n      }\n    }\n  },\n  \"definitions\": {\n    \"PresenceData\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"isPresenceSure\": {\n          \"type\": \"boolean\"\n        },\n        \"isOrderable\": {\n          \"type\": \"boolean\"\n        },\n        \"isAvailable\": {\n          \"type\": \"boolean\"\n        },\n        \"title\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"isEnding\": {\n          \"type\": \"boolean\"\n        },\n        \"isWait\": {\n          \"type\": \"boolean\"\n        }\n      }\n    },\n    \"ProductAttribute\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"Id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"ProductId\": {\n          \"type\": [\n            \"integer\",\n            \"null\"\n          ],\n          \"format\": \"int32\"\n        },\n        \"id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"name\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"group\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"AttributeValues\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Product\": {\n          \"oneOf\": [\n            {\n              \"type\": \"null\"\n            },\n            {\n              \"$ref\": \"#/definitions/ProductData\"\n            }\n          ]\n        }\n      }\n    },\n    \"ProductData\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"Id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"CompanyId\": {\n          \"type\": [\n            \"integer\",\n            \"null\"\n          ],\n          \"format\": \"int32\"\n        },\n        \"ExternalId\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Title\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Url\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"SyncDate\": {\n          \"type\": \"string\",\n          \"format\": \"date-time\"\n        },\n        \"ExpirationDate\": {\n          \"type\": \"string\",\n          \"format\": \"date-time\"\n        },\n        \"ProductState\": {\n          \"$ref\": \"#/definitions/ProductState\"\n        },\n        \"Description\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Price\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"KeyWords\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"JsonData\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"JsonDataSchema\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Company\": {\n          \"oneOf\": [\n            {\n              \"type\": \"null\"\n            },\n            {\n              \"$ref\": \"#/definitions/CompanyData\"\n            }\n          ]\n        },\n        \"Presence\": {\n          \"oneOf\": [\n            {\n              \"type\": \"null\"\n            },\n            {\n              \"$ref\": \"#/definitions/PresenceData\"\n            }\n          ]\n        },\n        \"Categories\": {\n          \"type\": [\n            \"array\",\n            \"null\"\n          ],\n          \"items\": {\n            \"$ref\": \"#/definitions/CategoryData\"\n          }\n        },\n        \"ProductPaymentOptions\": {\n          \"type\": [\n            \"array\",\n            \"null\"\n          ],\n          \"items\": {\n            \"$ref\": \"#/definitions/ProductPaymentOption\"\n          }\n        },\n        \"ProductDeliveryOptions\": {\n          \"type\": [\n            \"array\",\n            \"null\"\n          ],\n          \"items\": {\n            \"$ref\": \"#/definitions/ProductDeliveryOption\"\n          }\n        },\n        \"ProductAttribute\": {\n          \"type\": [\n            \"array\",\n            \"null\"\n          ],\n          \"items\": {\n            \"$ref\": \"#/definitions/ProductAttribute\"\n          }\n        }\n      }\n    },\n    \"ProductState\": {\n      \"type\": \"integer\",\n      \"description\": \"\",\n      \"x-enumNames\": [\n        \"Idle\",\n        \"Success\",\n        \"Failed\"\n      ],\n      \"enum\": [\n        0,\n        1,\n        2\n      ]\n    },\n    \"CompanyData\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"Id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"SourceId\": {\n          \"type\": [\n            \"integer\",\n            \"null\"\n          ],\n          \"format\": \"int32\"\n        },\n        \"ExternalId\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Name\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Url\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"SyncDate\": {\n          \"type\": \"string\",\n          \"format\": \"date-time\"\n        },\n        \"CompanyState\": {\n          \"$ref\": \"#/definitions/CompanyState\"\n        },\n        \"JsonData\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"JsonDataSchema\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Products\": {\n          \"type\": [\n            \"array\",\n            \"null\"\n          ],\n          \"items\": {\n            \"$ref\": \"#/definitions/ProductData\"\n          }\n        },\n        \"Source\": {\n          \"oneOf\": [\n            {\n              \"type\": \"null\"\n            },\n            {\n              \"$ref\": \"#/definitions/CompanySource\"\n            }\n          ]\n        }\n      }\n    },\n    \"CompanyState\": {\n      \"type\": \"integer\",\n      \"description\": \"\",\n      \"x-enumNames\": [\n        \"Idle\",\n        \"Processing\",\n        \"Success\",\n        \"Failed\"\n      ],\n      \"enum\": [\n        0,\n        1,\n        2,\n        3\n      ]\n    },\n    \"CompanySource\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"Id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"Name\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Companies\": {\n          \"type\": [\n            \"array\",\n            \"null\"\n          ],\n          \"items\": {\n            \"$ref\": \"#/definitions/CompanyData\"\n          }\n        }\n      }\n    },\n    \"CategoryData\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"Id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"caption\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"url\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Products\": {\n          \"type\": [\n            \"array\",\n            \"null\"\n          ],\n          \"items\": {\n            \"$ref\": \"#/definitions/ProductData\"\n          }\n        },\n        \"SupCategoryData\": {\n          \"oneOf\": [\n            {\n              \"type\": \"null\"\n            },\n            {\n              \"$ref\": \"#/definitions/CategoryData\"\n            }\n          ]\n        }\n      }\n    },\n    \"ProductPaymentOption\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"Id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"ProductId\": {\n          \"type\": [\n            \"integer\",\n            \"null\"\n          ],\n          \"format\": \"int32\"\n        },\n        \"id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"name\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"comment\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Product\": {\n          \"oneOf\": [\n            {\n              \"type\": \"null\"\n            },\n            {\n              \"$ref\": \"#/definitions/ProductData\"\n            }\n          ]\n        }\n      }\n    },\n    \"ProductDeliveryOption\": {\n      \"type\": \"object\",\n      \"additionalProperties\": false,\n      \"properties\": {\n        \"Id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"ProductId\": {\n          \"type\": [\n            \"integer\",\n            \"null\"\n          ],\n          \"format\": \"int32\"\n        },\n        \"id\": {\n          \"type\": \"integer\",\n          \"format\": \"int32\"\n        },\n        \"name\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"comment\": {\n          \"type\": [\n            \"null\",\n            \"string\"\n          ]\n        },\n        \"Product\": {\n          \"oneOf\": [\n            {\n              \"type\": \"null\"\n            },\n            {\n              \"$ref\": \"#/definitions/ProductData\"\n            }\n          ]\n        }\n      }\n    }\n  }\n}";
+                    var schema = await JsonSchema.FromJsonAsync(schemaJson);
+                    var generator = new CSharpGenerator(schema);
+
+                    generator.Settings.Namespace = "MakerNamespace";
+
+                    var generatedClasses = generator.GenerateFile();
+
+                    var nameSpaceBracketIndex = generatedClasses.IndexOf("MakerNamespace", StringComparison.Ordinal) + generator.Settings.Namespace.Length + 2;
+                    var resultClasses = generatedClasses.Substring(nameSpaceBracketIndex, generatedClasses.Length - 2 - nameSpaceBracketIndex);
+                }
+                
+            }
+            foreach (var field in parameters.OutputParametersDataModels)
+            {
+                if (field.ParameterName == null) continue;
+                if (field.ParameterName.Contains("JSON_"))
+                {
+                    var isValid = Guid.TryParse(field.ParameterName.Replace("JSON_", ""), out var tmp);
+                }
+            }
+
+
+          
             foreach (var field in parameters.OutputParametersDataModels.Select(p =>
                 new string(
                          $"\t\t{(p.ParameterName == null ? $"" : $"[Newtonsoft.Json.JsonProperty(\"{p.ParameterName}\")]")} " +//If not nullable -> required
