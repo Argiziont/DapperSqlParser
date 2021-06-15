@@ -36,7 +36,7 @@ namespace DapperSqlParser
             var outputClass = new StringBuilder();
             outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name}Output \n\t{{");
 
-            if (parameters.OutputParametersDataModels.First().ParameterName.Contains("JSON_"))
+            if (parameters.OutputParametersDataModels.First().ParameterName.Contains("JSON_"))//SP returns json
             {
                 if (Guid.TryParse(parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""), out _))
                 {
@@ -55,27 +55,19 @@ namespace DapperSqlParser
                 }
                 
             }
-            foreach (var field in parameters.OutputParametersDataModels)
+            else//Sp returns fields
             {
-                if (field.ParameterName == null) continue;
-                if (field.ParameterName.Contains("JSON_"))
-                {
-                    var isValid = Guid.TryParse(field.ParameterName.Replace("JSON_", ""), out var tmp);
-                }
+                foreach (var field in parameters.OutputParametersDataModels.Select(p =>
+                        new string(
+                            $"\t\t{(p.ParameterName == null ? $"" : $"[Newtonsoft.Json.JsonProperty(\"{p.ParameterName}\")]")} " +//If not nullable -> required
+                            $"{(p.IsNullable ? "" : "[System.ComponentModel.DataAnnotations.Required()] ")}" +//Json field
+                            $"public {p.TypeName} " +//Type name
+                            $"{(p.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{p.ParameterName.Replace("-", "_")}")} " +//Param name
+                            $"{{get; set;}} \n"))//Getter/setter
+                ) outputClass.AppendLine(field);
             }
-
-
-          
-            foreach (var field in parameters.OutputParametersDataModels.Select(p =>
-                new string(
-                         $"\t\t{(p.ParameterName == null ? $"" : $"[Newtonsoft.Json.JsonProperty(\"{p.ParameterName}\")]")} " +//If not nullable -> required
-                           $"{(p.IsNullable ? "" : "[System.ComponentModel.DataAnnotations.Required()] ")}" +//Json field
-                           $"public {p.TypeName} " +//Type name
-                           $"{(p.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{p.ParameterName.Replace("-", "_")}")} " +//Param name
-                           $"{{get; set;}} \n"))//Getter/setter
-            ) outputClass.AppendLine(field);
-
-
+            
+            
             outputClass.Append("\t}\n");
             return await Task.FromResult(outputClass.ToString());
         }
