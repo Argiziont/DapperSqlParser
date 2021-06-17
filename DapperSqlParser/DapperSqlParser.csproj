@@ -16,7 +16,6 @@
 
   <ItemGroup>
     <Folder Include="GeneratedFile\" />
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>
