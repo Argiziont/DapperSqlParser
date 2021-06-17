@@ -1,3 +1,4 @@
+using DapperSqlParser.Services;
 using SpClient;
 
 namespace ShopParserApi.Services.GeneratedClientFile 
@@ -227,14 +228,18 @@ namespace ShopParserApi.Services.GeneratedClientFile
     
     
     }
-	public class Sp_GetPagedCategoriesInput 
-	{
-		[Newtonsoft.Json.JsonProperty("page")] public System.Int32 Page {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("rowsPerPage")] public System.Int32 RowsPerPage {get; set;} 
-
-	}
-
+	[JsonWrapper("@jsonInput")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
+    public partial class Sp_GetPagedCategoriesInput 
+    {
+        [Newtonsoft.Json.JsonProperty("page", Required = Newtonsoft.Json.Required.Always)]
+        public int Page { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("rowsPerPage", Required = Newtonsoft.Json.Required.Always)]
+        public int RowsPerPage { get; set; }
+    
+    
+    }
 	public class Sp_GetPagedCategories 
 	{
 		private readonly IDapperExecutor<Sp_GetPagedCategoriesInput, Sp_GetPagedCategoriesOutput> _dapperExecutor;
@@ -323,14 +328,18 @@ namespace ShopParserApi.Services.GeneratedClientFile
 
 	}
 
-	public class Sp_CountProductsWithCategoryAndCompanyInput 
-	{
-		[Newtonsoft.Json.JsonProperty("categoryId")] public System.Int32 CategoryId {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("companyId")] public System.Int32 CompanyId {get; set;} 
-
-	}
-
+	[JsonWrapper("@jsonInput")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
+    public partial class Sp_CountProductsWithCategoryAndCompanyInput 
+    {
+        [Newtonsoft.Json.JsonProperty("companyId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CompanyId { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("categoryId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CategoryId { get; set; }
+    
+    
+    }
 	public class Sp_CountProductsWithCategoryAndCompany 
 	{
 		private readonly IDapperExecutor<Sp_CountProductsWithCategoryAndCompanyInput, Sp_CountProductsWithCategoryAndCompanyOutput> _dapperExecutor;
@@ -1178,6 +1187,5 @@ namespace ShopParserApi.Services.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_GetStoredProcedureOutputParameters", request);
 		}
 	}
-
-	#endregion
+#endregion
 }

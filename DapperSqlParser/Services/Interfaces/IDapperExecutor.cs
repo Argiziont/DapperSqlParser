@@ -7,7 +7,9 @@ namespace SpClient
 
     }
 
-    public interface IDapperExecutor<in TInParams, TOutParams> where TOutParams : class
+    public interface IDapperExecutor<in TInParams, TOutParams> 
+        where TOutParams : class
+        where TInParams : class
     {
         System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TOutParams>> ExecuteAsync(string spName, TInParams inputParams);
         System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TOutParams>> ExecuteAsync(string spName);
