@@ -18,5 +18,9 @@ namespace DapperSqlParser.Extensions
                 return null;
             }
         }
+        public static bool ContainsAttribute<T>() where T : class
+        {
+            return typeof(T).IsDefined(typeof(JsonWrapperAttribute), true);
+        }
     }
 }

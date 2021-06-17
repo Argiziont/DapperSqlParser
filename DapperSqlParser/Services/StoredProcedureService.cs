@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
@@ -72,19 +73,29 @@ namespace DapperSqlParser.Services
 
             /*
              *  Convert sql types into c# types
-             *  If type doesn't exist -> return "object" type 
+             *  If type doesn't exist -> return "object" type
+             *  If this fails means that we can't parse this sp
              */
-            if (spParams?.OutputParametersDataModels != null)
-                foreach (var outParam in spParams?.OutputParametersDataModels)
-                    outParam.TypeName = ConvertSqlServerFormatToCSharp(outParam.TypeName);
-            if (spParams?.InputParametersDataModels != null)
-                foreach (var inParam in spParams?.InputParametersDataModels)
-                    inParam.TypeName = ConvertSqlServerFormatToCSharp(inParam.TypeName);
+            try
+            {
+                if (spParams?.OutputParametersDataModels != null)
+                    foreach (var outParam in spParams?.OutputParametersDataModels)
+                        outParam.TypeName = ConvertSqlServerFormatToCSharp(outParam.TypeName);
+                if (spParams?.InputParametersDataModels != null)
+                    foreach (var inParam in spParams?.InputParametersDataModels)
+                        inParam.TypeName = ConvertSqlServerFormatToCSharp(inParam.TypeName);
 
-            if (spParams != null)
-                spParams.StoredProcedureInfo.Name =
-                    spParams.StoredProcedureInfo.Name
-                        .FirstCharToUpper(); //Make first char upper case for consistent c# naming
+                if (spParams != null)
+                    spParams.StoredProcedureInfo.Name =
+                        spParams.StoredProcedureInfo.Name
+                            .FirstCharToUpper(); //Make first char upper case for consistent c# naming
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+           
 
             return spParams;
         }
