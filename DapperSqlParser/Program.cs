@@ -1,32 +1,37 @@
-﻿using DapperSqlParser.Extensions;
-using DapperSqlParser.Models;
-using DapperSqlParser.Services;
-using NJsonSchema;
-using NJsonSchema.CodeGeneration.CSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DapperSqlParser.Extensions;
+using DapperSqlParser.Models;
+using DapperSqlParser.Services;
+using NJsonSchema;
+using NJsonSchema.CodeGeneration.CSharp;
 using ShopParserApi.Services.GeneratedClientFile;
 
 namespace DapperSqlParser
 {
     internal static class Program
     {
-        private const string ConnectionString = "Server= .\\SQLExpress;Database=ShopParserDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+        private const string ConnectionString =
+            "Server= .\\SQLExpress;Database=ShopParserDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+
         private const string NameSpaceName = "ShopParserApi.Services.GeneratedClientFile";
 
         private static async Task Main()
         {
             var dapper1 = new DapperExecutor<Sp_GetPagedCategoriesInput, Sp_GetPagedCategoriesOutput>(ConnectionString);
             var sp1 = new Sp_GetPagedCategories(dapper1);
-            var result1 = await sp1.Execute(new Sp_GetPagedCategoriesInput { Page = 1, RowsPerPage = 10 });
+            var result1 = await sp1.Execute(new Sp_GetPagedCategoriesInput {Page = 1, RowsPerPage = 10});
 
-            var dapper2 = new DapperExecutor<Sp_CountProductsWithCategoryAndCompanyInput, Sp_CountProductsWithCategoryAndCompanyOutput>(ConnectionString);
+            var dapper2 =
+                new DapperExecutor<Sp_CountProductsWithCategoryAndCompanyInput,
+                    Sp_CountProductsWithCategoryAndCompanyOutput>(ConnectionString);
             var sp2 = new Sp_CountProductsWithCategoryAndCompany(dapper2);
-            var result2 = await sp2.Execute(new Sp_CountProductsWithCategoryAndCompanyInput { CategoryId = 1, CompanyId = 1 });
+            var result2 = await sp2.Execute(new Sp_CountProductsWithCategoryAndCompanyInput
+                {CategoryId = 1, CompanyId = 1});
 
 
             var spService = new StoredProcedureService(ConnectionString);
@@ -43,24 +48,29 @@ namespace DapperSqlParser
 
             var outputClass = new StringBuilder();
 
-            if (parameters.OutputParametersDataModels.Length == 1 && parameters.OutputParametersDataModels.First() != null)//SP returns json
-            {
-                if (parameters.OutputParametersDataModels.First().ParameterName.Contains("JSON_") && Guid.TryParse(parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""), out _))
+            if (parameters.OutputParametersDataModels.Length == 1 &&
+                parameters.OutputParametersDataModels.First() != null) //SP returns json
+                if (parameters.OutputParametersDataModels.First().ParameterName.Contains("JSON_") &&
+                    Guid.TryParse(parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""),
+                        out _))
                 {
                     const string schemeStartKeyWord = "JSON_OUTPUT_SCHEMA_STARTS";
                     const string schemeEndKeyWord = "JSON_OUTPUT_SCHEMA_ENDS";
 
-                    var jsonSchemaStartIndex = parameters.StoredProcedureText.Definition.IndexOf(schemeStartKeyWord, StringComparison.Ordinal);
+                    var jsonSchemaStartIndex =
+                        parameters.StoredProcedureText.Definition.IndexOf(schemeStartKeyWord, StringComparison.Ordinal);
                     var jsonSchemaEndIndex =
                         parameters.StoredProcedureText.Definition.IndexOf(schemeEndKeyWord, StringComparison.Ordinal);
 
-                    if (jsonSchemaStartIndex==-1 && jsonSchemaEndIndex==-1)
-                        return await Task.FromResult($"\t\t//Could not find schema for {parameters.StoredProcedureInfo.Name}");
+                    if (jsonSchemaStartIndex == -1 && jsonSchemaEndIndex == -1)
+                        return await Task.FromResult(
+                            $"\t\t//Could not find schema for {parameters.StoredProcedureInfo.Name}");
 
                     jsonSchemaStartIndex += schemeStartKeyWord.Length;
-                    jsonSchemaEndIndex-= jsonSchemaStartIndex;
+                    jsonSchemaEndIndex -= jsonSchemaStartIndex;
 
-                    var jsonSchemaFromSp = parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
+                    var jsonSchemaFromSp =
+                        parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
 
                     //Schema parsing from JSON to csSharp
                     var schema = await JsonSchema.FromJsonAsync(jsonSchemaFromSp);
@@ -70,30 +80,32 @@ namespace DapperSqlParser
 
                     var generatedClasses = generator.GenerateFile();
 
-                    var nameSpaceBracketIndex = generatedClasses.IndexOf(trimStart, StringComparison.Ordinal) + trimStart.Length + 2;
-                    outputClass = new StringBuilder(generatedClasses.Substring(nameSpaceBracketIndex, generatedClasses.Length - 2 - nameSpaceBracketIndex));
+                    var nameSpaceBracketIndex = generatedClasses.IndexOf(trimStart, StringComparison.Ordinal) +
+                                                trimStart.Length + 2;
+                    outputClass = new StringBuilder(generatedClasses.Substring(nameSpaceBracketIndex,
+                        generatedClasses.Length - 2 - nameSpaceBracketIndex));
 
 
                     return await Task.FromResult(outputClass.ToString());
                 }
-            }
             //Sp returns fields with data
 
             outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name}Output \n\t{{");
 
             foreach (var field in parameters.OutputParametersDataModels.Select(p =>
                     new string(
-                        $"\t\t[Newtonsoft.Json.JsonProperty({(p.ParameterName == null ? $"\"{parameters.StoredProcedureInfo.Name}Result\"" : $"\"{p.ParameterName}\"")} " +//If not nullable -> required
-                        $", Required = {(p.IsNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]\n" +//Json field
-                        $"\t\tpublic {p.TypeName} " +//Type name
-                        $"{(p.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{p.ParameterName.Replace("-", "_")}")} " +//Param name
-                        $"{{get; set;}} \n"))//Getter/setter
+                        $"\t\t[Newtonsoft.Json.JsonProperty({(p.ParameterName == null ? $"\"{parameters.StoredProcedureInfo.Name}Result\"" : $"\"{p.ParameterName}\"")} " + //If not nullable -> required
+                        $", Required = {(p.IsNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]\n" + //Json field
+                        $"\t\tpublic {p.TypeName} " + //Type name
+                        $"{(p.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{p.ParameterName.Replace("-", "_")}")} " + //Param name
+                        "{get; set;} \n")) //Getter/setter
             ) outputClass.AppendLine(field);
             outputClass.Append("\t}\n");
 
 
             return await Task.FromResult(outputClass.ToString());
         }
+
         public static async Task<string> CreateSpDataModelForInputParams(StoredProcedureParameters parameters)
         {
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
@@ -104,7 +116,8 @@ namespace DapperSqlParser
             const string schemeStartKeyWord = "JSON_INPUT_SCHEMA_STARTS";
             const string schemeEndKeyWord = "JSON_INPUT_SCHEMA_ENDS";
 
-            var jsonSchemaStartIndex = parameters.StoredProcedureText.Definition.IndexOf(schemeStartKeyWord, StringComparison.Ordinal);
+            var jsonSchemaStartIndex =
+                parameters.StoredProcedureText.Definition.IndexOf(schemeStartKeyWord, StringComparison.Ordinal);
             var jsonSchemaEndIndex =
                 parameters.StoredProcedureText.Definition.IndexOf(schemeEndKeyWord, StringComparison.Ordinal);
 
@@ -113,7 +126,8 @@ namespace DapperSqlParser
                 jsonSchemaStartIndex += schemeStartKeyWord.Length;
                 jsonSchemaEndIndex -= jsonSchemaStartIndex;
 
-                var jsonSchemaFromSp = parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
+                var jsonSchemaFromSp =
+                    parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
 
                 //Schema parsing from JSON to csSharp
                 var schema = await JsonSchema.FromJsonAsync(jsonSchemaFromSp);
@@ -123,28 +137,34 @@ namespace DapperSqlParser
 
                 var generatedClasses = generator.GenerateFile();
 
-                var nameSpaceBracketIndex = generatedClasses.IndexOf(trimStart, StringComparison.Ordinal) + trimStart.Length + 2;
-                inputClass = new StringBuilder($"\t[JsonWrapper(\"{parameters.InputParametersDataModels.First().ParameterName}\")]\n"+generatedClasses.Substring(nameSpaceBracketIndex, generatedClasses.Length - 2 - nameSpaceBracketIndex));
+                var nameSpaceBracketIndex =
+                    generatedClasses.IndexOf(trimStart, StringComparison.Ordinal) + trimStart.Length + 2;
+                inputClass =
+                    new StringBuilder(
+                        $"\t[JsonWrapper(\"{parameters.InputParametersDataModels.First().ParameterName}\")]\n" +
+                        generatedClasses.Substring(nameSpaceBracketIndex,
+                            generatedClasses.Length - 2 - nameSpaceBracketIndex));
 
                 return await Task.FromResult(inputClass.ToString());
             }
-            
-           
+
+
             inputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name}Input \n\t{{");
 
             foreach (var field in parameters.InputParametersDataModels.Select(p =>
                     new string(
-                        $"\t\t{(p.ParameterName == null ? $"" : $"[Newtonsoft.Json.JsonProperty(\"{p.ParameterName.Replace("@", "")}\")]")} " +//If not nullable -> required
-                        $"{(p.IsNullable ? "" : "[System.ComponentModel.DataAnnotations.Required()] ")}" +//Json field
-                        $"public {p.TypeName} " +//Type name
-                        $"{(p.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{p.ParameterName.Replace("-", "_").Replace("@", "").FirstCharToUpper()}")} " +//Param name
-                        $"{{get; set;}} \n"))//Getter/setter
+                        $"\t\t{(p.ParameterName == null ? "" : $"[Newtonsoft.Json.JsonProperty(\"{p.ParameterName.Replace("@", "")}\")]")} " + //If not nullable -> required
+                        $"{(p.IsNullable ? "" : "[System.ComponentModel.DataAnnotations.Required()] ")}" + //Json field
+                        $"public {p.TypeName} " + //Type name
+                        $"{(p.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{p.ParameterName.Replace("-", "_").Replace("@", "").FirstCharToUpper()}")} " + //Param name
+                        "{get; set;} \n")) //Getter/setter
             ) inputClass.AppendLine(field);
 
 
             inputClass.Append("\t}\n");
             return await Task.FromResult(inputClass.ToString());
         }
+
         public static async Task<string> CreateSpClientClass(StoredProcedureParameters parameters)
         {
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
@@ -155,83 +175,80 @@ namespace DapperSqlParser
 
             #region CheckSpForJsonOutput
 
-            if (parameters.OutputParametersDataModels!=null)
-            {
+            if (parameters.OutputParametersDataModels != null)
                 if (parameters.OutputParametersDataModels.Length == 1 &&
                     parameters.OutputParametersDataModels.First() != null) //SP returns json
-                {
                     if (parameters.OutputParametersDataModels.First().ParameterName.Contains("JSON_") &&
                         Guid.TryParse(parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""),
                             out _))
-                    {
                         spReturnJsonFlag = true;
-                    }
-                }
-            }
-           
+
             #endregion
 
-            outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name} \n\t{{");//Class name
+            outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name} \n\t{{"); //Class name
 
-            if (parameters.InputParametersDataModels != null && parameters.OutputParametersDataModels != null)//IF inputs and outputs
+            if (parameters.InputParametersDataModels != null && parameters.OutputParametersDataModels != null
+            ) //IF inputs and outputs
             {
                 outputClass.AppendLine(
-                    $"\t\tprivate readonly IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input, {parameters.StoredProcedureInfo.Name}Output> _dapperExecutor;");//DapperExecutor prop
+                    $"\t\tprivate readonly IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input, {parameters.StoredProcedureInfo.Name}Output> _dapperExecutor;"); //DapperExecutor prop
 
                 outputClass.AppendLine(
-                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input, {parameters.StoredProcedureInfo.Name}Output> dapperExecutor)\n\t\t{{" +//Ctor 
-                    $"\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
-                    $"\n\t\t}}");
+                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input, {parameters.StoredProcedureInfo.Name}Output> dapperExecutor)\n\t\t{{" + //Ctor 
+                    "\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
+                    "\n\t\t}");
 
                 outputClass.AppendLine(
-                    $"\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<{parameters.StoredProcedureInfo.Name}Output>> Execute({parameters.StoredProcedureInfo.Name}Input request)\n\t\t{{" +//Execute method
+                    $"\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<{parameters.StoredProcedureInfo.Name}Output>> Execute({parameters.StoredProcedureInfo.Name}Input request)\n\t\t{{" + //Execute method
                     $"\n\t\t\treturn _dapperExecutor.{(spReturnJsonFlag ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{parameters.StoredProcedureInfo.Name}\", request);" +
-                    $"\n\t\t}}");
+                    "\n\t\t}");
             }
-            else if (parameters.OutputParametersDataModels == null)//IF inputs
+            else if (parameters.OutputParametersDataModels == null) //IF inputs
             {
                 outputClass.AppendLine(
-                    $"\t\tprivate readonly IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input> _dapperExecutor;");//DapperExecutor prop
+                    $"\t\tprivate readonly IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input> _dapperExecutor;"); //DapperExecutor prop
 
                 outputClass.AppendLine(
-                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input>dapperExecutor)\n\t\t{{" +//Ctor 
-                    $"\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
-                    $"\n\t\t}}");
+                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input>dapperExecutor)\n\t\t{{" + //Ctor 
+                    "\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
+                    "\n\t\t}");
 
                 outputClass.AppendLine(
-                    $"\t\tpublic System.Threading.Tasks.Task Execute({parameters.StoredProcedureInfo.Name}Input request)\n\t\t{{" +//Execute method
-                    $"\n\t\t\treturn _dapperExecutor.{(spReturnJsonFlag? "ExecuteJsonAsync":"ExecuteAsync")}(\"{parameters.StoredProcedureInfo.Name}\", request);" +
-                    $"\n\t\t}}");
+                    $"\t\tpublic System.Threading.Tasks.Task Execute({parameters.StoredProcedureInfo.Name}Input request)\n\t\t{{" + //Execute method
+                    $"\n\t\t\treturn _dapperExecutor.{(spReturnJsonFlag ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{parameters.StoredProcedureInfo.Name}\", request);" +
+                    "\n\t\t}");
             }
-            else//IF outputs
+            else //IF outputs
             {
                 outputClass.AppendLine(
-                    $"\t\tprivate readonly IDapperExecutor<EmptyInputParams, {parameters.StoredProcedureInfo.Name}Output> _dapperExecutor;");//DapperExecutor prop
+                    $"\t\tprivate readonly IDapperExecutor<EmptyInputParams, {parameters.StoredProcedureInfo.Name}Output> _dapperExecutor;"); //DapperExecutor prop
 
                 outputClass.AppendLine(
-                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<EmptyInputParams, {parameters.StoredProcedureInfo.Name}Output> dapperExecutor)\n\t\t{{" +//Ctor 
-                    $"\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
-                    $"\n\t\t}}");
+                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<EmptyInputParams, {parameters.StoredProcedureInfo.Name}Output> dapperExecutor)\n\t\t{{" + //Ctor 
+                    "\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
+                    "\n\t\t}");
 
                 outputClass.AppendLine(
-                    $"\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<{parameters.StoredProcedureInfo.Name}Output>> Execute()\n\t\t{{" +//Execute method
+                    $"\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<{parameters.StoredProcedureInfo.Name}Output>> Execute()\n\t\t{{" + //Execute method
                     $"\n\t\t\treturn _dapperExecutor.{(spReturnJsonFlag ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{parameters.StoredProcedureInfo.Name}\");" +
-                    $"\n\t\t}}");
+                    "\n\t\t}");
             }
 
 
             outputClass.Append("\t}\n");
             return await Task.FromResult(outputClass.ToString());
         }
-        public static async Task<string> CreateSpClient(IEnumerable<StoredProcedureParameters> parameters, string namespaceName)
-        {
 
+        public static async Task<string> CreateSpClient(IEnumerable<StoredProcedureParameters> parameters,
+            string namespaceName)
+        {
             var outputNamespace = new StringBuilder();
             outputNamespace.AppendLine($"namespace {namespaceName} \n{{");
 
             foreach (var spParameter in parameters)
             {
-                outputNamespace.AppendLine($"\n\t#region {spParameter.StoredProcedureInfo.Name}");//Wrapping every sp into region
+                outputNamespace.AppendLine(
+                    $"\n\t#region {spParameter.StoredProcedureInfo.Name}"); //Wrapping every sp into region
 
                 var outputModelClass = await CreateSpDataModelForOutputParams(spParameter);
                 var inputModelClass = await CreateSpDataModelForInputParams(spParameter);
@@ -247,11 +264,13 @@ namespace DapperSqlParser
             outputNamespace.Append("}");
             return await Task.FromResult(outputNamespace.ToString());
         }
+
         public static async Task WriteGeneratedNamespaceToClientFile(string namespaceString)
         {
             // This will get the current PROJECT directory
             var projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent?.Parent?.FullName;
-            var filePath = Path.Combine(projectPath ?? throw new InvalidOperationException(), @"GeneratedFile\spClient.cs");
+            var filePath = Path.Combine(projectPath ?? throw new InvalidOperationException(),
+                @"GeneratedFile\spClient.cs");
 
             await File.WriteAllTextAsync(filePath, namespaceString);
         }

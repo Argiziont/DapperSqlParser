@@ -10,7 +10,8 @@ namespace DapperSqlParser.Extensions
         {
             try
             {
-                return ((JsonWrapperAttribute)typeof(T).GetCustomAttributes(typeof(JsonWrapperAttribute), false).FirstOrDefault());
+                return (JsonWrapperAttribute) typeof(T).GetCustomAttributes(typeof(JsonWrapperAttribute), false)
+                    .FirstOrDefault();
             }
             catch (SystemException)
             {

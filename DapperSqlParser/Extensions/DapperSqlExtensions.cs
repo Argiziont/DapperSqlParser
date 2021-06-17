@@ -15,24 +15,24 @@ namespace DapperSqlParser.Extensions
         {
             var result = cnn.Query<string>(sql, param, transaction, buffered, commandTimeout, commandType).ToList();
             if (!result.Any())
-                return default(IEnumerable<T>);
+                return default;
 
             // Concats
             var sb = new StringBuilder();
             foreach (var jsonPart in result)
                 sb.Append(jsonPart);
 
-            var tmp = sb.ToString();
             //If needed private fields resolver
             //var settings = new JsonSerializerSettings
             //{
             //    // https://github.com/danielwertheim/jsonnet-contractresolvers
             //    ContractResolver = new PrivateSetterContractResolver()
             //};
-            return sb[0] == '[' ? JsonConvert.DeserializeObject<IEnumerable<T>>(sb.ToString()) : new []{ JsonConvert.DeserializeObject<T>(sb.ToString()) };
+            return sb[0] == '['
+                ? JsonConvert.DeserializeObject<IEnumerable<T>>(sb.ToString())
+                : new[] {JsonConvert.DeserializeObject<T>(sb.ToString())};
 
             // Using Json.Net to de-serialize objects
-
         }
     }
 }
