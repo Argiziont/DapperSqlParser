@@ -22,16 +22,17 @@ namespace DapperSqlParser
 
         private static async Task Main()
         {
-            var dapper1 = new DapperExecutor<Sp_GetPagedCategoriesInput, Sp_GetPagedCategoriesOutput>(ConnectionString);
-            var sp1 = new Sp_GetPagedCategories(dapper1);
-            var result1 = await sp1.Execute(new Sp_GetPagedCategoriesInput {Page = 1, RowsPerPage = 10});
 
-            var dapper2 =
-                new DapperExecutor<Sp_CountProductsWithCategoryAndCompanyInput,
-                    Sp_CountProductsWithCategoryAndCompanyOutput>(ConnectionString);
-            var sp2 = new Sp_CountProductsWithCategoryAndCompany(dapper2);
-            var result2 = await sp2.Execute(new Sp_CountProductsWithCategoryAndCompanyInput
-                {CategoryId = 1, CompanyId = 1});
+            //var dapper1 = new DapperExecutor<Sp_GetPagedCategoriesInput, Sp_GetPagedCategoriesOutput>(ConnectionString);
+            //var sp1 = new Sp_GetPagedCategories(dapper1);
+            //var result1 = await sp1.Execute(new Sp_GetPagedCategoriesInput {Page = 1, RowsPerPage = 10});
+
+            //var dapper2 =
+            //    new DapperExecutor<Sp_CountProductsWithCategoryAndCompanyInput,
+            //        Sp_CountProductsWithCategoryAndCompanyOutput>(ConnectionString);
+            //var sp2 = new Sp_CountProductsWithCategoryAndCompany(dapper2);
+            //var result2 = await sp2.Execute(new Sp_CountProductsWithCategoryAndCompanyInput
+            //    {CategoryId = 1, CompanyId = 1});
 
 
             var spService = new StoredProcedureService(ConnectionString);
