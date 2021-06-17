@@ -41,12 +41,13 @@ namespace DapperSqlParser
                     const string schemeEndKeyWord = "JSON_OUTPUT_SCHEMA_ENDS";
 
                     var jsonSchemaStartIndex = parameters.StoredProcedureText.Definition.IndexOf(schemeStartKeyWord, StringComparison.Ordinal) + schemeStartKeyWord.Length;
-                    var jsonSchemaEndIndex = parameters.StoredProcedureText.Definition.IndexOf(schemeEndKeyWord, StringComparison.Ordinal);
+                    var jsonSchemaEndIndex = parameters.StoredProcedureText.Definition.IndexOf(schemeEndKeyWord, StringComparison.Ordinal) - jsonSchemaStartIndex;
 
-                    if (jsonSchemaStartIndex > jsonSchemaEndIndex)
+                    if (jsonSchemaStartIndex==-1 && jsonSchemaEndIndex==-1)
                         return await Task.FromResult($"\t\t//Could not find schema for {parameters.StoredProcedureInfo.Name}");
 
-                    var jsonSchemaFromSp = parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex - jsonSchemaStartIndex);
+
+                    var jsonSchemaFromSp = parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
 
                     //Schema parsing from JSON to csSharp
                     var schema = await JsonSchema.FromJsonAsync(jsonSchemaFromSp);
