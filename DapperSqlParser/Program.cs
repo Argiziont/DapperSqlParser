@@ -9,6 +9,9 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DapperSqlParser.Services.Exceptions;
+using ShopParserApi.Services.GeneratedClientFile;
+using SpClient;
 using static DapperSqlParser.Services.TemplateService.TemplateNamingConstants;
 
 namespace DapperSqlParser
@@ -23,11 +26,9 @@ namespace DapperSqlParser
         private static async Task Main(string[] args)
         {
             if (!args.Any())
-            {
                 Console.WriteLine("Specify stored procedures for parsing: \n" +
                                   "\t-all :for all procedures\n" +
                                   "\t-mod [sp1],[sp2],[sp3],[...] :for procedures with given names");
-            }
 
             var spService = new StoredProcedureService(ConnectionString);
             List<StoredProcedureParameters> paramsList;
@@ -63,8 +64,7 @@ namespace DapperSqlParser
                     parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeEndKeyWordSnippet, StringComparison.Ordinal);
 
                 if (jsonSchemaStartIndex == -1 && jsonSchemaEndIndex == -1)
-                    return await Task.FromResult(
-                        $"\t\t//Could not find schema for {parameters.StoredProcedureInfo.Name}");
+                    throw new NullModelException();
 
                 jsonSchemaStartIndex += OutputSchemeStartKeyWordSnippet.Length;
                 jsonSchemaEndIndex -= jsonSchemaStartIndex;
@@ -186,13 +186,21 @@ namespace DapperSqlParser
                 outputNamespace.AppendLine(
                     $"\n\t#region {spParameter.StoredProcedureInfo.Name}"); //Wrapping every sp into region
 
-                var outputModelClass = await CreateSpDataModelForOutputParams(spParameter);
-                var inputModelClass = await CreateSpDataModelForInputParams(spParameter);
-                var clientClass = await CreateSpClientClass(spParameter);
+                try
+                {
+                    var outputModelClass = await CreateSpDataModelForOutputParams(spParameter);
+                    var inputModelClass = await CreateSpDataModelForInputParams(spParameter);
+                    var clientClass = await CreateSpClientClass(spParameter);
 
-                outputNamespace.AppendLine(outputModelClass);
-                outputNamespace.AppendLine(inputModelClass);
-                outputNamespace.AppendLine(clientClass);
+                    outputNamespace.AppendLine(outputModelClass);
+                    outputNamespace.AppendLine(inputModelClass);
+                    outputNamespace.AppendLine(clientClass);
+                }
+                catch (NullModelException)
+                {
+                    outputNamespace.AppendLine($"//Model for {spParameter.StoredProcedureInfo.Name} was not found, could not parse this Stored Procedure!");
+                }
+              
 
                 outputNamespace.AppendLine("\t#endregion");
             }

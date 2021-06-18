@@ -1080,5 +1080,44 @@ namespace ShopParserApi.Services.GeneratedClientFile
 
 	#endregion
 
+	#region Sp_GetStoredProcedureJsonData
+//Model for Sp_GetStoredProcedureJsonData was not found, could not parse this Stored Procedure!
+	#endregion
 
+	#region Sp_GetStoredProcedures
+//Model for Sp_GetStoredProcedures was not found, could not parse this Stored Procedure!
+	#endregion
+
+	#region P_WrapperV1
+	public class P_WrapperV1Output 
+	{
+		[Newtonsoft.Json.JsonProperty("Id" , Required = Newtonsoft.Json.Required.Default)]
+		public System.Int32 Id {get; set;} 
+
+		[Newtonsoft.Json.JsonProperty("Name" , Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String Name {get; set;} 
+
+		[Newtonsoft.Json.JsonProperty("Url" , Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String Url {get; set;} 
+
+		[Newtonsoft.Json.JsonProperty("SupCategoryDataId" , Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.Int32 SupCategoryDataId {get; set;} 
+
+	}
+
+
+	public class P_WrapperV1 
+	{
+		private readonly IDapperExecutor<EmptyInputParams, P_WrapperV1Output> _dapperExecutor;
+		public P_WrapperV1(IDapperExecutor<EmptyInputParams, P_WrapperV1Output> dapperExecutor)
+		{
+			this._dapperExecutor = dapperExecutor;
+		}
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<P_WrapperV1Output>> Execute( )
+		{
+			return _dapperExecutor.ExecuteAsync("P_WrapperV1");
+		}
+	}
+
+	#endregion
 }

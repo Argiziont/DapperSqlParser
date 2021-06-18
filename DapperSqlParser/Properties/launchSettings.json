@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DapperSqlParser": {
+      "commandName": "Project",
+      "commandLineArgs": "-all"
+    }
+  }
+}
