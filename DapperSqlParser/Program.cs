@@ -20,24 +20,28 @@ namespace DapperSqlParser
 
         private const string NameSpaceName = "ShopParserApi.Services.GeneratedClientFile";
 
-        private static async Task Main()
+        private static async Task Main(string[] args)
         {
-
-            //var dapper1 = new DapperExecutor<Sp_GetPagedCategoriesInput, Sp_GetPagedCategoriesOutput>(ConnectionString);
-            //var sp1 = new Sp_GetPagedCategories(dapper1);
-            //var result1 = await sp1.Execute(new Sp_GetPagedCategoriesInput {Page = 1, RowsPerPage = 10});
-
-            //var dapper2 =
-            //    new DapperExecutor<Sp_CountProductsWithCategoryAndCompanyInput,
-            //        Sp_CountProductsWithCategoryAndCompanyOutput>(ConnectionString);
-            //var sp2 = new Sp_CountProductsWithCategoryAndCompany(dapper2);
-            //var result2 = await sp2.Execute(new Sp_CountProductsWithCategoryAndCompanyInput
-            //    {CategoryId = 1, CompanyId = 1});
-
+            if (!args.Any())
+            {
+                Console.WriteLine("Specify stored procedures for parsing: \n" +
+                                  "\t-all :for all procedures\n" +
+                                  "\t-mod [sp1],[sp2],[sp3],[...] :for procedures with given names");
+            }
 
             var spService = new StoredProcedureService(ConnectionString);
+            List<StoredProcedureParameters> paramsList;
 
-            var paramsList = await spService.GenerateModelsListAsync();
+            if (args.Contains("-all"))
+            {
+                paramsList = await spService.GenerateModelsListAsync();
+            }
+            else if (args.Contains("-mod"))
+            {
+                paramsList = await spService.GenerateModelsListAsync(args[1].Split(','));
+            }
+            else
+                return;
             var spNamespace = await CreateSpClient(paramsList.ToArray(), NameSpaceName);
             await WriteGeneratedNamespaceToClientFile(spNamespace);
         }
@@ -226,21 +230,11 @@ namespace DapperSqlParser
             if (outputClass == null) throw new ArgumentNullException(nameof(outputClass));
 
 
-            if (parameters.InputParametersDataModels != null && parameters.OutputParametersDataModels != null)
-                outputClass.AppendLine(
-                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input, {parameters.StoredProcedureInfo.Name}Output> dapperExecutor)\n\t\t{{" + //Ctor 
-                    "\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
-                    "\n\t\t}"); //If input and output
-            else if (parameters.OutputParametersDataModels == null)
-                outputClass.AppendLine(
-                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input>dapperExecutor)\n\t\t{{" + //Ctor 
-                    "\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
-                    "\n\t\t}"); //If output
-            else
-                outputClass.AppendLine(
-                    $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<EmptyInputParams, {parameters.StoredProcedureInfo.Name}Output> dapperExecutor)\n\t\t{{" + //Ctor 
-                    "\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
-                    "\n\t\t}"); //If input
+            outputClass.AppendLine(
+                $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<{(parameters.InputParametersDataModels != null ? $"{parameters.StoredProcedureInfo.Name}Input" : "EmptyInputParams")}" +
+                $"{(parameters.OutputParametersDataModels != null ? $", {parameters.StoredProcedureInfo.Name}Output" : "")}> dapperExecutor)\n\t\t{{" + //Ctor 
+                "\n\t\t\tthis._dapperExecutor = dapperExecutor;" +
+                "\n\t\t}");
         }
 
         private static void AppendExecutorMethod(StoredProcedureParameters parameters, StringBuilder outputClass, bool spReturnJsonFlag)
@@ -250,21 +244,11 @@ namespace DapperSqlParser
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (outputClass == null) throw new ArgumentNullException(nameof(outputClass));
 
-            if (parameters.InputParametersDataModels != null && parameters.OutputParametersDataModels != null)
-                outputClass.AppendLine(
-                    $"\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<{parameters.StoredProcedureInfo.Name}Output>> Execute({parameters.StoredProcedureInfo.Name}Input request)\n\t\t{{" + //Execute method
-                    $"\n\t\t\treturn _dapperExecutor.{(spReturnJsonFlag ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{parameters.StoredProcedureInfo.Name}\", request);" +
-                    "\n\t\t}"); //If input and output
-            else if (parameters.OutputParametersDataModels == null)
-                outputClass.AppendLine(
-                    $"\t\tpublic System.Threading.Tasks.Task Execute({parameters.StoredProcedureInfo.Name}Input request)\n\t\t{{" + //Execute method
-                    $"\n\t\t\treturn _dapperExecutor.{(spReturnJsonFlag ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{parameters.StoredProcedureInfo.Name}\", request);" +
-                    "\n\t\t}"); //If output
-            else
-                outputClass.AppendLine(
-                    $"\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<{parameters.StoredProcedureInfo.Name}Output>> Execute()\n\t\t{{" + //Execute method
-                    $"\n\t\t\treturn _dapperExecutor.{(spReturnJsonFlag ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{parameters.StoredProcedureInfo.Name}\");" +
-                    "\n\t\t}"); //If input
+            outputClass.AppendLine(
+                $"\t\tpublic System.Threading.Tasks.Task{(parameters.OutputParametersDataModels != null ? $"<System.Collections.Generic.IEnumerable<{parameters.StoredProcedureInfo.Name}Output>>" : "")} " +
+                $"Execute({(parameters.InputParametersDataModels != null ? $"{parameters.StoredProcedureInfo.Name}Input request" : "")} )\n\t\t{{" + //Execute method
+                $"\n\t\t\treturn _dapperExecutor.{(spReturnJsonFlag ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{parameters.StoredProcedureInfo.Name}\"{(parameters.InputParametersDataModels != null ? ", request" : "")});" +
+                "\n\t\t}"); //If input and output
         }
 
         private static void AppendIDapperExecutorField(StoredProcedureParameters parameters, StringBuilder outputClass)
@@ -274,16 +258,10 @@ namespace DapperSqlParser
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (outputClass == null) throw new ArgumentNullException(nameof(outputClass));
 
-
-            if (parameters.InputParametersDataModels != null && parameters.OutputParametersDataModels != null)
-                outputClass.AppendLine(
-                    $"\t\tprivate readonly IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input, {parameters.StoredProcedureInfo.Name}Output> _dapperExecutor;"); //If input and output
-            else if (parameters.OutputParametersDataModels == null)
-                outputClass.AppendLine(
-                    $"\t\tprivate readonly IDapperExecutor<{parameters.StoredProcedureInfo.Name}Input> _dapperExecutor;"); //If output
-            else
-                outputClass.AppendLine(
-                    $"\t\tprivate readonly IDapperExecutor<EmptyInputParams, {parameters.StoredProcedureInfo.Name}Output> _dapperExecutor;"); //If input
+            outputClass.AppendLine(
+                $"\t\tprivate readonly " +
+                $"IDapperExecutor<{(parameters.InputParametersDataModels != null ? $"{parameters.StoredProcedureInfo.Name}Input" : "EmptyInputParams")}" +
+                $"{(parameters.OutputParametersDataModels != null ? $", {parameters.StoredProcedureInfo.Name}Output" : "")}> _dapperExecutor;");
         }
 
         private static void AppendOutputParameterPropertyField(StoredProcedureParameters parameters, StringBuilder outputClass,

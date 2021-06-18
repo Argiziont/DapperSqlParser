@@ -13,5 +13,7 @@ namespace DapperSqlParser.Models
         [JsonProperty("ParameterName")] public string ParameterName { get; set; }
         [JsonProperty("SystemTypeName")] public string TypeName { get; set; }
         [JsonProperty("MaxLength")] public int MaxLength { get; set; }
+        [JsonProperty("ErrorNumber")] public int ErrorCode { get; set; }
+        [JsonProperty("ErrorMessage")] public string ErrorMessage { get; set; }
     }
 }

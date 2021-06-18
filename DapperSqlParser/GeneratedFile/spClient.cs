@@ -25,7 +25,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_CountProductsWithCategoryOutput>> Execute(Sp_CountProductsWithCategoryInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_CountProductsWithCategoryOutput>> Execute(Sp_CountProductsWithCategoryInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_CountProductsWithCategory", request);
 		}
@@ -34,23 +34,22 @@ namespace ShopParserApi.Services.GeneratedClientFile
 	#endregion
 
 	#region Sp_GetAllCategories
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
-    public partial class Sp_GetAllCategoriesOutput 
-    {
-        [Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Id { get; set; }
-    
-        [Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Name { get; set; }
-    
-        [Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Url { get; set; }
-    
-        [Newtonsoft.Json.JsonProperty("SupCategoryDataId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int SupCategoryDataId { get; set; }
-    
-    
-    }
+	public class Sp_GetAllCategoriesOutput 
+	{
+		[Newtonsoft.Json.JsonProperty("Id" , Required = Newtonsoft.Json.Required.Default)]
+		public System.Int32 Id {get; set;} 
+
+		[Newtonsoft.Json.JsonProperty("Name" , Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String Name {get; set;} 
+
+		[Newtonsoft.Json.JsonProperty("Url" , Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String Url {get; set;} 
+
+		[Newtonsoft.Json.JsonProperty("SupCategoryDataId" , Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.Int32 SupCategoryDataId {get; set;} 
+
+	}
+
 
 	public class Sp_GetAllCategories 
 	{
@@ -59,9 +58,9 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllCategoriesOutput>> Execute()
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllCategoriesOutput>> Execute( )
 		{
-			return _dapperExecutor.ExecuteJsonAsync("Sp_GetAllCategories");
+			return _dapperExecutor.ExecuteAsync("Sp_GetAllCategories");
 		}
 	}
 
@@ -122,7 +121,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllProductsOutput>> Execute()
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllProductsOutput>> Execute( )
 		{
 			return _dapperExecutor.ExecuteJsonAsync("Sp_GetAllProducts");
 		}
@@ -161,7 +160,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetNestedCategoryByParentIdOutput>> Execute(Sp_GetNestedCategoryByParentIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetNestedCategoryByParentIdOutput>> Execute(Sp_GetNestedCategoryByParentIdInput request )
 		{
 			return _dapperExecutor.ExecuteJsonAsync("Sp_GetNestedCategoryByParentId", request);
 		}
@@ -202,7 +201,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetNestedCategoryByParentIdAndCompanyIdOutput>> Execute(Sp_GetNestedCategoryByParentIdAndCompanyIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetNestedCategoryByParentIdAndCompanyIdOutput>> Execute(Sp_GetNestedCategoryByParentIdAndCompanyIdInput request )
 		{
 			return _dapperExecutor.ExecuteJsonAsync("Sp_GetNestedCategoryByParentIdAndCompanyId", request);
 		}
@@ -247,7 +246,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetPagedCategoriesOutput>> Execute(Sp_GetPagedCategoriesInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetPagedCategoriesOutput>> Execute(Sp_GetPagedCategoriesInput request )
 		{
 			return _dapperExecutor.ExecuteJsonAsync("Sp_GetPagedCategories", request);
 		}
@@ -312,7 +311,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetProductsByCategoryIdOutput>> Execute(Sp_GetProductsByCategoryIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetProductsByCategoryIdOutput>> Execute(Sp_GetProductsByCategoryIdInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetProductsByCategoryId", request);
 		}
@@ -347,7 +346,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_CountProductsWithCategoryAndCompanyOutput>> Execute(Sp_CountProductsWithCategoryAndCompanyInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_CountProductsWithCategoryAndCompanyOutput>> Execute(Sp_CountProductsWithCategoryAndCompanyInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_CountProductsWithCategoryAndCompany", request);
 		}
@@ -400,7 +399,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCompanyByNameOutput>> Execute(Sp_GetCompanyByNameInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCompanyByNameOutput>> Execute(Sp_GetCompanyByNameInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetCompanyByName", request);
 		}
@@ -448,7 +447,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllCompaniesOutput>> Execute()
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllCompaniesOutput>> Execute( )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetAllCompanies");
 		}
@@ -501,7 +500,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCompanyByIdOutput>> Execute(Sp_GetCompanyByIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCompanyByIdOutput>> Execute(Sp_GetCompanyByIdInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetCompanyById", request);
 		}
@@ -530,46 +529,9 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_CountProductsWithCompanyOutput>> Execute(Sp_CountProductsWithCompanyInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_CountProductsWithCompanyOutput>> Execute(Sp_CountProductsWithCompanyInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_CountProductsWithCompany", request);
-		}
-	}
-
-	#endregion
-
-	#region Sp_AddCompany
-
-	public class Sp_AddCompanyInput 
-	{
-		[Newtonsoft.Json.JsonProperty("SourceId")] public System.Int32 SourceId {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("ExternalId")] public System.String ExternalId {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("Name")] public System.String Name {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("Url")] public System.String Url {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("SyncDate")] public System.DateTime SyncDate {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("JsonData")] public System.String JsonData {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("JsonDataSchema")] public System.String JsonDataSchema {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("CompanyState")] public System.Int32 CompanyState {get; set;} 
-
-	}
-
-	public class Sp_AddCompany 
-	{
-		private readonly IDapperExecutor<Sp_AddCompanyInput> _dapperExecutor;
-		public Sp_AddCompany(IDapperExecutor<Sp_AddCompanyInput>dapperExecutor)
-		{
-			this._dapperExecutor = dapperExecutor;
-		}
-		public System.Threading.Tasks.Task Execute(Sp_AddCompanyInput request)
-		{
-			return _dapperExecutor.ExecuteAsync("Sp_AddCompany", request);
 		}
 	}
 
@@ -632,81 +594,9 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllProductsByCompanyIdOutput>> Execute(Sp_GetAllProductsByCompanyIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllProductsByCompanyIdOutput>> Execute(Sp_GetAllProductsByCompanyIdInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetAllProductsByCompanyId", request);
-		}
-	}
-
-	#endregion
-
-	#region Sp_UpdateProduct
-
-	public class Sp_UpdateProductInput 
-	{
-		[Newtonsoft.Json.JsonProperty("productId")] public System.Int32 ProductId {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("companyId")] public System.Int32 CompanyId {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("externalId")] public System.String ExternalId {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("title")] public System.String Title {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("url")] public System.String Url {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("syncDate")] public System.DateTime SyncDate {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("expirationDate")] public System.DateTime ExpirationDate {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("productState")] public System.Int32 ProductState {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("description")] public System.String Description {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("price")] public System.String Price {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("keyWords")] public System.String KeyWords {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("jsonData")] public System.String JsonData {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("jsonDataSchema")] public System.String JsonDataSchema {get; set;} 
-
-	}
-
-	public class Sp_UpdateProduct 
-	{
-		private readonly IDapperExecutor<Sp_UpdateProductInput> _dapperExecutor;
-		public Sp_UpdateProduct(IDapperExecutor<Sp_UpdateProductInput>dapperExecutor)
-		{
-			this._dapperExecutor = dapperExecutor;
-		}
-		public System.Threading.Tasks.Task Execute(Sp_UpdateProductInput request)
-		{
-			return _dapperExecutor.ExecuteAsync("Sp_UpdateProduct", request);
-		}
-	}
-
-	#endregion
-
-	#region Sp_UpdateProductState
-
-	public class Sp_UpdateProductStateInput 
-	{
-		[Newtonsoft.Json.JsonProperty("productId")] public System.Int32 ProductId {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("productState")] public System.Int32 ProductState {get; set;} 
-
-	}
-
-	public class Sp_UpdateProductState 
-	{
-		private readonly IDapperExecutor<Sp_UpdateProductStateInput> _dapperExecutor;
-		public Sp_UpdateProductState(IDapperExecutor<Sp_UpdateProductStateInput>dapperExecutor)
-		{
-			this._dapperExecutor = dapperExecutor;
-		}
-		public System.Threading.Tasks.Task Execute(Sp_UpdateProductStateInput request)
-		{
-			return _dapperExecutor.ExecuteAsync("Sp_UpdateProductState", request);
 		}
 	}
 
@@ -769,7 +659,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetProductByIdOutput>> Execute(Sp_GetProductByIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetProductByIdOutput>> Execute(Sp_GetProductByIdInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetProductById", request);
 		}
@@ -808,7 +698,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCategoriesByProductIdOutput>> Execute(Sp_GetCategoriesByProductIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCategoriesByProductIdOutput>> Execute(Sp_GetCategoriesByProductIdInput request )
 		{
 			return _dapperExecutor.ExecuteJsonAsync("Sp_GetCategoriesByProductId", request);
 		}
@@ -847,7 +737,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCategoryByIdOutput>> Execute(Sp_GetCategoryByIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCategoryByIdOutput>> Execute(Sp_GetCategoryByIdInput request )
 		{
 			return _dapperExecutor.ExecuteJsonAsync("Sp_GetCategoryById", request);
 		}
@@ -912,7 +802,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetSuccessfulProductsByCompanyIdOutput>> Execute(Sp_GetSuccessfulProductsByCompanyIdInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetSuccessfulProductsByCompanyIdOutput>> Execute(Sp_GetSuccessfulProductsByCompanyIdInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetSuccessfulProductsByCompanyId", request);
 		}
@@ -941,7 +831,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetStoredProcedureDefinitionOutput>> Execute(Sp_GetStoredProcedureDefinitionInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetStoredProcedureDefinitionOutput>> Execute(Sp_GetStoredProcedureDefinitionInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetStoredProcedureDefinition", request);
 		}
@@ -1030,7 +920,7 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetStoredProcedureParametersOutput>> Execute(Sp_GetStoredProcedureParametersInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetStoredProcedureParametersOutput>> Execute(Sp_GetStoredProcedureParametersInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetStoredProcedureParameters", request);
 		}
@@ -1182,12 +1072,13 @@ namespace ShopParserApi.Services.GeneratedClientFile
 		{
 			this._dapperExecutor = dapperExecutor;
 		}
-		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetStoredProcedureOutputParametersOutput>> Execute(Sp_GetStoredProcedureOutputParametersInput request)
+		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetStoredProcedureOutputParametersOutput>> Execute(Sp_GetStoredProcedureOutputParametersInput request )
 		{
 			return _dapperExecutor.ExecuteAsync("Sp_GetStoredProcedureOutputParameters", request);
 		}
 	}
 
 	#endregion
+
 
 }
