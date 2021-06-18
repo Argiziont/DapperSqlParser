@@ -1,17 +1,15 @@
-﻿using DapperSqlParser.Extensions;
-using DapperSqlParser.Models;
-using DapperSqlParser.Services;
-using NJsonSchema;
-using NJsonSchema.CodeGeneration.CSharp;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DapperSqlParser.Extensions;
+using DapperSqlParser.Models;
+using DapperSqlParser.Services;
 using DapperSqlParser.Services.Exceptions;
-using ShopParserApi.Services.GeneratedClientFile;
-using SpClient;
+using NJsonSchema;
+using NJsonSchema.CodeGeneration.CSharp;
 using static DapperSqlParser.Services.TemplateService.TemplateNamingConstants;
 
 namespace DapperSqlParser
@@ -34,13 +32,9 @@ namespace DapperSqlParser
             List<StoredProcedureParameters> paramsList;
 
             if (args.Contains("-all"))
-            {
                 paramsList = await spService.GenerateModelsListAsync();
-            }
             else if (args.Contains("-mod"))
-            {
                 paramsList = await spService.GenerateModelsListAsync(args[1].Split(','));
-            }
             else
                 return;
             var spNamespace = await CreateSpClient(paramsList.ToArray(), NameSpaceName);
@@ -54,14 +48,16 @@ namespace DapperSqlParser
 
             var outputClass = new StringBuilder();
 
-            if (parameters.OutputParametersDataModels.First().ParameterName != null && Guid.TryParse(parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""),
-                    out _))
+            if (parameters.OutputParametersDataModels.First().ParameterName != null && Guid.TryParse(
+                parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""),
+                out _))
             {
-
                 var jsonSchemaStartIndex =
-                    parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeStartKeyWordSnippet, StringComparison.Ordinal);
+                    parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeStartKeyWordSnippet,
+                        StringComparison.Ordinal);
                 var jsonSchemaEndIndex =
-                    parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeEndKeyWordSnippet, StringComparison.Ordinal);
+                    parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeEndKeyWordSnippet,
+                        StringComparison.Ordinal);
 
                 if (jsonSchemaStartIndex == -1 && jsonSchemaEndIndex == -1)
                     throw new NullModelException();
@@ -109,9 +105,11 @@ namespace DapperSqlParser
 
 
             var jsonSchemaStartIndex =
-                parameters.StoredProcedureText.Definition.IndexOf(InputSchemeStartKeyWordSnippet, StringComparison.Ordinal);
+                parameters.StoredProcedureText.Definition.IndexOf(InputSchemeStartKeyWordSnippet,
+                    StringComparison.Ordinal);
             var jsonSchemaEndIndex =
-                parameters.StoredProcedureText.Definition.IndexOf(InputSchemeEndKeyWordSnippet, StringComparison.Ordinal);
+                parameters.StoredProcedureText.Definition.IndexOf(InputSchemeEndKeyWordSnippet,
+                    StringComparison.Ordinal);
 
             if (jsonSchemaStartIndex != -1 && jsonSchemaEndIndex != -1)
             {
@@ -160,8 +158,10 @@ namespace DapperSqlParser
 
             #region CheckSpForJsonOutput
 
-            var spReturnJsonFlag = parameters.OutputParametersDataModels?.First().ParameterName != null && Guid.TryParse(parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""),
-                out _);
+            var spReturnJsonFlag = parameters.OutputParametersDataModels?.First().ParameterName != null &&
+                                   Guid.TryParse(
+                                       parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""),
+                                       out _);
 
             #endregion
 
@@ -198,9 +198,10 @@ namespace DapperSqlParser
                 }
                 catch (NullModelException)
                 {
-                    outputNamespace.AppendLine($"//Model for {spParameter.StoredProcedureInfo.Name} was not found, could not parse this Stored Procedure!");
+                    outputNamespace.AppendLine(
+                        $"//Model for {spParameter.StoredProcedureInfo.Name} was not found, could not parse this Stored Procedure!");
                 }
-              
+
 
                 outputNamespace.AppendLine("\t#endregion");
             }
@@ -219,7 +220,8 @@ namespace DapperSqlParser
             await File.WriteAllTextAsync(filePath, namespaceString);
         }
 
-        private static void AppendInputParameterPropertyField(StoredProcedureParameters parameters, StringBuilder inputClass,
+        private static void AppendInputParameterPropertyField(StoredProcedureParameters parameters,
+            StringBuilder inputClass,
             InputParametersDataModel field)
         {
             inputClass.AppendLine(new string(
@@ -233,7 +235,8 @@ namespace DapperSqlParser
         private static void AppendClientConstructor(StoredProcedureParameters parameters, StringBuilder outputClass)
         {
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
-                throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " + nameof(parameters.OutputParametersDataModels));
+                throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " +
+                                                nameof(parameters.OutputParametersDataModels));
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (outputClass == null) throw new ArgumentNullException(nameof(outputClass));
 
@@ -245,10 +248,12 @@ namespace DapperSqlParser
                 "\n\t\t}");
         }
 
-        private static void AppendExecutorMethod(StoredProcedureParameters parameters, StringBuilder outputClass, bool spReturnJsonFlag)
+        private static void AppendExecutorMethod(StoredProcedureParameters parameters, StringBuilder outputClass,
+            bool spReturnJsonFlag)
         {
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
-                throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " + nameof(parameters.OutputParametersDataModels));
+                throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " +
+                                                nameof(parameters.OutputParametersDataModels));
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (outputClass == null) throw new ArgumentNullException(nameof(outputClass));
 
@@ -262,17 +267,19 @@ namespace DapperSqlParser
         private static void AppendIDapperExecutorField(StoredProcedureParameters parameters, StringBuilder outputClass)
         {
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
-                throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " + nameof(parameters.OutputParametersDataModels));
+                throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " +
+                                                nameof(parameters.OutputParametersDataModels));
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (outputClass == null) throw new ArgumentNullException(nameof(outputClass));
 
             outputClass.AppendLine(
-                $"\t\tprivate readonly " +
+                "\t\tprivate readonly " +
                 $"IDapperExecutor<{(parameters.InputParametersDataModels != null ? $"{parameters.StoredProcedureInfo.Name}Input" : "EmptyInputParams")}" +
                 $"{(parameters.OutputParametersDataModels != null ? $", {parameters.StoredProcedureInfo.Name}Output" : "")}> _dapperExecutor;");
         }
 
-        private static void AppendOutputParameterPropertyField(StoredProcedureParameters parameters, StringBuilder outputClass,
+        private static void AppendOutputParameterPropertyField(StoredProcedureParameters parameters,
+            StringBuilder outputClass,
             OutputParametersDataModel field)
         {
             outputClass.AppendLine(new string(

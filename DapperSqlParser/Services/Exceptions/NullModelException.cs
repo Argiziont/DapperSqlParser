@@ -2,11 +2,7 @@
 
 namespace DapperSqlParser.Services.Exceptions
 {
-    public class NullModelException:Exception
+    public class NullModelException : Exception
     {
-        public NullModelException()
-        {
-            
-        }
     }
 }

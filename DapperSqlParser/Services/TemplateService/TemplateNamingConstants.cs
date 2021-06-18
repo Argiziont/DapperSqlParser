@@ -1,6 +1,6 @@
 ﻿namespace DapperSqlParser.Services.TemplateService
 {
-    public  static class TemplateNamingConstants
+    public static class TemplateNamingConstants
     {
         public static string ClassSnippet => "class";
         public static string PrivateSnippet => "private";

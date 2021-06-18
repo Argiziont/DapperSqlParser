@@ -1,11 +1,11 @@
-﻿using Dapper;
-using DapperSqlParser.Extensions;
-using Newtonsoft.Json;
-using SpClient;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using Dapper;
+using DapperSqlParser.Extensions;
+using Newtonsoft.Json;
+using SpClient;
 
 namespace DapperSqlParser.Services
 {
@@ -22,13 +22,14 @@ namespace DapperSqlParser.Services
         public async Task ExecuteAsync(string spName, TInParams inputParams)
         {
             if (JsonWrapperAttributeExtensions.ContainsAttribute<TInParams>())
+            {
                 await ExecuteWithJsonInputAsync(spName, inputParams);
+            }
             else
             {
                 await using var connection = new SqlConnection(_connectionString);
                 await connection.ExecuteAsync(spName, inputParams, commandType: CommandType.StoredProcedure);
             }
-
         }
 
         public async Task ExecuteWithJsonInputAsync(string spName, TInParams inputParams)
@@ -81,7 +82,7 @@ namespace DapperSqlParser.Services
         }
 
         async Task<IEnumerable<TOutParams>> IDapperExecutor<TInParams, TOutParams>.ExecuteAsync(string spName,
-             TInParams inputParams)
+            TInParams inputParams)
         {
             await using var connection = new SqlConnection(_connectionString);
 
@@ -91,28 +92,6 @@ namespace DapperSqlParser.Services
             if (typeof(TInParams) == typeof(EmptyInputParams) || inputParams.Equals(default))
                 return await ExecuteAsync(spName);
 
-
-            return await connection.QueryAsync<TOutParams>(spName, inputParams,
-                commandType: CommandType.StoredProcedure);
-        }
-
-        public async Task<IEnumerable<TOutParams>> ExecuteWithJsonInputAsync(string spName, TInParams inputParams)
-        {
-            /*
-             *  If input is json so we must to know how to deserialize this
-             *  Dapper requires input names to be set
-             *  We pass this param name through  JsonWrapperAttribute
-             *  And create dynamic dictionary wrapper for our object
-             */
-            await using var connection = new SqlConnection(_connectionString);
-
-            var parameters = new DynamicParameters(new Dictionary<string, object>
-           {
-               {
-                   JsonWrapperAttributeExtensions.GetAttributeCustom<TInParams>().StoreProcedureJsonInputName,
-                   JsonConvert.SerializeObject(inputParams)
-               }
-           });
 
             return await connection.QueryAsync<TOutParams>(spName, inputParams,
                 commandType: CommandType.StoredProcedure);
@@ -133,7 +112,31 @@ namespace DapperSqlParser.Services
                 commandType: CommandType.StoredProcedure,
                 buffered: false));
         }
-        public async Task<IEnumerable<TOutParams>> ExecuteWithJsonInputAndOutputAsync(string spName, TInParams inputParams)
+
+        public async Task<IEnumerable<TOutParams>> ExecuteWithJsonInputAsync(string spName, TInParams inputParams)
+        {
+            /*
+             *  If input is json so we must to know how to deserialize this
+             *  Dapper requires input names to be set
+             *  We pass this param name through  JsonWrapperAttribute
+             *  And create dynamic dictionary wrapper for our object
+             */
+            await using var connection = new SqlConnection(_connectionString);
+
+            var parameters = new DynamicParameters(new Dictionary<string, object>
+            {
+                {
+                    JsonWrapperAttributeExtensions.GetAttributeCustom<TInParams>().StoreProcedureJsonInputName,
+                    JsonConvert.SerializeObject(inputParams)
+                }
+            });
+
+            return await connection.QueryAsync<TOutParams>(spName, inputParams,
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<IEnumerable<TOutParams>> ExecuteWithJsonInputAndOutputAsync(string spName,
+            TInParams inputParams)
         {
             /*
              *  If input is json so we must to know how to deserialize this
@@ -155,6 +158,5 @@ namespace DapperSqlParser.Services
                 commandType: CommandType.StoredProcedure,
                 buffered: false));
         }
-
     }
 }
