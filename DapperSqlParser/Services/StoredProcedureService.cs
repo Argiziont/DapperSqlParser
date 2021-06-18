@@ -77,7 +77,7 @@ namespace DapperSqlParser.Services
              *  If type doesn't exist -> return "object" type
              *  If this fails means that we can't parse this sp
              */
-            if (storedProcedureData?.OutputParametersDataModels.FirstOrDefault() != null &&
+            if (storedProcedureData?.OutputParametersDataModels?.FirstOrDefault() != null &&
                 storedProcedureData.OutputParametersDataModels.First().ErrorCode == 10)
             {
                 var jsonSchemaStartIndex =
@@ -132,6 +132,7 @@ namespace DapperSqlParser.Services
         {
             await using var connection = new SqlConnection(_connectionString);
 
+
             var values = new {spName};
 
             const string query =
@@ -154,7 +155,7 @@ namespace DapperSqlParser.Services
                     var spParameter = await GetSpDataAsync(sp.Name);
                     paramsList.Add(spParameter);
                 }
-                catch
+                catch(Exception e)
                 {
                     /* ignored*/
                 }
