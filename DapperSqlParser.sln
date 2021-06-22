@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DapperSqlParser", "DapperSqlParser\DapperSqlParser.csproj", "{A0DBA5AD-A3E1-4283-B47A-876A7F1567BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapperSqlParser.Tests", "DapperSqlParser.Tests\DapperSqlParser.Tests.csproj", "{A72AFDF3-5C47-4C21-A705-029ED83FE77A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DapperSqlParser.Tests", "DapperSqlParser.Tests\DapperSqlParser.Tests.csproj", "{A72AFDF3-5C47-4C21-A705-029ED83FE77A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DapperSqlParser.TestRepository", "DapperSqlParser.TestRepository\DapperSqlParser.TestRepository.csproj", "{424456B8-BA92-41A8-92AD-24F8FE55FC90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A72AFDF3-5C47-4C21-A705-029ED83FE77A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A72AFDF3-5C47-4C21-A705-029ED83FE77A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A72AFDF3-5C47-4C21-A705-029ED83FE77A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{424456B8-BA92-41A8-92AD-24F8FE55FC90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{424456B8-BA92-41A8-92AD-24F8FE55FC90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{424456B8-BA92-41A8-92AD-24F8FE55FC90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{424456B8-BA92-41A8-92AD-24F8FE55FC90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

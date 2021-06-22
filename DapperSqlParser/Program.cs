@@ -10,7 +10,6 @@ using DapperSqlParser.Services;
 using DapperSqlParser.Services.Exceptions;
 using NJsonSchema;
 using NJsonSchema.CodeGeneration.CSharp;
-using ShopParserApi.Services.GeneratedClientFile;
 using static DapperSqlParser.Services.TemplateService.TemplateNamingConstants;
 
 namespace DapperSqlParser
@@ -20,7 +19,7 @@ namespace DapperSqlParser
         private const string ConnectionString =
             "Server= .\\SQLExpress;Database=DapperSPTestDb;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-        private const string NameSpaceName = "ShopParserApi.Services.GeneratedClientFile";
+        private const string NameSpaceName = "DapperSqlParser.TestRepository.Service.GeneratedClientFile";
 
         private static async Task Main(string[] args)
         {

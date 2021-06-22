@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Dapper;
-using DapperSqlParser.Extensions;
+using DapperSqlParser.TestRepository.Service.DapperExecutor.Extensions;
+using Microsoft.Data.SqlClient;
 using Newtonsoft.Json;
-using SpClient;
 
-namespace DapperSqlParser.Services
+namespace DapperSqlParser.TestRepository.Service.DapperExecutor
 {
     public class DapperExecutor<TInParams> : IDapperExecutor<TInParams>
         where TInParams : class
@@ -130,9 +130,11 @@ namespace DapperSqlParser.Services
                     JsonConvert.SerializeObject(inputParams)
                 }
             });
-
+            
             return await connection.QueryAsync<TOutParams>(spName, parameters,
-                commandType: CommandType.StoredProcedure);
+                    commandType: CommandType.StoredProcedure);
+            
+
         }
 
         public async Task<IEnumerable<TOutParams>> ExecuteWithJsonInputAndOutputAsync(string spName,

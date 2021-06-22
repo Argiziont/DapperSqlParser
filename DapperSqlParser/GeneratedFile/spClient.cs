@@ -1,4 +1,7 @@
-namespace ShopParserApi.Services.GeneratedClientFile 
+using DapperSqlParser.Services;
+using SpClient;
+
+namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile 
 {
 
 	#region Sp_GetAllCategories
@@ -140,12 +143,15 @@ namespace ShopParserApi.Services.GeneratedClientFile
 
 	}
 
-	public class Sp_GetCategoryByIdInput 
-	{
-		[Newtonsoft.Json.JsonProperty("categorytId")] public System.Int32 CategorytId {get; set;} 
-
-	}
-
+	[JsonWrapper("@jsonInput")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
+    public partial class Sp_GetCategoryByIdInput 
+    {
+        [Newtonsoft.Json.JsonProperty("categoryId", Required = Newtonsoft.Json.Required.Always)]
+        public int CategoryId { get; set; }
+    
+    
+    }
 	public class Sp_GetCategoryById 
 	{
 		private readonly IDapperExecutor<Sp_GetCategoryByIdInput, Sp_GetCategoryByIdOutput> _dapperExecutor;
@@ -198,14 +204,18 @@ namespace ShopParserApi.Services.GeneratedClientFile
 
 	#region Sp_InsertCategory
 
-	public class Sp_InsertCategoryInput 
-	{
-		[Newtonsoft.Json.JsonProperty("Name")] public System.String Name {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("Url")] public System.String Url {get; set;} 
-
-	}
-
+	[JsonWrapper("@jsonInput")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
+    public partial class Sp_InsertCategoryInput 
+    {
+        [Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Name { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Url { get; set; }
+    
+    
+    }
 	public class Sp_InsertCategory 
 	{
 		private readonly IDapperExecutor<Sp_InsertCategoryInput> _dapperExecutor;
@@ -248,14 +258,18 @@ namespace ShopParserApi.Services.GeneratedClientFile
 
 	#region Sp_UpdateCategoryNameById
 
-	public class Sp_UpdateCategoryNameByIdInput 
-	{
-		[Newtonsoft.Json.JsonProperty("categoryId")] public System.Int32 CategoryId {get; set;} 
-
-		[Newtonsoft.Json.JsonProperty("categoryName")] public System.String CategoryName {get; set;} 
-
-	}
-
+	[JsonWrapper("@jsonInput")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
+    public partial class Sp_UpdateCategoryNameByIdInput 
+    {
+        [Newtonsoft.Json.JsonProperty("categoryId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CategoryId { get; set; }
+    
+        [Newtonsoft.Json.JsonProperty("categoryName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string CategoryName { get; set; }
+    
+    
+    }
 	public class Sp_UpdateCategoryNameById 
 	{
 		private readonly IDapperExecutor<Sp_UpdateCategoryNameByIdInput> _dapperExecutor;
@@ -273,12 +287,15 @@ namespace ShopParserApi.Services.GeneratedClientFile
 
 	#region Sp_DeleteCategoryById
 
-	public class Sp_DeleteCategoryByIdInput 
-	{
-		[Newtonsoft.Json.JsonProperty("categoryId")] public System.Int32 CategoryId {get; set;} 
-
-	}
-
+	[JsonWrapper("@jsonInput")]
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
+    public partial class Sp_DeleteCategoryByIdInput 
+    {
+        [Newtonsoft.Json.JsonProperty("categoryId", Required = Newtonsoft.Json.Required.Always)]
+        public int CategoryId { get; set; }
+    
+    
+    }
 	public class Sp_DeleteCategoryById 
 	{
 		private readonly IDapperExecutor<Sp_DeleteCategoryByIdInput> _dapperExecutor;

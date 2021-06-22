@@ -155,7 +155,7 @@ namespace DapperSqlParser.Services
                     var spParameter = await GetSpDataAsync(sp.Name);
                     paramsList.Add(spParameter);
                 }
-                catch(Exception e)
+                catch
                 {
                     /* ignored*/
                 }
