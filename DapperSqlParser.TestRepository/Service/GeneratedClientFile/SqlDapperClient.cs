@@ -5,19 +5,20 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 {
 
 	#region Sp_GetAllCategories
-	public class Sp_GetAllCategoriesOutput
+	[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
+	public partial class Sp_GetAllCategoriesOutput
 	{
-		[Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.Default)]
-		public System.Int32 Id { get; set; }
+		[Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+		public int Id { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.DisallowNull)]
-		public System.String Name { get; set; }
+		[Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+		public string Name { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.DisallowNull)]
-		public System.String Url { get; set; }
+		[Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+		public string Url { get; set; }
+
 
 	}
-
 
 	public class Sp_GetAllCategories
 	{
@@ -28,7 +29,7 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 		}
 		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetAllCategoriesOutput>> Execute()
 		{
-			return _dapperExecutor.ExecuteAsync("Sp_GetAllCategories");
+			return _dapperExecutor.ExecuteJsonAsync("Sp_GetAllCategories");
 		}
 	}
 
@@ -130,19 +131,20 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 	#endregion
 
 	#region Sp_GetCategoryById
-	public class Sp_GetCategoryByIdOutput
+	[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
+	public partial class Sp_GetCategoryByIdOutput
 	{
-		[Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.Default)]
-		public System.Int32 Id { get; set; }
+		[Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+		public int Id { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.DisallowNull)]
-		public System.String Name { get; set; }
+		[Newtonsoft.Json.JsonProperty("Name", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+		public string Name { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.DisallowNull)]
-		public System.String Url { get; set; }
+		[Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+		public string Url { get; set; }
+
 
 	}
-
 	[JsonWrapper("@jsonInput")]
 	[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
 	public partial class Sp_GetCategoryByIdInput
@@ -161,7 +163,7 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 		}
 		public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<Sp_GetCategoryByIdOutput>> Execute(Sp_GetCategoryByIdInput request)
 		{
-			return _dapperExecutor.ExecuteAsync("Sp_GetCategoryById", request);
+			return _dapperExecutor.ExecuteJsonAsync("Sp_GetCategoryById", request);
 		}
 	}
 

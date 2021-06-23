@@ -154,7 +154,7 @@ namespace DapperSqlParser.Services
                 }
             });
 
-            return await Task.FromResult(connection.QueryJson<TOutParams>(spName, connection,
+            return await Task.FromResult(connection.QueryJson<TOutParams>(spName, parameters,
                 commandType: CommandType.StoredProcedure,
                 buffered: false));
         }
