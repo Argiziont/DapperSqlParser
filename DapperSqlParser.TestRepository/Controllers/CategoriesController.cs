@@ -101,7 +101,7 @@ namespace DapperSqlParser.TestRepository.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> UpdateTitleByIdAsync(int categoryId, string categoryName)
+        public async Task<IActionResult> UpdateTitleByIdAsync(int categoryId, [FromBody]string categoryName)
         {
             try
             {
