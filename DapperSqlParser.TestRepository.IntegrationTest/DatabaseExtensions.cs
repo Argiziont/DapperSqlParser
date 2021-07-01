@@ -11,7 +11,7 @@ using Xunit.Sdk;
 
 namespace DapperSqlParser.TestRepository.IntegrationTest
 {
-    public class DatabaseExtensions
+    public static class DatabaseExtensions
     {
         private static string ProjectPath => Directory.GetParent(Environment.CurrentDirectory).Parent?.Parent?.FullName;
         private static string ConnectionString => JObject.Parse(File.ReadAllText(Path.Combine(ProjectPath, @"appsettings.json")))["ConnectionStrings"]["UserDb"].ToString();
