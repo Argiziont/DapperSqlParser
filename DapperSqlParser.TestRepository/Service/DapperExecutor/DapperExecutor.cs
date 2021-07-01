@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper;
@@ -22,9 +21,7 @@ namespace DapperSqlParser.TestRepository.Service.DapperExecutor
         public async Task ExecuteAsync(string spName, TInParams inputParams)
         {
             if (JsonWrapperAttributeExtensions.ContainsAttribute<TInParams>())
-            {
                 await ExecuteWithJsonInputAsync(spName, inputParams);
-            }
             else
             {
                 await using var connection = new SqlConnection(_connectionString);

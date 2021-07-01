@@ -1,11 +1,5 @@
-﻿using Dapper;
-using Microsoft.Data.SqlClient;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Data;
-using System.IO;
+﻿using System.IO;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;

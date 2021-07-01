@@ -74,7 +74,7 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
 
             //Arrange
             var client = new TestClientProvider().Client;
-            var stringContent = new StringContent(jsonPayLod.ToString(), System.Text.Encoding.UTF8, "application/json");
+            var stringContent = new StringContent(jsonPayLod, System.Text.Encoding.UTF8, "application/json");
 
             //Act
             var response = await client.PostAsync($"{url}", stringContent);
