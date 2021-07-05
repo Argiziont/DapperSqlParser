@@ -154,8 +154,7 @@ namespace DapperSqlParser
             if (parameters == null) throw new ArgumentNullException(nameof(parameters));
 
             var outputClass = new StringBuilder();
-
-
+            
             #region CheckSpForJsonOutput
 
             var spReturnJsonFlag = parameters.OutputParametersDataModels?.First().ParameterName != null &&
@@ -164,7 +163,7 @@ namespace DapperSqlParser
                                        out _);
 
             #endregion
-
+            
             outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name} \n\t{{"); //Class name
 
             AppendIDapperExecutorField(parameters, outputClass);
@@ -283,8 +282,8 @@ namespace DapperSqlParser
             OutputParametersDataModel field)
         {
             outputClass.AppendLine(new string(
-                $"\t\t[Newtonsoft.Json.JsonProperty({(field.ParameterName == null ? $"\"{parameters.StoredProcedureInfo.Name}Result\"" : $"\"{field.ParameterName}\"")} " + //If not nullable -> required
-                $", Required = {(field.IsNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]\n" + //Json field
+                $"\t\t[Newtonsoft.Json.JsonProperty({(field.ParameterName == null ? $"\"{parameters.StoredProcedureInfo.Name}Result\"" : $"\"{field.ParameterName}\"")} " + 
+                $", Required = {(field.IsNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]\n" + //If fields isn't nullable -> it's required in any case
                 $"\t\tpublic {field.TypeName} " + //Type name
                 $"{(field.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{field.ParameterName.Replace("-", "_")}")} " + //Param name
                 "{get; set;} \n"));

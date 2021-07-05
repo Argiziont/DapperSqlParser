@@ -17,7 +17,7 @@ namespace DapperSqlParser.Extensions
             if (!result.Any())
                 return default;
 
-            // Concats
+            // Concats all json chunks into one single string
             var sb = new StringBuilder();
             foreach (var jsonPart in result)
                 sb.Append(jsonPart);

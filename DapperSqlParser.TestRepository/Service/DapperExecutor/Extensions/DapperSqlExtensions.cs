@@ -32,7 +32,7 @@ namespace DapperSqlParser.TestRepository.Service.DapperExecutor.Extensions
                 ? JsonConvert.DeserializeObject<IEnumerable<T>>(sb.ToString())
                 : new[] { JsonConvert.DeserializeObject<T>(sb.ToString()) };
 
-            // Using Json.Net to de-serialize objects
+            // Using Newtonsoft.Json to de-serialize objects
         }
     }
 }
