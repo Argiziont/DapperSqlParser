@@ -13,7 +13,7 @@ using static DapperSqlParser.Services.TemplateService.TemplateNamingConstants;
 
 namespace DapperSqlParser.Services
 {
-    static class StoredProceduresExtractor
+    public static class StoredProceduresExtractor
     {
         public static async Task<string> CreateSpDataModelForOutputParams(StoredProcedureParameters parameters)
         {

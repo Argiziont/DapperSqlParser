@@ -5,31 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DapperSqlParser.WindowsApplication"
         mc:Ignorable="d"
-        Title="MainWindow" Height="599" Width="712">
+        Title="MainWindow" Height="486" Width="712">
     <Grid>
-        <Button Content="Generate output" HorizontalAlignment="Left" Margin="33,396,0,0" VerticalAlignment="Top" Height="32" Width="100"/>
-        <Button Content="Save to file" HorizontalAlignment="Left" Margin="162,396,0,0" VerticalAlignment="Top" Height="32" Width="100"/>
+        <Button Content="Generate output" HorizontalAlignment="Left" Margin="33,396,0,0" VerticalAlignment="Top" Height="32" Width="100" Name="GenerateOutputButton" Click="GenerateOutputButton_Click"/>
+        <Button Content="Save to file" HorizontalAlignment="Left" Margin="162,396,0,0" VerticalAlignment="Top" Height="32" Width="100" Name="SaveOutputToFileButton" Click="SaveOutputToFileButton_Click"/>
         <TextBlock HorizontalAlignment="Left" Margin="33,32,0,0" Text="Connection string" TextWrapping="Wrap" VerticalAlignment="Top" Width="219"/>
         <TextBox HorizontalAlignment="Left" Margin="33,53,0,0" VerticalAlignment="Top" Width="229" Height="23" Name="ConnectionStringTextBlock"/>
         <TextBlock HorizontalAlignment="Left" Margin="33,85,0,0" Text="Namespace name" TextWrapping="Wrap" VerticalAlignment="Top" Width="219"/>
         <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock"/>
         <RadioButton Content="-All" HorizontalAlignment="Left" Margin="33,147,0,0" VerticalAlignment="Top" Width="229" Checked="AllStoredProceduresRadioButton_Checked" Name="AllStoredProceduresRadioButton"/>
         <RadioButton Content="-Only checked" HorizontalAlignment="Left" Margin="33,167,0,0" VerticalAlignment="Top" Width="229" Name="OnlyCheckedStoredProceduresRadioButton" Checked="OnlyCheckedStoredProceduresRadioButton_Checked"/>
-        <RichTextBox Margin="320,10,10,171" IsReadOnly="True">
+        <RichTextBox Margin="320,10,10,10" IsReadOnly="True" Name="GeneratedOutputRichTextBox" VerticalScrollBarVisibility="Visible">
             <FlowDocument>
                 <Paragraph>
                     <Run Text="Generated stored procedures output"/>
                 </Paragraph>
             </FlowDocument>
         </RichTextBox>
-        <ScrollViewer Visibility="Hidden" HorizontalScrollBarVisibility="Visible" Margin="33,187,450,192" Name="CheckBoxListScrollView">
+        <DataGrid AutoGenerateColumns="True" x:Name="StoredProceduresDataGrid" Margin="33,196,397,79"/>
+        <!--<ScrollViewer Visibility="Hidden" HorizontalScrollBarVisibility="Visible" Margin="33,187,450,192" Name="CheckBoxListScrollView">
             <Grid Name="CheckBoxListGrid"/>
-        </ScrollViewer>
-        <ScrollViewer  Margin="33,433,10,10">
-            <DataGrid Height="106" Width="591" AutoGenerateColumns="True" Name="StoredProceduresDataGrid">
-            </DataGrid>
-
-        </ScrollViewer>
+        </ScrollViewer>-->
 
     </Grid>
 </Window>
