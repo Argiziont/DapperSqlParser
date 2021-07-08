@@ -12,48 +12,12 @@ using Newtonsoft.Json;
 
 namespace DapperSqlParser.Services
 {
+  
     public class StoredProcedureService
     {
         private readonly string _connectionString;
 
-        private readonly Dictionary<string, string> _sqlServerTypesTocSharpTypes = new Dictionary<string, string>
-        {
-            {"bigint", typeof(long).FullName},
-            {"binary", typeof(byte[]).FullName},
-            {"bit", typeof(bool).FullName},
-            {"char", typeof(char).FullName},
-            {"date", typeof(DateTime).FullName},
-            {"datetime", typeof(DateTime).FullName},
-            {"datetime2", typeof(DateTime).FullName},
-            {"datetimeoffset", typeof(DateTimeOffset).FullName},
-            {"decimal", typeof(decimal).FullName},
-            {"filestream", typeof(byte[]).FullName},
-            {"float", typeof(double).FullName},
-            {"geography", "Microsoft.SqlServer.Types.SqlGeography"},
-            {"geometry", "Microsoft.SqlServer.Types.SqlGeometry"},
-            {"hierarchyid", "Microsoft.SqlServer.Types.SqlHierarchyId"},
-            {"image", typeof(byte[]).FullName},
-            {"int", typeof(int).FullName},
-            {"money", typeof(decimal).FullName},
-            {"nchar", typeof(string).FullName},
-            {"ntext", typeof(string).FullName},
-            {"numeric", typeof(decimal).FullName},
-            {"nvarchar", typeof(string).FullName},
-            {"real", typeof(float).FullName},
-            {"rowversion", typeof(byte[]).FullName},
-            {"smalldatetime", typeof(DateTime).FullName},
-            {"smallint", typeof(short).FullName},
-            {"smallmoney", typeof(decimal).FullName},
-            {"sql_variant", typeof(object).FullName},
-            {"text", typeof(string).FullName},
-            {"time", typeof(TimeSpan).FullName},
-            {"timestamp", typeof(byte[]).FullName},
-            {"tinyint", typeof(byte).FullName},
-            {"uniqueidentifier", typeof(Guid).FullName},
-            {"varbinary", typeof(byte[]).FullName},
-            {"varchar", typeof(string).FullName},
-            {"xml", typeof(string).FullName}
-        };
+        
 
         public StoredProcedureService(string connectionString)
         {
@@ -101,10 +65,10 @@ namespace DapperSqlParser.Services
 
             if (storedProcedureData?.OutputParametersDataModels != null)
                 foreach (var outParam in storedProcedureData?.OutputParametersDataModels)
-                    outParam.TypeName = ConvertSqlServerFormatToCSharp(outParam.TypeName);
+                    outParam.TypeName = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(outParam.TypeName);
             if (storedProcedureData?.InputParametersDataModels != null)
                 foreach (var inParam in storedProcedureData?.InputParametersDataModels)
-                    inParam.TypeName = ConvertSqlServerFormatToCSharp(inParam.TypeName);
+                    inParam.TypeName = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(inParam.TypeName);
 
             if (storedProcedureData != null)
                 storedProcedureData.StoredProcedureInfo.Name =
@@ -182,11 +146,6 @@ namespace DapperSqlParser.Services
             return paramsList;
         }
 
-        public string ConvertSqlServerFormatToCSharp(string typeName)
-        {
-            return _sqlServerTypesTocSharpTypes.ContainsKey(typeName)
-                ? _sqlServerTypesTocSharpTypes[typeName]
-                : "System.Object";
-        }
+        
     }
 }

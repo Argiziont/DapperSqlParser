@@ -1,5 +1,10 @@
-﻿using System;
+﻿using DapperSqlParser.Models;
+using DapperSqlParser.Services;
+using DapperSqlParser.WindowsApplication.Models;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,66 +12,61 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using DapperSqlParser.Models;
-using DapperSqlParser.Services;
-using DapperSqlParser.WindowsApplication.Models;
-using Microsoft.Win32;
-
 
 namespace DapperSqlParser.WindowsApplication
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {
-        private List<StoredProcedureGridModel> _gridModels= new List<StoredProcedureGridModel>();
+        private ObservableCollection<StoredProcedureGridModel> _gridModels = new ObservableCollection<StoredProcedureGridModel>();
 
         public MainWindow()
         {
             InitializeComponent();
-
         }
 
 
         private void AddDetailsToStoredProcedureGrid(StoredProcedureGridModel gridModel)
         {
             _gridModels.Add(gridModel);
-            StoredProceduresDataGrid.ItemsSource = _gridModels;
-            StoredProceduresDataGrid.Items.Refresh();
+            RefreshDataGridWithNewItems();
         }
 
-        private void RefreshDataGrid()
+        private void RefreshDataGridWithNewItems()
         {
-            StoredProceduresDataGrid.ItemsSource = _gridModels;
+            ClearDataGrid();
+            foreach (var dataChunk in _gridModels) StoredProceduresDataGrid.Items.Add(dataChunk);
             StoredProceduresDataGrid.Items.Refresh();
         }
 
+        private void ClearDataGrid()
+        {
+            StoredProceduresDataGrid.Items.Clear();
+            StoredProceduresDataGrid.Items.Refresh();
+        }
 
         private void UnCheckAllCheckboxesInDataGrid()
         {
-            foreach (var storedProcedureDetails in _gridModels)
-            {
-                storedProcedureDetails.IsChecked = false;
-            }
-            RefreshDataGrid();
+            foreach (var storedProcedureDetails in _gridModels) storedProcedureDetails.IsChecked = false;
+            RefreshDataGridWithNewItems();
         }
+
         private void CheckAllCheckboxesInDataGrid()
         {
-            foreach (var storedProcedureDetails in _gridModels)
-            {
-                storedProcedureDetails.IsChecked = true;
-            }
-            RefreshDataGrid();
+            foreach (var storedProcedureDetails in _gridModels) storedProcedureDetails.IsChecked = true;
+            RefreshDataGridWithNewItems();
         }
 
         private string GetConnectionStringFromTextBox()
         {
-            if (ConnectionStringTextBlock.Text.Length==0)
+            if (ConnectionStringTextBlock.Text.Length == 0)
                 throw new ArgumentException(nameof(ConnectionStringTextBlock) + " was empty");
 
             return ConnectionStringTextBlock.Text;
         }
+
         private string GetNameSpaceStringFromTextBox()
         {
             if (NamespaceNameTextBlock.Text.Length == 0)
@@ -82,11 +82,12 @@ namespace DapperSqlParser.WindowsApplication
             {
                 connectionString = GetConnectionStringFromTextBox();
             }
-            catch
+            catch (ArgumentException)
             {
                 MessageBox.Show("Couldn't get stored procedures names!", "Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 throw new ArgumentException("Couldn't get stored procedures names!");
+
             }
 
             var storedProcedureService = new StoredProcedureService(connectionString);
@@ -98,106 +99,115 @@ namespace DapperSqlParser.WindowsApplication
             var storedProcedureService = GetStoreConnectedStoredProcedureService();
             var storedProceduresList = await storedProcedureService.GenerateModelsListAsync();
 
-            _gridModels = new List<StoredProcedureGridModel>();
+            _gridModels = new ObservableCollection<StoredProcedureGridModel>();
 
             foreach (var storedProcedure in storedProceduresList)
-            {
-                AddDetailsToStoredProcedureGrid(new StoredProcedureGridModel()
+                AddDetailsToStoredProcedureGrid(new StoredProcedureGridModel
                 {
                     IsChecked = false,
                     Title = storedProcedure.StoredProcedureInfo.Name,
-                    InputCount = storedProcedure.InputParametersDataModels != null ? storedProcedure.InputParametersDataModels.Length.ToString():"0",
-                    OutputCount = storedProcedure.OutputParametersDataModels != null ? storedProcedure.OutputParametersDataModels.Length.ToString() : "0",
+                    InputCount = storedProcedure.InputParametersDataModels != null
+                        ? storedProcedure.InputParametersDataModels.Length.ToString()
+                        : "0",
+                    OutputCount = storedProcedure.OutputParametersDataModels != null
+                        ? storedProcedure.OutputParametersDataModels.Length.ToString()
+                        : "0"
                 });
-            }
 
             CreateAndSetupEventsForStoredProcedureDataGrid();
         }
+
         private async void AllStoredProceduresRadioButton_Checked(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                await AddDetailsWithCheckBoxesListToDataGrid();
+            }
+            catch (ArgumentException) { return; }
 
-            await AddDetailsWithCheckBoxesListToDataGrid();
             CheckAllCheckboxesInDataGrid();
         }
 
         private async void OnlyCheckedStoredProceduresRadioButton_Checked(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                await AddDetailsWithCheckBoxesListToDataGrid();
+            }
+            catch (ArgumentException) { return; }
 
-            await AddDetailsWithCheckBoxesListToDataGrid();
             UnCheckAllCheckboxesInDataGrid();
-
         }
 
         private void CreateAndSetupEventsForStoredProcedureDataGrid()
         {
             var cellStyle = new Style(typeof(DataGridCell));
-            cellStyle.Setters.Add(new EventSetter(DataGridRow.MouseEnterEvent,
-                new MouseEventHandler(Row_MouseEnter)));
+            cellStyle.Setters.Add(new EventSetter(MouseEnterEvent,
+                new MouseEventHandler(Cell_MouseEnter)));
             StoredProceduresDataGrid.CellStyle = cellStyle;
         }
 
-        private async void Row_MouseEnter(object sender, MouseEventArgs e)
+        private async void Cell_MouseEnter(object sender, MouseEventArgs e)
         {
             if (sender == null) throw new ArgumentNullException(nameof(sender));
 
             var cell = e.Source as DataGridCell;
 
-            if (!(cell.DataContext is StoredProcedureGridModel cellDataContext))
+            if (!(cell?.DataContext is StoredProcedureGridModel cellDataContext))
                 return;
 
             switch (cell.Column.Header.ToString())
             {
                 case nameof(StoredProcedureGridModel.InputCount):
-                {
-                    var storedProcedureService = GetStoreConnectedStoredProcedureService();
-                    var storeProcedureParameters= await storedProcedureService.GetSpDataAsync(cellDataContext.Title);
-                    var inputTip = FormatInputStoredProcedureParameters(storeProcedureParameters.InputParametersDataModels);
+                    {
+                        StoredProcedureService storedProcedureService;
+                        try
+                        {
+                            storedProcedureService = GetStoreConnectedStoredProcedureService();
+                        }
+                        catch { return; }
 
-                    cell.ToolTip = inputTip;
-                    break;
-                }
+                        var storeProcedureParameters = await storedProcedureService.GetSpDataAsync(cellDataContext.Title);
+                        var inputTip = StoredProcedureParametersStringFormatter.FormatInputStoredProcedureParameters(storeProcedureParameters.InputParametersDataModels);
+
+                        cell.ToolTip = inputTip;
+                        break;
+                    }
                 case nameof(StoredProcedureGridModel.OutputCount):
-                {
-                    var storedProcedureService = GetStoreConnectedStoredProcedureService();
-                    var storeProcedureParameters = await storedProcedureService.GetSpDataAsync(cellDataContext.Title);
-                    var outputTip = FormatOutputStoredProcedureParameters(storeProcedureParameters.OutputParametersDataModels);
+                    {
+                        StoredProcedureService storedProcedureService;
+                        try
+                        {
+                            storedProcedureService = GetStoreConnectedStoredProcedureService();
+                        }
+                        catch { return; }
 
-                    cell.ToolTip = outputTip;
-                    break;
-                }
+                        var storeProcedureParameters = await storedProcedureService.GetSpDataAsync(cellDataContext.Title);
+                        var outputTip = StoredProcedureParametersStringFormatter.FormatOutputStoredProcedureParameters(storeProcedureParameters.OutputParametersDataModels);
+
+                        cell.ToolTip = outputTip;
+                        break;
+                    }
             }
-        }
-
-        private string FormatInputStoredProcedureParameters(InputParametersDataModel[] inputParameters)
-        {
-            return inputParameters == null
-                ? "Input parameters are empty"
-                : inputParameters.Aggregate("",
-                    (current, inputParameter) =>
-                        current + (inputParameter.ParameterName + " " + inputParameter.TypeName + " \n"));
-        }
-
-        private string FormatOutputStoredProcedureParameters(OutputParametersDataModel[] outputParameters)
-        {
-            return outputParameters == null
-                ? "Output parameters are empty"
-                : outputParameters.Aggregate("",
-                    (current, outputParameter) =>
-                        current + (outputParameter.ParameterName + " " + outputParameter.TypeName + " \n"));
         }
 
         private async void GenerateOutputButton_Click(object sender, RoutedEventArgs e)
         {
-            await GetGeneratedStoreProcedureData();
+            try
+            {
+                await FillOutputTextBoxWithGeneratedCode();
+            }
+            catch (ArgumentException)
+            {
+            }
         }
 
-        private async Task GetGeneratedStoreProcedureData()
+        private async Task FillOutputTextBoxWithGeneratedCode()
         {
             var generatedStoreProcedureOutput = await GenerateStoreProcedureOutput();
 
             GeneratedOutputRichTextBox.Document.Blocks.Clear();
             GeneratedOutputRichTextBox.Document.Blocks.Add(new Paragraph(new Run(generatedStoreProcedureOutput)));
-
         }
 
         private async Task<string> GenerateStoreProcedureOutput()
@@ -216,27 +226,53 @@ namespace DapperSqlParser.WindowsApplication
             }
 
             var storedProcedureService = GetStoreConnectedStoredProcedureService();
-
-            var checkedStoredProceduresNames = _gridModels.Where(storedProcedure => storedProcedure.IsChecked)
-                .Select(checkedStoredProcedure => checkedStoredProcedure.Title).ToArray();
-            var checkedStoredProceduresDetails =
-                await storedProcedureService.GenerateModelsListAsync(checkedStoredProceduresNames);
+            
+            var checkedStoredProceduresDetails = await GetStoreProcedureGeneratedPureCode(storedProcedureService);
 
             var generatedStoreProcedureOutput =
                 await StoredProceduresExtractor.CreateSpClient(checkedStoredProceduresDetails, nameSpaceName);
             return generatedStoreProcedureOutput;
         }
 
+        private async Task<List<StoredProcedureParameters>> GetStoreProcedureGeneratedPureCode(StoredProcedureService storedProcedureService)
+        {
+            var checkedStoredProceduresNames = GetCheckedStoreProcedureNames();
+            return await storedProcedureService.GenerateModelsListAsync(checkedStoredProceduresNames);
+        }
+
+        private string[] GetCheckedStoreProcedureNames()
+        {
+            return _gridModels.Where(storedProcedure => storedProcedure.IsChecked)
+                .Select(checkedStoredProcedure => checkedStoredProcedure.Title).ToArray();
+        }
+
         private async void SaveOutputToFileButton_Click(object sender, RoutedEventArgs e)
         {
-            var resultStoreProcedureOutput = await GenerateStoreProcedureOutput();
-            var saveFileDialog = new SaveFileDialog();
+            string resultStoreProcedureOutput;
+            try
+            {
+                resultStoreProcedureOutput = await GenerateStoreProcedureOutput();
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
 
-            saveFileDialog.FileName = "StoreProcedureClientOutput";
-            saveFileDialog.Filter = "Text file (*.txt)|*.txt|C# file (*.cs)|*.cs";
+
+            var saveFileDialog = CreateSaveDialogForGeneratedStoredProcedureCode();
+
 
             if (saveFileDialog.ShowDialog() == true)
                 await File.WriteAllTextAsync(saveFileDialog.FileName, resultStoreProcedureOutput);
+        }
+
+        private static SaveFileDialog CreateSaveDialogForGeneratedStoredProcedureCode()
+        {
+            return new SaveFileDialog
+            {
+                FileName = "StoreProcedureClientOutput",
+                Filter = "Text file (*.txt)|*.txt|C# file (*.cs)|*.cs"
+            };
         }
     }
 }
