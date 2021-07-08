@@ -59,7 +59,9 @@ namespace DapperSqlParser.Services
                 }
                 else
                 {
-                    throw new ArgumentNullException();
+                    storedProcedureData.StoredProcedureInfo.Error =
+                        storedProcedureData.OutputParametersDataModels.First().ErrorMessage;
+                    return storedProcedureData;
                 }
             }
 

@@ -161,6 +161,14 @@ namespace DapperSqlParser.Services
 
                 try
                 {
+                    if (spParameter.StoredProcedureInfo.Error != null)
+                    {
+                        outputNamespace.AppendLine("//Couldn't parse Stored procedure  with name: " +
+                                                   $"{spParameter.StoredProcedureInfo.Name} because of internal error: " +
+                                                   $"{spParameter.StoredProcedureInfo.Error}\n\t#endregion");
+                        continue;;
+                    }
+
                     var outputModelClass = await CreateSpDataModelForOutputParams(spParameter);
                     var inputModelClass = await CreateSpDataModelForInputParams(spParameter);
                     var clientClass = await CreateSpClientClass(spParameter);

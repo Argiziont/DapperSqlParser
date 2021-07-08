@@ -25,6 +25,21 @@ namespace DapperSqlParser.WindowsApplication
         public MainWindow()
         {
             InitializeComponent();
+
+
+        }
+
+        private async Task InitializeStoreProceduresGrid()
+        {
+            //Uncheck the header checkbox
+            try
+            {
+                await AddDetailsWithCheckBoxesListToDataGrid();
+            }
+            catch (ArgumentException)
+            {
+                return;
+            }
         }
 
 
@@ -38,7 +53,6 @@ namespace DapperSqlParser.WindowsApplication
         {
             ClearDataGrid();
             foreach (var dataChunk in _gridModels) StoredProceduresDataGrid.Items.Add(dataChunk);
-            StoredProceduresDataGrid.Items.Refresh();
         }
 
         private void ClearDataGrid()
@@ -111,86 +125,14 @@ namespace DapperSqlParser.WindowsApplication
                         : "0",
                     OutputCount = storedProcedure.OutputParametersDataModels != null
                         ? storedProcedure.OutputParametersDataModels.Length.ToString()
-                        : "0"
+                        : "0",
+                    InputTooltip = StoredProcedureParametersStringFormatter.FormatInputStoredProcedureParameters(storedProcedure.InputParametersDataModels),
+                    OutputTooltip = StoredProcedureParametersStringFormatter.FormatOutputStoredProcedureParameters(storedProcedure.OutputParametersDataModels),
+                    GeneralDetails = StoredProcedureParametersStringFormatter.FormatStoreProcedureInfo(storedProcedure.StoredProcedureInfo)
+
                 });
-
-            CreateAndSetupEventsForStoredProcedureDataGrid();
         }
-
-        private async void AllStoredProceduresRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                await AddDetailsWithCheckBoxesListToDataGrid();
-            }
-            catch (ArgumentException) { return; }
-
-            CheckAllCheckboxesInDataGrid();
-        }
-
-        private async void OnlyCheckedStoredProceduresRadioButton_Checked(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                await AddDetailsWithCheckBoxesListToDataGrid();
-            }
-            catch (ArgumentException) { return; }
-
-            UnCheckAllCheckboxesInDataGrid();
-        }
-
-        private void CreateAndSetupEventsForStoredProcedureDataGrid()
-        {
-            var cellStyle = new Style(typeof(DataGridCell));
-            cellStyle.Setters.Add(new EventSetter(MouseEnterEvent,
-                new MouseEventHandler(Cell_MouseEnter)));
-            StoredProceduresDataGrid.CellStyle = cellStyle;
-        }
-
-        private async void Cell_MouseEnter(object sender, MouseEventArgs e)
-        {
-            if (sender == null) throw new ArgumentNullException(nameof(sender));
-
-            var cell = e.Source as DataGridCell;
-
-            if (!(cell?.DataContext is StoredProcedureGridModel cellDataContext))
-                return;
-
-            switch (cell.Column.Header.ToString())
-            {
-                case nameof(StoredProcedureGridModel.InputCount):
-                    {
-                        StoredProcedureService storedProcedureService;
-                        try
-                        {
-                            storedProcedureService = GetStoreConnectedStoredProcedureService();
-                        }
-                        catch { return; }
-
-                        var storeProcedureParameters = await storedProcedureService.GetSpDataAsync(cellDataContext.Title);
-                        var inputTip = StoredProcedureParametersStringFormatter.FormatInputStoredProcedureParameters(storeProcedureParameters.InputParametersDataModels);
-
-                        cell.ToolTip = inputTip;
-                        break;
-                    }
-                case nameof(StoredProcedureGridModel.OutputCount):
-                    {
-                        StoredProcedureService storedProcedureService;
-                        try
-                        {
-                            storedProcedureService = GetStoreConnectedStoredProcedureService();
-                        }
-                        catch { return; }
-
-                        var storeProcedureParameters = await storedProcedureService.GetSpDataAsync(cellDataContext.Title);
-                        var outputTip = StoredProcedureParametersStringFormatter.FormatOutputStoredProcedureParameters(storeProcedureParameters.OutputParametersDataModels);
-
-                        cell.ToolTip = outputTip;
-                        break;
-                    }
-            }
-        }
-
+        
         private async void GenerateOutputButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -271,8 +213,48 @@ namespace DapperSqlParser.WindowsApplication
             return new SaveFileDialog
             {
                 FileName = "StoreProcedureClientOutput",
-                Filter = "Text file (*.txt)|*.txt|C# file (*.cs)|*.cs"
+                Filter = "C# file (*.cs)|*.cs|Text file (*.txt)|*.txt"
             };
+        }
+
+        private void StoredProceduresDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //Ignored
+            //Created to prevent the unauthorized crash
+
+        }
+
+        private void StoredProceduresDataGrid_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        {
+            // Have to do this in the unusual case where the border of the cell gets selected.
+            // and causes a crash 'EditItem is not allowed'
+
+            var storedProcedureContext = e.Row.DataContext as StoredProcedureGridModel;
+            InvertStoredProcedureCheckBox(_gridModels.FirstOrDefault(storedProcedure=>storedProcedure.Title== storedProcedureContext?.Title));
+            RefreshDataGridWithNewItems();
+            e.Cancel = true;
+        }
+
+        private void InvertStoredProcedureCheckBox(StoredProcedureGridModel model)
+        {
+            model.IsChecked = !model.IsChecked;
+        }
+
+        private void IsCheckedStoreProcedureSelector_OnChecked(object sender, RoutedEventArgs e)
+        {
+            CheckAllCheckboxesInDataGrid();
+            RefreshDataGridWithNewItems();
+        }
+        private void IsCheckedStoreProcedureSelector_OnUnchecked(object sender, RoutedEventArgs e)
+        {
+            UnCheckAllCheckboxesInDataGrid();
+            RefreshDataGridWithNewItems();
+        }
+
+
+        private async void LoadStoreProcedures_OnClick(object sender, RoutedEventArgs e)
+        {
+           await InitializeStoreProceduresGrid();
         }
     }
 }

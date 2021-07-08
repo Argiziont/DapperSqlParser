@@ -9,11 +9,10 @@ using DapperSqlParser.Services;
 
 namespace DapperSqlParser
 {
-   
     internal static class Program
     {
         private const string ConnectionString =
-            @"Server= ARGIZIONT-PC\SQLExpress;Database=DapperSPTestDb;Trusted_Connection=True;MultipleActiveResultSets=true";
+            @"Server= ARGIZIONT-PC\SQLExpress;Database=ShopParserDb;Trusted_Connection=True;MultipleActiveResultSets=true";
 
         private const string NameSpaceName = "DapperSqlParser.TestRepository.Service.GeneratedClientFile";
 

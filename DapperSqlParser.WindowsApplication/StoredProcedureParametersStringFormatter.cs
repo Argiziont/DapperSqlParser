@@ -1,6 +1,6 @@
-﻿using System.Linq;
-using DapperSqlParser.Models;
+﻿using DapperSqlParser.Models;
 using DapperSqlParser.Services;
+using System.Linq;
 
 namespace DapperSqlParser.WindowsApplication
 {
@@ -21,7 +21,16 @@ namespace DapperSqlParser.WindowsApplication
                 ? "Output parameters are empty"
                 : outputParameters.Aggregate("",
                     (current, outputParameter) =>
-                        current + outputParameter.ParameterName + " " + SqlCsSharpTypesConverter.ConvertCSharpToSqlServerFormat(outputParameter.TypeName)  + " \n");
+                        current + outputParameter.ParameterName + " " + SqlCsSharpTypesConverter.ConvertCSharpToSqlServerFormat(outputParameter.TypeName) + " \n");
+        }
+
+        public static string FormatStoreProcedureInfo(StoredProcedureInfo storedProcedureParameters)
+        {
+            return storedProcedureParameters == null
+                ? "No details"
+                : storedProcedureParameters.Error ?? $"Store procedure has Id: {storedProcedureParameters.Id} and Name: {storedProcedureParameters.Name}";
+
+
         }
     }
 }
