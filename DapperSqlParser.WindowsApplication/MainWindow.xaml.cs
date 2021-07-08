@@ -5,6 +5,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -73,28 +74,28 @@ namespace DapperSqlParser.WindowsApplication
             RefreshDataGridWithNewItems();
         }
 
-        private string GetConnectionStringFromTextBox()
+        private Task<string> GetConnectionStringFromTextBox()
         {
             if (ConnectionStringTextBlock.Text.Length == 0)
                 throw new ArgumentException(nameof(ConnectionStringTextBlock) + " was empty");
 
-            return ConnectionStringTextBlock.Text;
+            return Task.FromResult(ConnectionStringTextBlock.Text);
         }
 
-        private string GetNameSpaceStringFromTextBox()
+        private Task<string> GetNameSpaceStringFromTextBox()
         {
             if (NamespaceNameTextBlock.Text.Length == 0)
                 throw new ArgumentException(nameof(NamespaceNameTextBlock) + " was empty");
 
-            return NamespaceNameTextBlock.Text;
+            return Task.FromResult(NamespaceNameTextBlock.Text);
         }
 
-        private StoredProcedureService GetStoreConnectedStoredProcedureService()
+        private async Task<StoredProcedureService> GetStoreConnectedStoredProcedureService()
         {
             string connectionString;
             try
             {
-                connectionString = GetConnectionStringFromTextBox();
+                connectionString = await GetConnectionStringFromTextBox();
             }
             catch (ArgumentException)
             {
@@ -111,7 +112,7 @@ namespace DapperSqlParser.WindowsApplication
         private async Task AddDetailsWithCheckBoxesListToDataGrid()
         {
             var storedProcedureService = GetStoreConnectedStoredProcedureService();
-            var storedProceduresList = await storedProcedureService.GenerateModelsListAsync();
+            var storedProceduresList = await (await storedProcedureService).GenerateModelsListAsync();
 
             _gridModels = new ObservableCollection<StoredProcedureGridModel>();
 
@@ -132,7 +133,9 @@ namespace DapperSqlParser.WindowsApplication
 
                 });
         }
-        
+
+
+
         private async void GenerateOutputButton_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -142,6 +145,13 @@ namespace DapperSqlParser.WindowsApplication
             catch (ArgumentException)
             {
             }
+        }
+
+        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            StoreProcedureParsingProgressBar.Value = e.ProgressPercentage;
+            //if (e.UserState != null)
+            //    lbResults.Items.Add(e.UserState);
         }
 
         private async Task FillOutputTextBoxWithGeneratedCode()
@@ -158,7 +168,7 @@ namespace DapperSqlParser.WindowsApplication
 
             try
             {
-                nameSpaceName = GetNameSpaceStringFromTextBox();
+                nameSpaceName = await GetNameSpaceStringFromTextBox();
             }
             catch
             {
@@ -167,7 +177,7 @@ namespace DapperSqlParser.WindowsApplication
                 throw new ArgumentException("Namespace was not specified!");
             }
 
-            var storedProcedureService = GetStoreConnectedStoredProcedureService();
+            var storedProcedureService = await GetStoreConnectedStoredProcedureService();
             
             var checkedStoredProceduresDetails = await GetStoreProcedureGeneratedPureCode(storedProcedureService);
 
@@ -217,12 +227,6 @@ namespace DapperSqlParser.WindowsApplication
             };
         }
 
-        private void StoredProceduresDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Ignored
-            //Created to prevent the unauthorized crash
-
-        }
 
         private void StoredProceduresDataGrid_OnBeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {

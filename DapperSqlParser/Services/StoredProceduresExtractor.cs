@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using DapperSqlParser.Extensions;
 using DapperSqlParser.Models;
@@ -149,7 +150,7 @@ namespace DapperSqlParser.Services
         }
 
         public static async Task<string> CreateSpClient(IEnumerable<StoredProcedureParameters> parameters,
-            string namespaceName)
+            string namespaceName, IProgress<StoreProcedureGenerationProgress> progress)
         {
             var outputNamespace = new StringBuilder();
             outputNamespace.AppendLine($"namespace {namespaceName} \n{{");
@@ -176,6 +177,8 @@ namespace DapperSqlParser.Services
                     outputNamespace.AppendLine(outputModelClass);
                     outputNamespace.AppendLine(inputModelClass);
                     outputNamespace.AppendLine(clientClass);
+
+                   await Task.Delay(200);
                 }
                 catch (NullModelException)
                 {

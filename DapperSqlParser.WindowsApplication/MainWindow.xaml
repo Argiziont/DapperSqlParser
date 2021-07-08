@@ -3,75 +3,94 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DapperSqlParser.WindowsApplication"
-        xmlns:models="clr-namespace:DapperSqlParser.WindowsApplication.Models"
         mc:Ignorable="d"
         Title="MainWindow" Height="667" Width="770">
     <Grid>
-        <Button Content="Generate output" Margin="0,0,130,10" Name="GenerateOutputButton" Click="GenerateOutputButton_Click" HorizontalAlignment="Right" Width="100" Height="32" VerticalAlignment="Bottom"/>
-        <Button Content="Save to file" Margin="0,0,10,10" Name="SaveOutputToFileButton" Click="SaveOutputToFileButton_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" />
-        <TextBlock HorizontalAlignment="Left" Margin="33,32,0,0" Text="Connection string" TextWrapping="Wrap" VerticalAlignment="Top" Width="219"/>
-        <TextBox HorizontalAlignment="Left" Margin="33,53,0,0" VerticalAlignment="Top" Width="229" Height="23" Name="ConnectionStringTextBlock"/>
-        <TextBlock HorizontalAlignment="Left" Margin="33,85,0,0" Text="Namespace name" TextWrapping="Wrap" VerticalAlignment="Top" Width="219"/>
-        <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock"/>
-        <RichTextBox Margin="320,10,10,0" IsReadOnly="True" Name="GeneratedOutputRichTextBox" VerticalScrollBarVisibility="Visible" Height="370" VerticalAlignment="Top">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="Generated stored procedures output"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
-        <DataGrid AutoGenerateColumns="True" BeginningEdit="StoredProceduresDataGrid_OnBeginningEdit" x:Name="StoredProceduresDataGrid" Margin="10,395,10,47" SelectionChanged="StoredProceduresDataGrid_SelectionChanged">
+        <TabControl>
+            <TabItem Header="Settings">
+                <Grid>
+                    <Button Content="Generate output" Margin="0,0,130,10" Click="GenerateOutputButton_Click" HorizontalAlignment="Right" Width="100" Height="32" VerticalAlignment="Bottom"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="33,32,0,0" Text="Connection string" TextWrapping="Wrap" VerticalAlignment="Top" Width="219"/>
+                    <TextBox HorizontalAlignment="Left" Margin="33,53,0,0" VerticalAlignment="Top" Width="229" Height="23" Name="ConnectionStringTextBlock"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="33,85,0,0" Text="Namespace name" TextWrapping="Wrap" VerticalAlignment="Top" Width="219"/>
+                    <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock"/>
 
-            <DataGrid.Columns>
-                <DataGridCheckBoxColumn Header="IsChecked"
+                    <DataGrid AutoGenerateColumns="True" BeginningEdit="StoredProceduresDataGrid_OnBeginningEdit" x:Name="StoredProceduresDataGrid" Margin="10,355,10,47">
+
+                        <DataGrid.Columns>
+                            <DataGridCheckBoxColumn Header="IsChecked"
                                         Binding="{Binding IsChecked}"
                                     Width="85">
-                    <DataGridCheckBoxColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <CheckBox Name="CheckAllStoreProceduresCheckBox" Content="IsChecked" Checked="IsCheckedStoreProcedureSelector_OnChecked" Unchecked="IsCheckedStoreProcedureSelector_OnUnchecked"/>
-                        </DataTemplate>
-                    </DataGridCheckBoxColumn.HeaderTemplate>
-                </DataGridCheckBoxColumn>
-                <DataGridTextColumn Header="Title"
+                                <DataGridCheckBoxColumn.HeaderTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Name="CheckAllStoreProceduresCheckBox" Content="IsChecked" Checked="IsCheckedStoreProcedureSelector_OnChecked" Unchecked="IsCheckedStoreProcedureSelector_OnUnchecked"/>
+                                    </DataTemplate>
+                                </DataGridCheckBoxColumn.HeaderTemplate>
+                            </DataGridCheckBoxColumn>
+                            <DataGridTextColumn Header="Title"
                                     Binding="{Binding Title}"
                                     Width="*" 
                                     IsReadOnly="True"/>
 
-                <DataGridTextColumn Header="Number of input parameters"
+                            <DataGridTextColumn Header="Number of input parameters"
                                         Binding="{Binding InputCount}"
                                         Width="*"  IsReadOnly="True">
 
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="ToolTip" Value="{Binding InputTooltip}" />
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
-                <DataGridTextColumn Header="Number of output parameters"
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="ToolTip" Value="{Binding InputTooltip}" />
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Number of output parameters"
                                     Binding="{Binding OutputCount}"
                                     Width="*"  IsReadOnly="True">
 
-                    <DataGridTextColumn.CellStyle>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="ToolTip" Value="{Binding OutputTooltip}" />
-                        </Style>
-                    </DataGridTextColumn.CellStyle>
-                </DataGridTextColumn>
-            </DataGrid.Columns>
+                                <DataGridTextColumn.CellStyle>
+                                    <Style TargetType="DataGridCell">
+                                        <Setter Property="ToolTip" Value="{Binding OutputTooltip}" />
+                                    </Style>
+                                </DataGridTextColumn.CellStyle>
+                            </DataGridTextColumn>
+                        </DataGrid.Columns>
 
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path=GeneralDetails}" />
-                    </StackPanel>
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
-        </DataGrid>
-        <Button Margin="10,352,0,0" x:Name="LoadStoreProcedures" Click="LoadStoreProcedures_OnClick" Height="38" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101">
-            <TextBlock Text="Load stored procedures" TextWrapping="Wrap" TextAlignment="Center"/>
-        </Button>
-        <GroupBox Header="Settings" Margin="10,0,0,0" HorizontalAlignment="Left" Width="295" Height="326" VerticalAlignment="Top"/>
+                        <DataGrid.RowDetailsTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Path=GeneralDetails}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGrid.RowDetailsTemplate>
+                    </DataGrid>
+                    <Button Margin="10,312,0,0" Click="LoadStoreProcedures_OnClick" Height="38" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101">
+                        <TextBlock Text="Load stored procedures" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </Button>
+                    <GroupBox Header="Settings" Margin="10,10,10,0" Height="294" VerticalAlignment="Top"/>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="Output">
+                <Grid>
+                    <RichTextBox Margin="10,10,10,81" IsReadOnly="True" Name="GeneratedOutputRichTextBox" VerticalScrollBarVisibility="Visible">
+                        <FlowDocument>
+                            <Paragraph>
+                                <Run Text="Generated stored procedures output"/>
+                                <InlineUIContainer>
+
+                                </InlineUIContainer>
+                            </Paragraph>
+                        </FlowDocument>
+                    </RichTextBox>
+                    <ProgressBar Margin="219,250,250,321" Name="StoreProcedureParsingProgressBar" />
+                    <Button Content="Save to file" Click="SaveOutputToFileButton_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Margin="0,0,10,9" />
+                </Grid>
+
+
+            </TabItem>
+
+        </TabControl>
+
+
 
     </Grid>
 </Window>
