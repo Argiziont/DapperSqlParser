@@ -33,7 +33,7 @@ namespace DapperSqlParser
             else
                 return;
 
-            var spNamespace = await StoredProceduresExtractor.CreateSpClient(paramsList.ToArray(), NameSpaceName);
+            var spNamespace = await StoredProceduresExtractor.CreateSpClient(paramsList, NameSpaceName);
 
 
             // This will get the current PROJECT directory

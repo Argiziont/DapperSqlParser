@@ -149,8 +149,8 @@ namespace DapperSqlParser.Services
             return await Task.FromResult(outputClass.ToString());
         }
 
-        public static async Task<string> CreateSpClient(IEnumerable<StoredProcedureParameters> parameters,
-            string namespaceName, IProgress<StoreProcedureGenerationProgress> progress)
+        public static async Task<string> CreateSpClient(List<StoredProcedureParameters> parameters,
+            string namespaceName, IProgress<StoreProcedureGenerationProgress> progress=default)
         {
             var outputNamespace = new StringBuilder();
             outputNamespace.AppendLine($"namespace {namespaceName} \n{{");
@@ -179,6 +179,15 @@ namespace DapperSqlParser.Services
                     outputNamespace.AppendLine(clientClass);
 
                    await Task.Delay(200);
+
+                   progress?.Report(new StoreProcedureGenerationProgress()
+                   {
+                       CurrentProgressAmount = parameters.IndexOf(spParameter),
+                       TotalProgressAmount = parameters.Count,
+                       CurrentProgressMessage =
+                           $"On {parameters.IndexOf(spParameter)} Message"
+                   });
+
                 }
                 catch (NullModelException)
                 {

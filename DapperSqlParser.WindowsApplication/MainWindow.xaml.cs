@@ -181,10 +181,20 @@ namespace DapperSqlParser.WindowsApplication
             
             var checkedStoredProceduresDetails = await GetStoreProcedureGeneratedPureCode(storedProcedureService);
 
+
+            var progressIndicator = new Progress<StoreProcedureGenerationProgress>(ReportProgress);
+
             var generatedStoreProcedureOutput =
-                await StoredProceduresExtractor.CreateSpClient(checkedStoredProceduresDetails, nameSpaceName);
+                await StoredProceduresExtractor.CreateSpClient(checkedStoredProceduresDetails, nameSpaceName, progressIndicator);
             return generatedStoreProcedureOutput;
         }
+
+        private void ReportProgress(StoreProcedureGenerationProgress progress)
+        {
+            StoreProcedureParsingProgressBar.Maximum = progress.TotalProgressAmount;
+            StoreProcedureParsingProgressBar.Value = progress.CurrentProgressAmount;
+        }
+
 
         private async Task<List<StoredProcedureParameters>> GetStoreProcedureGeneratedPureCode(StoredProcedureService storedProcedureService)
         {
