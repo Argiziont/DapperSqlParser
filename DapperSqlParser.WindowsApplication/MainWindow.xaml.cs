@@ -26,13 +26,10 @@ namespace DapperSqlParser.WindowsApplication
         public MainWindow()
         {
             InitializeComponent();
-
-
         }
 
         private async Task InitializeStoreProceduresGrid()
         {
-            //Uncheck the header checkbox
             try
             {
                 await AddDetailsWithCheckBoxesListToDataGrid();
@@ -47,13 +44,13 @@ namespace DapperSqlParser.WindowsApplication
         private void AddDetailsToStoredProcedureGrid(StoredProcedureGridModel gridModel)
         {
             _gridModels.Add(gridModel);
-            RefreshDataGridWithNewItems();
+            RefreshDataGridWithNewItems(_gridModels);
         }
 
-        private void RefreshDataGridWithNewItems()
+        private void RefreshDataGridWithNewItems(IEnumerable<StoredProcedureGridModel> storedProcedureModels)
         {
             ClearDataGrid();
-            foreach (var dataChunk in _gridModels) StoredProceduresDataGrid.Items.Add(dataChunk);
+            foreach (var dataChunk in storedProcedureModels) StoredProceduresDataGrid.Items.Add(dataChunk);
         }
 
         private void ClearDataGrid()
@@ -64,14 +61,19 @@ namespace DapperSqlParser.WindowsApplication
 
         private void UnCheckAllCheckboxesInDataGrid()
         {
-            foreach (var storedProcedureDetails in _gridModels) storedProcedureDetails.IsChecked = false;
-            RefreshDataGridWithNewItems();
+            foreach (var storedProcedureDetails in StoredProceduresDataGrid.Items) ((StoredProcedureGridModel) storedProcedureDetails).IsChecked = false;
+            RefreshDataGridWithNewItems(GetCurrentGridItemCollection());
         }
 
         private void CheckAllCheckboxesInDataGrid()
         {
-            foreach (var storedProcedureDetails in _gridModels) storedProcedureDetails.IsChecked = true;
-            RefreshDataGridWithNewItems();
+            foreach (var storedProcedureDetails in StoredProceduresDataGrid.Items) ((StoredProcedureGridModel)storedProcedureDetails).IsChecked = true;
+            RefreshDataGridWithNewItems(GetCurrentGridItemCollection());
+        }
+
+        private IEnumerable<StoredProcedureGridModel> GetCurrentGridItemCollection()
+        {
+            return StoredProceduresDataGrid.Items.OfType<StoredProcedureGridModel>().ToList();
         }
 
         private Task<string> GetConnectionStringFromTextBox()
@@ -144,14 +146,8 @@ namespace DapperSqlParser.WindowsApplication
             }
             catch (ArgumentException)
             {
+                //Ignored
             }
-        }
-
-        void worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            StoreProcedureParsingProgressBar.Value = e.ProgressPercentage;
-            //if (e.UserState != null)
-            //    lbResults.Items.Add(e.UserState);
         }
 
         private async Task FillOutputTextBoxWithGeneratedCode()
@@ -181,18 +177,32 @@ namespace DapperSqlParser.WindowsApplication
             
             var checkedStoredProceduresDetails = await GetStoreProcedureGeneratedPureCode(storedProcedureService);
 
-
-            var progressIndicator = new Progress<StoreProcedureGenerationProgress>(ReportProgress);
+            var progressIndicator = GetProgressIndicatorForStoreProcedureExtractor();
 
             var generatedStoreProcedureOutput =
                 await StoredProceduresExtractor.CreateSpClient(checkedStoredProceduresDetails, nameSpaceName, progressIndicator);
             return generatedStoreProcedureOutput;
         }
 
+        private Progress<StoreProcedureGenerationProgress> GetProgressIndicatorForStoreProcedureExtractor()
+        {
+            var progressIndicator = new Progress<StoreProcedureGenerationProgress>(ReportProgress);
+            progressIndicator.ProgressChanged += (sender, progress) =>
+            {
+                if (progress.CurrentProgressAmount== progress.TotalProgressAmount) HideProgressIndicator();
+            };
+
+            return progressIndicator;
+        }
+
+        private void HideProgressIndicator()
+        {
+            StoredProcedureParsingProgressBar.Visibility = Visibility.Hidden;
+        }
         private void ReportProgress(StoreProcedureGenerationProgress progress)
         {
-            StoreProcedureParsingProgressBar.Maximum = progress.TotalProgressAmount;
-            StoreProcedureParsingProgressBar.Value = progress.CurrentProgressAmount;
+            StoredProcedureParsingProgressBar.Maximum = progress.TotalProgressAmount;
+            StoredProcedureParsingProgressBar.Value = progress.CurrentProgressAmount;
         }
 
 
@@ -243,9 +253,19 @@ namespace DapperSqlParser.WindowsApplication
             // Have to do this in the unusual case where the border of the cell gets selected.
             // and causes a crash 'EditItem is not allowed'
 
+            if (e.Column is DataGridCheckBoxColumn)
+            {
+                EditCheckBoxColumn(e);
+            }
+        }
+
+        private void EditCheckBoxColumn(DataGridBeginningEditEventArgs e)
+        {
             var storedProcedureContext = e.Row.DataContext as StoredProcedureGridModel;
-            InvertStoredProcedureCheckBox(_gridModels.FirstOrDefault(storedProcedure=>storedProcedure.Title== storedProcedureContext?.Title));
-            RefreshDataGridWithNewItems();
+            InvertStoredProcedureCheckBox(GetCurrentGridItemCollection().FirstOrDefault(storedProcedure =>
+                storedProcedure.Title == storedProcedureContext?.Title));
+
+            RefreshDataGridWithNewItems(GetCurrentGridItemCollection());
             e.Cancel = true;
         }
 
@@ -257,18 +277,24 @@ namespace DapperSqlParser.WindowsApplication
         private void IsCheckedStoreProcedureSelector_OnChecked(object sender, RoutedEventArgs e)
         {
             CheckAllCheckboxesInDataGrid();
-            RefreshDataGridWithNewItems();
         }
         private void IsCheckedStoreProcedureSelector_OnUnchecked(object sender, RoutedEventArgs e)
         {
             UnCheckAllCheckboxesInDataGrid();
-            RefreshDataGridWithNewItems();
         }
 
 
         private async void LoadStoreProcedures_OnClick(object sender, RoutedEventArgs e)
         {
            await InitializeStoreProceduresGrid();
+        }
+
+        private void StoredProcedureDataGridSearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox searchTextBox)
+            {
+                RefreshDataGridWithNewItems(_gridModels.Where(storedProcedure => storedProcedure.Title.Contains(searchTextBox.Text)));
+            }
         }
     }
 }

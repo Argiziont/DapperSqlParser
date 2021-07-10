@@ -157,6 +157,8 @@ namespace DapperSqlParser.Services
 
             foreach (var spParameter in parameters)
             {
+                ReportAboutStoredProcedureParsingProgress(parameters, progress, spParameter);
+
                 outputNamespace.AppendLine(
                     $"\n\t#region {spParameter.StoredProcedureInfo.Name}"); //Wrapping every sp into region
 
@@ -167,26 +169,12 @@ namespace DapperSqlParser.Services
                         outputNamespace.AppendLine("//Couldn't parse Stored procedure  with name: " +
                                                    $"{spParameter.StoredProcedureInfo.Name} because of internal error: " +
                                                    $"{spParameter.StoredProcedureInfo.Error}\n\t#endregion");
-                        continue;;
+                        continue;
                     }
 
-                    var outputModelClass = await CreateSpDataModelForOutputParams(spParameter);
-                    var inputModelClass = await CreateSpDataModelForInputParams(spParameter);
-                    var clientClass = await CreateSpClientClass(spParameter);
+                    await AppendExtractedCsSharpCode(spParameter, outputNamespace);
 
-                    outputNamespace.AppendLine(outputModelClass);
-                    outputNamespace.AppendLine(inputModelClass);
-                    outputNamespace.AppendLine(clientClass);
-
-                   await Task.Delay(200);
-
-                   progress?.Report(new StoreProcedureGenerationProgress()
-                   {
-                       CurrentProgressAmount = parameters.IndexOf(spParameter),
-                       TotalProgressAmount = parameters.Count,
-                       CurrentProgressMessage =
-                           $"On {parameters.IndexOf(spParameter)} Message"
-                   });
+                    await Task.Delay(200);
 
                 }
                 catch (NullModelException)
@@ -195,12 +183,36 @@ namespace DapperSqlParser.Services
                         $"//Model for {spParameter.StoredProcedureInfo.Name} was not found, could not parse this Stored Procedure!");
                 }
 
-
                 outputNamespace.AppendLine("\t#endregion");
             }
 
             outputNamespace.Append("}");
             return await Task.FromResult(outputNamespace.ToString());
+        }
+
+        private static async Task AppendExtractedCsSharpCode(StoredProcedureParameters spParameter,
+            StringBuilder outputNamespace)
+        {
+            var outputModelClass = await CreateSpDataModelForOutputParams(spParameter);
+            var inputModelClass = await CreateSpDataModelForInputParams(spParameter);
+            var clientClass = await CreateSpClientClass(spParameter);
+
+            outputNamespace.AppendLine(outputModelClass);
+            outputNamespace.AppendLine(inputModelClass);
+            outputNamespace.AppendLine(clientClass);
+        }
+
+        private static void ReportAboutStoredProcedureParsingProgress(IList<StoredProcedureParameters> parameters, IProgress<StoreProcedureGenerationProgress> progress,
+            StoredProcedureParameters spParameter)
+        {
+            var totalProgressAmount = parameters.Count-1;
+            progress?.Report(new StoreProcedureGenerationProgress()
+            {
+                CurrentProgressAmount = parameters.IndexOf(spParameter),
+                TotalProgressAmount = totalProgressAmount,
+                CurrentProgressMessage =
+                    $"On {parameters.IndexOf(spParameter)} Message"
+            });
         }
 
         public static async Task WriteGeneratedNamespaceToClientFile(string namespaceString, string filePath)
