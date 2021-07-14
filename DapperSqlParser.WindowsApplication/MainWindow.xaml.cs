@@ -5,14 +5,12 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 
 namespace DapperSqlParser.WindowsApplication
 {
@@ -36,7 +34,7 @@ namespace DapperSqlParser.WindowsApplication
             }
             catch (ArgumentException)
             {
-                return;
+                //Ignored
             }
         }
 
@@ -140,6 +138,7 @@ namespace DapperSqlParser.WindowsApplication
 
         private async void GenerateOutputButton_Click(object sender, RoutedEventArgs e)
         {
+            ShowProgressIndicator();
             try
             {
                 await FillOutputTextBoxWithGeneratedCode();
@@ -198,6 +197,11 @@ namespace DapperSqlParser.WindowsApplication
         private void HideProgressIndicator()
         {
             StoredProcedureParsingProgressBar.Visibility = Visibility.Hidden;
+        }
+
+        private void ShowProgressIndicator()
+        {
+            StoredProcedureParsingProgressBar.Visibility = Visibility.Visible;
         }
         private void ReportProgress(StoreProcedureGenerationProgress progress)
         {
