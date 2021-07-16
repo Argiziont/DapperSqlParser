@@ -32,7 +32,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteJsonAsync("Sp_GetAllCategories");
 		}
 	}
-
 	#endregion
 
 	#region Sp_GetAllProducts
@@ -77,7 +76,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_GetAllProducts");
 		}
 	}
-
 	#endregion
 
 	#region Sp_GetProductById
@@ -127,7 +125,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_GetProductById", request);
 		}
 	}
-
 	#endregion
 
 	#region Sp_GetCategoryById
@@ -166,7 +163,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteJsonAsync("Sp_GetCategoryById", request);
 		}
 	}
-
 	#endregion
 
 	#region Sp_InsertProduct
@@ -201,7 +197,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_InsertProduct", request);
 		}
 	}
-
 	#endregion
 
 	#region Sp_InsertCategory
@@ -230,7 +225,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_InsertCategory", request);
 		}
 	}
-
 	#endregion
 
 	#region Sp_UpdateProductTitleById
@@ -255,7 +249,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_UpdateProductTitleById", request);
 		}
 	}
-
 	#endregion
 
 	#region Sp_UpdateCategoryNameById
@@ -284,7 +277,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_UpdateCategoryNameById", request);
 		}
 	}
-
 	#endregion
 
 	#region Sp_DeleteCategoryById
@@ -310,7 +302,6 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_DeleteCategoryById", request);
 		}
 	}
-
 	#endregion
 
 	#region Sp_DeleteProductById
@@ -333,6 +324,5 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 			return _dapperExecutor.ExecuteAsync("Sp_DeleteProductById", request);
 		}
 	}
-
 	#endregion
 }

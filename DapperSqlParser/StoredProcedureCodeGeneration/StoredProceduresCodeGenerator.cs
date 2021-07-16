@@ -7,42 +7,54 @@ using DapperSqlParser.Models;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
-    public static class StoredProceduresCodeGenerator
+    public class StoredProceduresCodeGenerator
     {
-        public static async Task<string> CreateSpClient(List<StoredProcedureParameters> parameters,
-            string namespaceName, IProgress<StoreProcedureGenerationProgress> progress = default)
+        public string NameSpaceName { get; set; }
+        public IList<StoredProcedureParameters> Parameters { get; set; }
+
+        private readonly StoredProcedureParseBuilder _storedProcedureCodeBuilder;
+
+        public StoredProceduresCodeGenerator(StoredProcedureParseBuilder storedProcedureCodeBuilder)
         {
+            _storedProcedureCodeBuilder = storedProcedureCodeBuilder;
+        }
+        public async Task<string> CreateSpClient(IProgress<StoreProcedureGenerationProgress> progress = default)
+        {
+            if (Parameters == null) throw new ArgumentNullException(nameof(Parameters));
+            if (NameSpaceName == null) throw new ArgumentNullException(nameof(NameSpaceName));
+
             StringBuilder outputCode = new StringBuilder();
 
-            outputCode.AppendLine($"namespace {namespaceName} \n{{"); // Append name space start
+            outputCode.AppendLine($"namespace {NameSpaceName} \n{{"); // Append name space start
 
-            foreach (StoredProcedureParameters spParameter in parameters)
+            _storedProcedureCodeBuilder.SetStringBuilder(outputCode);
+
+            foreach (StoredProcedureParameters spParameter in Parameters)
             {
-                ReportAboutStoredProcedureParsingProgress(parameters, progress, spParameter);
+                ReportAboutStoredProcedureParsingProgress(Parameters, progress, spParameter);
 
-                StoredProcedureParseBuilder.AppendStoredProcedureRegionStart(spParameter.StoredProcedureInfo.Name,
-                    outputCode);
+                _storedProcedureCodeBuilder.AppendStoredProcedureRegionStart(spParameter.StoredProcedureInfo.Name);
 
                 try
                 {
                     if (spParameter.StoredProcedureInfo.Error != null)
                     {
-                        StoredProcedureParseBuilder.AppendStoredProcedureCantParseMessage(
-                            spParameter.StoredProcedureInfo, outputCode);
+                        _storedProcedureCodeBuilder.AppendStoredProcedureCantParseMessage(
+                            spParameter.StoredProcedureInfo);
                         continue;
                     }
 
-                    await StoredProcedureParseBuilder.AppendExtractedCsSharpCode(spParameter, outputCode);
+                    await _storedProcedureCodeBuilder.AppendExtractedCsSharpCode(spParameter);
 
                     //await Task.Delay(200); //Await 200ms for progress bar testing, could be deleted if not needed
                 }
                 catch (NullModelException)
                 {
-                    StoredProcedureParseBuilder.AppendStoredProcedureNotFoundMessage(
-                        spParameter.StoredProcedureInfo.Name, outputCode);
+                    _storedProcedureCodeBuilder.AppendStoredProcedureNotFoundMessage(
+                        spParameter.StoredProcedureInfo.Name);
                 }
 
-                StoredProcedureParseBuilder.AppendStoredProcedureRegionEnd(outputCode);
+                _storedProcedureCodeBuilder.AppendStoredProcedureRegionEnd();
             }
 
             outputCode.Append("}"); // Append name space end
@@ -50,7 +62,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             return await Task.FromResult(outputCode.ToString());
         }
 
-        private static void ReportAboutStoredProcedureParsingProgress(IList<StoredProcedureParameters> parameters,
+        private void ReportAboutStoredProcedureParsingProgress(IList<StoredProcedureParameters> parameters,
             IProgress<StoreProcedureGenerationProgress> progress,
             StoredProcedureParameters spParameter)
         {

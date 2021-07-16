@@ -36,7 +36,10 @@ namespace DapperSqlParser
 
             #endregion
 
-            string storedProcedureGeneratedCode = await StoredProceduresCodeGenerator.CreateSpClient(paramsList, NameSpaceName);
+            StoredProceduresCodeGenerator storedProcedureCodeGenerator = new StoredProceduresCodeGenerator(new StoredProcedureParseBuilder(new StoredProceduresDataModelExtractor()))
+                { NameSpaceName = NameSpaceName, Parameters = paramsList };
+
+            string storedProcedureGeneratedCode = await storedProcedureCodeGenerator.CreateSpClient();
 
             await WriteGeneratedCodeToClientFile(storedProcedureGeneratedCode);
         }

@@ -3,47 +3,63 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DapperSqlParser.Exceptions;
+using DapperSqlParser.Extensions;
 using DapperSqlParser.Models;
+using DapperSqlParser.StoredProcedureCodeGeneration.Interfaces;
 using NJsonSchema;
 using NJsonSchema.CodeGeneration.CSharp;
-using static DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParseBuilder;
 using static DapperSqlParser.StoredProcedureCodeGeneration.TemplateService.TemplateNamingConstants;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
-    public static class StoredProceduresDataModelExtractor
+    public  class StoredProceduresDataModelExtractor: IStoredProceduresDataModelExtractor
     {
-        public static async Task<string> CreateSpDataModelForOutputParams(StoredProcedureParameters parameters)
+        public StoredProcedureParameters Parameters { get; set; }
+
+        public StoredProceduresDataModelExtractor(StoredProcedureParameters parameters)
         {
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
-            if (parameters.OutputParametersDataModels == null) return await Task.FromResult(string.Empty);
+            Parameters = parameters;
+        }
+        public StoredProceduresDataModelExtractor()
+        {
+        }
+
+        public async Task<string> CreateSpDataModelForOutputParams()
+        {
+            if (Parameters == null) throw new ArgumentNullException(nameof(Parameters));
+            if (Parameters.OutputParametersDataModels == null) return await Task.FromResult(string.Empty);
 
             StringBuilder outputClass = new StringBuilder();
 
-            if (parameters.OutputParametersDataModels.First().ParameterName != null && Guid.TryParse(
-                parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""),
+            if (Parameters.OutputParametersDataModels.First().ParameterName != null && Guid.TryParse(
+                Parameters.OutputParametersDataModels.First().ParameterName.Replace("JSON_", ""),
                 out _))
-                return await CreateSpDataModelForOutputParamsJson(parameters);
+                return await CreateSpDataModelForOutputParamsJson();
 
             //Sp returns fields with data
 
-            outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name}Output \n\t{{");
+            outputClass.AppendLine($"\tpublic class {Parameters.StoredProcedureInfo.Name}Output \n\t{{");
 
-            foreach (OutputParametersDataModel field in parameters.OutputParametersDataModels) //Getter/setter
-                AppendOutputParameterPropertyField(parameters, outputClass, field);
-
+            foreach (OutputParametersDataModel field in Parameters.OutputParametersDataModels) //Getter/setter
+                outputClass.AppendLine(new string(
+                    $"\t\t[Newtonsoft.Json.JsonProperty({(field.ParameterName == null ? $"\"{Parameters.StoredProcedureInfo.Name}Result\"" : $"\"{field.ParameterName}\"")} " +
+                    $", Required = {(field.IsNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]\n" + //If fields isn't nullable -> it's required in any case
+                    $"\t\tpublic {field.TypeName} " + //Type name
+                    $"{(field.ParameterName == null ? $"{Parameters.StoredProcedureInfo.Name}Result" : $"{field.ParameterName.Replace("-", "_")}")} " + //Param name
+                    "{get; set;} \n"));
+            
             outputClass.Append("\t}\n");
 
             return await Task.FromResult(outputClass.ToString());
         }
 
-        private static async Task<string> CreateSpDataModelForOutputParamsJson(StoredProcedureParameters parameters)
+        public async Task<string> CreateSpDataModelForOutputParamsJson()
         {
             int jsonSchemaStartIndex =
-                parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeStartKeyWordSnippet,
+                Parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeStartKeyWordSnippet,
                     StringComparison.Ordinal);
             int jsonSchemaEndIndex =
-                parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeEndKeyWordSnippet,
+                Parameters.StoredProcedureText.Definition.IndexOf(OutputSchemeEndKeyWordSnippet,
                     StringComparison.Ordinal);
 
             if (jsonSchemaStartIndex == -1 && jsonSchemaEndIndex == -1)
@@ -53,7 +69,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             jsonSchemaEndIndex -= jsonSchemaStartIndex;
 
             string jsonSchemaFromSp =
-                parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
+                Parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
 
             //Schema parsing from JSON to csSharp
             JsonSchema schema = await JsonSchema.FromJsonAsync(jsonSchemaFromSp);
@@ -72,42 +88,46 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             return await Task.FromResult(outputClass.ToString());
         }
 
-        public static async Task<string> CreateSpDataModelForInputParams(StoredProcedureParameters parameters)
+        public async Task<string> CreateSpDataModelForInputParams()
         {
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
-            if (parameters.InputParametersDataModels == null) return await Task.FromResult(string.Empty);
+            if (Parameters == null) throw new ArgumentNullException(nameof(Parameters));
+            if (Parameters.InputParametersDataModels == null) return await Task.FromResult(string.Empty);
 
             StringBuilder inputClass = new StringBuilder();
 
 
             int jsonSchemaStartIndex =
-                parameters.StoredProcedureText.Definition.IndexOf(InputSchemeStartKeyWordSnippet,
+                Parameters.StoredProcedureText.Definition.IndexOf(InputSchemeStartKeyWordSnippet,
                     StringComparison.Ordinal);
             int jsonSchemaEndIndex =
-                parameters.StoredProcedureText.Definition.IndexOf(InputSchemeEndKeyWordSnippet,
+                Parameters.StoredProcedureText.Definition.IndexOf(InputSchemeEndKeyWordSnippet,
                     StringComparison.Ordinal);
 
             if (jsonSchemaStartIndex != -1 && jsonSchemaEndIndex != -1)
-                return await CreateSpDataModelForInputParamsJson(parameters, jsonSchemaStartIndex, jsonSchemaEndIndex);
+                return await CreateSpDataModelForInputParamsJson( jsonSchemaStartIndex, jsonSchemaEndIndex);
 
-            inputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name}Input \n\t{{");
+            inputClass.AppendLine($"\tpublic class {Parameters.StoredProcedureInfo.Name}Input \n\t{{");
 
-            foreach (InputParametersDataModel field in parameters.InputParametersDataModels) //Getter/setter
-                AppendInputParameterPropertyField(parameters, inputClass, field);
+            foreach (InputParametersDataModel field in Parameters.InputParametersDataModels) //Getter/setter
+                inputClass.AppendLine(new string(
+                    $"\t\t{(field.ParameterName == null ? "" : $"[Newtonsoft.Json.JsonProperty(\"{field.ParameterName.Replace("@", "")}\")]")} " + //If not nullable -> required
+                    $"{(field.IsNullable ? "" : "[System.ComponentModel.DataAnnotations.Required()] ")}" + //Json field
+                    $"public {field.TypeName} " + //Type name
+                    $"{(field.ParameterName == null ? $"{Parameters.StoredProcedureInfo.Name}Result" : $"{field.ParameterName.Replace("-", "_").Replace("@", "").FirstCharToUpper()}")} " + //Param name
+                    "{get; set;} \n"));
 
 
             inputClass.Append("\t}\n");
             return await Task.FromResult(inputClass.ToString());
         }
 
-        private static async Task<string> CreateSpDataModelForInputParamsJson(StoredProcedureParameters parameters,
-            int jsonSchemaStartIndex, int jsonSchemaEndIndex)
+        public async Task<string> CreateSpDataModelForInputParamsJson(int jsonSchemaStartIndex, int jsonSchemaEndIndex)
         {
             jsonSchemaStartIndex += InputSchemeStartKeyWordSnippet.Length;
             jsonSchemaEndIndex -= jsonSchemaStartIndex;
 
             string jsonSchemaFromSp =
-                parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
+                Parameters.StoredProcedureText.Definition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
 
             //Schema parsing from JSON to csSharp
             JsonSchema schema = await JsonSchema.FromJsonAsync(jsonSchemaFromSp);
@@ -120,7 +140,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             int nameSpaceBracketIndex =
                 generatedClasses.IndexOf(trimStart, StringComparison.Ordinal) + trimStart.Length + 2;
             StringBuilder inputClass = new StringBuilder(
-                $"\t[JsonWrapper(\"{parameters.InputParametersDataModels.First().ParameterName}\")]\n" +
+                $"\t[JsonWrapper(\"{Parameters.InputParametersDataModels.First().ParameterName}\")]\n" +
                 generatedClasses.Substring(nameSpaceBracketIndex,
                     generatedClasses.Length - 2 - nameSpaceBracketIndex));
 
