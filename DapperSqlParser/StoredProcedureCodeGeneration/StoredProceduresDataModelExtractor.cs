@@ -6,11 +6,10 @@ using DapperSqlParser.Models;
 using DapperSqlParser.Services.Exceptions;
 using NJsonSchema;
 using NJsonSchema.CodeGeneration.CSharp;
-
-using static DapperSqlParser.Services.StoredProcedureParseBuilder;
+using static DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParseBuilder;
 using static DapperSqlParser.Services.TemplateService.TemplateNamingConstants;
 
-namespace DapperSqlParser.Services
+namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
     public static class StoredProceduresDataModelExtractor
     {

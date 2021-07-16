@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DapperSqlParser.Models;
 using DapperSqlParser.Services;
+using DapperSqlParser.StoredProcedureCodeGeneration;
 
 
 namespace DapperSqlParser
@@ -18,13 +19,15 @@ namespace DapperSqlParser
 
         private static async Task Main(string[] args)
         {
+            StoredProcedureService spService = new StoredProcedureService(ConnectionString);
+            List<StoredProcedureParameters> paramsList;
+
+            #region argsLogic
+
             if (!args.Any())
                 Console.WriteLine("Specify stored procedures for parsing: \n" +
                                   "\t-all :for all procedures\n" +
                                   "\t-mod [sp1],[sp2],[sp3],[...] :for procedures with given names");
-
-            StoredProcedureService spService = new StoredProcedureService(ConnectionString);
-            List<StoredProcedureParameters> paramsList;
 
             if (args.Contains("-all"))
                 paramsList = await spService.GenerateModelsListAsync();
@@ -32,6 +35,8 @@ namespace DapperSqlParser
                 paramsList = await spService.GenerateModelsListAsync(args[1].Split(','));
             else
                 return;
+
+            #endregion
 
             string storedProcedureGeneratedCode = await StoredProceduresCodeGenerator.CreateSpClient(paramsList, NameSpaceName);
 

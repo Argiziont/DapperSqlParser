@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DapperSqlParser.Services
+namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
     public static class SqlCsSharpTypesConverter
     {

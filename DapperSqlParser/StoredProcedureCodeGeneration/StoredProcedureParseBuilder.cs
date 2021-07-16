@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using DapperSqlParser.Extensions;
 using DapperSqlParser.Models;
 
-namespace DapperSqlParser.Services
+namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
     public static class StoredProcedureParseBuilder
     {

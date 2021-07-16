@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Dapper;
 using DapperSqlParser.Extensions;
 using DapperSqlParser.Models;
+using DapperSqlParser.Services;
 using DapperSqlParser.Services.TemplateService;
 using Newtonsoft.Json;
 
-namespace DapperSqlParser.Services
+namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
     public class StoredProcedureService
     {

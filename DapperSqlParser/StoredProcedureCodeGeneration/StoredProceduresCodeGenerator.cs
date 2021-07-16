@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using DapperSqlParser.Models;
 using DapperSqlParser.Services.Exceptions;
 
-namespace DapperSqlParser.Services
+namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
     public static class StoredProceduresCodeGenerator
     {
