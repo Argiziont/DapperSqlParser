@@ -20,6 +20,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             Parameters = parameters;
         }
+        
         public StoredProceduresDataModelExtractor()
         {
         }

@@ -3,7 +3,7 @@ using Xunit;
 
 namespace DapperSqlParser.Tests
 {
-    public class StoredProcedureServiceTests
+    public class SqlCsSharpTypesConverterTests
     {
         [Fact]
         public void ConvertSqlServerFormatToCSharpReturns_Int64_IfInputIs_bigint()
