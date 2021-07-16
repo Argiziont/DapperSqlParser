@@ -6,6 +6,7 @@ using DapperSqlParser.Models;
 using DapperSqlParser.Services.Exceptions;
 using NJsonSchema;
 using NJsonSchema.CodeGeneration.CSharp;
+
 using static DapperSqlParser.Services.StoredProcedureParseBuilder;
 using static DapperSqlParser.Services.TemplateService.TemplateNamingConstants;
 
@@ -103,7 +104,6 @@ namespace DapperSqlParser.Services
         private static async Task<string> CreateSpDataModelForInputParamsJson(StoredProcedureParameters parameters,
             int jsonSchemaStartIndex, int jsonSchemaEndIndex)
         {
-            StringBuilder inputClass;
             jsonSchemaStartIndex += InputSchemeStartKeyWordSnippet.Length;
             jsonSchemaEndIndex -= jsonSchemaStartIndex;
 
@@ -114,17 +114,16 @@ namespace DapperSqlParser.Services
             JsonSchema schema = await JsonSchema.FromJsonAsync(jsonSchemaFromSp);
             CSharpGenerator generator = new CSharpGenerator(schema);
 
-            string trimStart = "#pragma warning disable // Disable all warnings";
+            const string trimStart = "#pragma warning disable // Disable all warnings";
 
             string generatedClasses = generator.GenerateFile();
 
             int nameSpaceBracketIndex =
                 generatedClasses.IndexOf(trimStart, StringComparison.Ordinal) + trimStart.Length + 2;
-            inputClass =
-                new StringBuilder(
-                    $"\t[JsonWrapper(\"{parameters.InputParametersDataModels.First().ParameterName}\")]\n" +
-                    generatedClasses.Substring(nameSpaceBracketIndex,
-                        generatedClasses.Length - 2 - nameSpaceBracketIndex));
+            StringBuilder inputClass = new StringBuilder(
+                $"\t[JsonWrapper(\"{parameters.InputParametersDataModels.First().ParameterName}\")]\n" +
+                generatedClasses.Substring(nameSpaceBracketIndex,
+                    generatedClasses.Length - 2 - nameSpaceBracketIndex));
 
             return await Task.FromResult(inputClass.ToString());
         }

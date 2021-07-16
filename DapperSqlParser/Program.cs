@@ -35,12 +35,20 @@ namespace DapperSqlParser
 
             string storedProcedureGeneratedCode = await StoredProceduresCodeGenerator.CreateSpClient(paramsList, NameSpaceName);
 
-            // This will get the current PROJECT directory
+            await WriteGeneratedCodeToClientFile(storedProcedureGeneratedCode);
+        }
+
+        private static async Task WriteGeneratedCodeToClientFile(string generatedCode)
+        {
             string projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent?.Parent?.FullName;
             string filePath = Path.Combine(projectPath ?? throw new InvalidOperationException(),
                 @"GeneratedFile\spClient.cs");
 
-            await StoredProceduresCodeGenerator.WriteGeneratedCodeToClientFile(storedProcedureGeneratedCode, filePath);
+            if (generatedCode == null) throw new ArgumentNullException(nameof(generatedCode));
+            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
+
+
+            await File.WriteAllTextAsync(filePath, generatedCode);
         }
     }
 }

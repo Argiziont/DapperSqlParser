@@ -51,15 +51,6 @@ namespace DapperSqlParser.Services
             return await Task.FromResult(outputCode.ToString());
         }
 
-        public static async Task WriteGeneratedCodeToClientFile(string generatedCode, string filePath)
-        {
-            if (generatedCode == null) throw new ArgumentNullException(nameof(generatedCode));
-            if (filePath == null) throw new ArgumentNullException(nameof(filePath));
-
-
-            await File.WriteAllTextAsync(filePath, generatedCode);
-        }
-
         private static void ReportAboutStoredProcedureParsingProgress(IList<StoredProcedureParameters> parameters,
             IProgress<StoreProcedureGenerationProgress> progress,
             StoredProcedureParameters spParameter)

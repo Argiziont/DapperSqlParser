@@ -9,14 +9,19 @@
         <TabControl>
             <TabItem Header="Settings">
                 <Grid>
-                    <GroupBox Header="Settings" Margin="10,10,10,0" Height="294" VerticalAlignment="Top"/>
-                    <Button Content="Generate output" Margin="0,0,10,10" Click="GenerateOutputButton_Click" HorizontalAlignment="Right" Width="100" Height="32" VerticalAlignment="Bottom"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="33,32,0,0" Text="Connection string" TextWrapping="Wrap" VerticalAlignment="Top" Width="219"/>
-                    <TextBox HorizontalAlignment="Left" Margin="33,53,0,0" VerticalAlignment="Top" Width="229" Height="23" Name="ConnectionStringTextBlock"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="33,85,0,0" Text="Namespace name" TextWrapping="Wrap" VerticalAlignment="Top" Width="219"/>
-                    <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock"/>
-                    <TextBlock Text="Search" HorizontalAlignment="Left" Margin="467,320,0,0" VerticalAlignment="Top" Height="25" Width="53"/>
-                    <DataGrid AutoGenerateColumns="True" BeginningEdit="StoredProceduresDataGrid_OnBeginningEdit" x:Name="StoredProceduresDataGrid" Margin="10,355,10,47">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="19*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="167*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Settings" Margin="10,10,10,0" Height="294" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
+                    <Button Content="Generate output" Margin="0,0,10,10" Click="GenerateOutputButton_Click" HorizontalAlignment="Right" Width="100" Height="32" VerticalAlignment="Bottom" Grid.Column="2"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="33,32,0,0" Text="Connection string" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="3"/>
+                    <TextBox HorizontalAlignment="Left" Margin="33,53,0,0" VerticalAlignment="Top" Width="229" Height="23" Name="ConnectionStringTextBlock" Grid.ColumnSpan="3"/>
+                    <TextBlock HorizontalAlignment="Left" Margin="33,85,0,0" Text="Namespace name" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="3"/>
+                    <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock" Grid.ColumnSpan="3"/>
+                    <TextBlock Text="Search" HorizontalAlignment="Left" Margin="371,320,0,0" VerticalAlignment="Top" Height="25" Width="53" Grid.Column="2"/>
+                    <DataGrid AutoGenerateColumns="True" BeginningEdit="StoredProceduresDataGrid_OnBeginningEdit" x:Name="StoredProceduresDataGrid" Margin="10,355,10,47" Grid.ColumnSpan="3">
 
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="IsChecked"
@@ -63,10 +68,10 @@
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                     </DataGrid>
-                    <Button Margin="10,312,0,0" Click="LoadStoreProcedures_OnClick" Height="38" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101">
+                    <Button Margin="10,312,0,0" Click="LoadStoreProcedures_OnClick" Height="38" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101" Grid.ColumnSpan="3">
                         <TextBlock Text="Load stored procedures" TextWrapping="Wrap" TextAlignment="Center"/>
                     </Button>
-                    <TextBox Margin="520,319,10,0" Name="StoredProcedureGridSearchBox" Height="23" VerticalAlignment="Top" TextChanged="StoredProcedureDataGridSearchBox_OnTextChanged"/>
+                    <TextBox Margin="424,319,10,0" Name="StoredProcedureGridSearchBox" Height="23" VerticalAlignment="Top" TextChanged="StoredProcedureDataGridSearchBox_OnTextChanged" Grid.Column="2"/>
 
 
                 </Grid>

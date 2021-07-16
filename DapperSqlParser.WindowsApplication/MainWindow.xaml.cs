@@ -59,13 +59,13 @@ namespace DapperSqlParser.WindowsApplication
 
         private void UnCheckAllCheckboxesInDataGrid()
         {
-            foreach (object? storedProcedureDetails in StoredProceduresDataGrid.Items) ((StoredProcedureGridModel) storedProcedureDetails).IsChecked = false;
+            foreach (object storedProcedureDetails in StoredProceduresDataGrid.Items) ((StoredProcedureGridModel) storedProcedureDetails).IsChecked = false;
             RefreshDataGridWithNewItems(GetCurrentGridItemCollection());
         }
 
         private void CheckAllCheckboxesInDataGrid()
         {
-            foreach (object? storedProcedureDetails in StoredProceduresDataGrid.Items) ((StoredProcedureGridModel)storedProcedureDetails).IsChecked = true;
+            foreach (object storedProcedureDetails in StoredProceduresDataGrid.Items) ((StoredProcedureGridModel)storedProcedureDetails).IsChecked = true;
             RefreshDataGridWithNewItems(GetCurrentGridItemCollection());
         }
 
