@@ -1,4 +1,4 @@
-﻿namespace DapperSqlParser.Services
+﻿namespace DapperSqlParser.Models
 {
     public class StoreProcedureGenerationProgress
     {

@@ -18,8 +18,8 @@ namespace DapperSqlParser.TestRepository.Service.DapperExecutor.Extensions
                 return default;
 
             // Concats
-            var sb = new StringBuilder();
-            foreach (var jsonPart in result)
+            StringBuilder sb = new StringBuilder();
+            foreach (string jsonPart in result)
                 sb.Append(jsonPart);
 
             //If needed private fields resolver

@@ -23,7 +23,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<EmptyInputParams, Sp_GetAllProductsOutput>();
-            var spService = new Sp_GetAllProducts(executor);
+            Sp_GetAllProducts spService = new Sp_GetAllProducts(executor);
 
             var executeResult = await spService.Execute();
             try
@@ -44,7 +44,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task<Product> GetByIdAsync(int productId)
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_GetProductByIdInput, Sp_GetProductByIdOutput>();
-            var spService = new Sp_GetProductById(executor);
+            Sp_GetProductById spService = new Sp_GetProductById(executor);
 
             var executeResult = await spService.Execute(new Sp_GetProductByIdInput(){ProductId = productId });
             try
@@ -65,7 +65,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task DeleteByIdAsync(int productId)
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_DeleteProductByIdInput>();
-            var spService = new Sp_DeleteProductById(executor);
+            Sp_DeleteProductById spService = new Sp_DeleteProductById(executor);
 
             await spService.Execute(new Sp_DeleteProductByIdInput() {  ProductId= productId });
         }
@@ -73,7 +73,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task InsertAsync(Product product)
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_InsertProductInput>();
-            var spService = new Sp_InsertProduct(executor);
+            Sp_InsertProduct spService = new Sp_InsertProduct(executor);
 
             try
             {
@@ -91,7 +91,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task UpdateTitleByIdAsync(int productId, string productTitle)
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_UpdateProductTitleByIdInput>();
-            var spService = new Sp_UpdateProductTitleById(executor);
+            Sp_UpdateProductTitleById spService = new Sp_UpdateProductTitleById(executor);
 
             await spService.Execute(new Sp_UpdateProductTitleByIdInput() { ProductId = productId,ProductTitle = productTitle });
         }

@@ -19,7 +19,7 @@ namespace DapperSqlParser.TestRepository
             services.AddControllers();
 
             //AutoMapper
-            var mapperConfig = new MapperConfiguration(mc =>
+            MapperConfiguration mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new CategoryMappingProfile());
                 mc.AddProfile(new ProductMappingProfile());

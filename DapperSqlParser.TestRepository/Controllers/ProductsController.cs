@@ -48,7 +48,7 @@ namespace DapperSqlParser.TestRepository.Controllers
         {
             try
             {
-                var response = await _productRepository.GetByIdAsync(productId);
+                Product response = await _productRepository.GetByIdAsync(productId);
 
                 return Ok(response);
             }

@@ -48,7 +48,7 @@ namespace DapperSqlParser.TestRepository.Controllers
         {
             try
             {
-                var response = await _categoryRepository.GetByIdAsync(categoryId);
+                Category response = await _categoryRepository.GetByIdAsync(categoryId);
 
                 return Ok(response);
             }

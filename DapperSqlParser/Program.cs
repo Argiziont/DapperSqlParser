@@ -23,7 +23,7 @@ namespace DapperSqlParser
                                   "\t-all :for all procedures\n" +
                                   "\t-mod [sp1],[sp2],[sp3],[...] :for procedures with given names");
 
-            var spService = new StoredProcedureService(ConnectionString);
+            StoredProcedureService spService = new StoredProcedureService(ConnectionString);
             List<StoredProcedureParameters> paramsList;
 
             if (args.Contains("-all"))
@@ -33,15 +33,14 @@ namespace DapperSqlParser
             else
                 return;
 
-            var spNamespace = await StoredProceduresExtractor.CreateSpClient(paramsList, NameSpaceName);
-
+            string spNamespace = await StoredProceduresCodeGenerator.CreateSpClient(paramsList, NameSpaceName);
 
             // This will get the current PROJECT directory
-            var projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent?.Parent?.FullName;
-            var filePath = Path.Combine(projectPath ?? throw new InvalidOperationException(),
+            string projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent?.Parent?.FullName;
+            string filePath = Path.Combine(projectPath ?? throw new InvalidOperationException(),
                 @"GeneratedFile\spClient.cs");
 
-            await StoredProceduresExtractor.WriteGeneratedNamespaceToClientFile(spNamespace, filePath);
+            await StoredProceduresCodeGenerator.WriteGeneratedCodeToClientFile(spNamespace, filePath);
         }
     }
 }

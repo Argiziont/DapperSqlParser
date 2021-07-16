@@ -18,7 +18,7 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
 
         public static async Task RestoreDatabase()
         {
-            await using var connection = new SqlConnection(ConnectionString);
+            await using SqlConnection connection = new SqlConnection(ConnectionString);
 
             await connection.ExecuteAsync($"ALTER DATABASE[{DatabaseName}] " +
                                           $"SET SINGLE_USER WITH ROLLBACK IMMEDIATE \n" +

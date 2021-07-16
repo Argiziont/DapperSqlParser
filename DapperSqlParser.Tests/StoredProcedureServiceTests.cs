@@ -10,10 +10,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "bigint";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Int64", cSharpType);
@@ -24,10 +24,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "binary";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Byte[]", cSharpType);
@@ -38,10 +38,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "bit";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Boolean", cSharpType);
@@ -52,10 +52,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "char";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Char", cSharpType);
@@ -66,10 +66,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "date";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.DateTime", cSharpType);
@@ -80,10 +80,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "datetime";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.DateTime", cSharpType);
@@ -94,10 +94,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "datetime2";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.DateTime", cSharpType);
@@ -108,10 +108,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "datetimeoffset";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.DateTimeOffset", cSharpType);
@@ -122,10 +122,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "decimal";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Decimal", cSharpType);
@@ -136,10 +136,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "filestream";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Byte[]", cSharpType);
@@ -150,10 +150,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "float";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Double", cSharpType);
@@ -164,10 +164,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "geography";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("Microsoft.SqlServer.Types.SqlGeography", cSharpType);
@@ -178,10 +178,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "geometry";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("Microsoft.SqlServer.Types.SqlGeometry", cSharpType);
@@ -192,10 +192,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "hierarchyid";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("Microsoft.SqlServer.Types.SqlHierarchyId", cSharpType);
@@ -206,10 +206,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "image";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Byte[]", cSharpType);
@@ -220,10 +220,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "int";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Int32", cSharpType);
@@ -234,10 +234,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "money";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Decimal", cSharpType);
@@ -248,10 +248,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "nchar";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.String", cSharpType);
@@ -262,10 +262,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "ntext";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.String", cSharpType);
@@ -276,10 +276,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "numeric";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Decimal", cSharpType);
@@ -290,10 +290,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "nvarchar";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.String", cSharpType);
@@ -304,10 +304,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "real";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Single", cSharpType);
@@ -318,10 +318,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "rowversion";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Byte[]", cSharpType);
@@ -332,10 +332,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "smalldatetime";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.DateTime", cSharpType);
@@ -346,10 +346,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "smallint";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Int16", cSharpType);
@@ -360,10 +360,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "smallmoney";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Decimal", cSharpType);
@@ -374,10 +374,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "sql_variant";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Object", cSharpType);
@@ -388,10 +388,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "text";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.String", cSharpType);
@@ -402,10 +402,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "time";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.TimeSpan", cSharpType);
@@ -416,10 +416,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "timestamp";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Byte[]", cSharpType);
@@ -430,10 +430,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "tinyint";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Byte", cSharpType);
@@ -444,10 +444,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "uniqueidentifier";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Guid", cSharpType);
@@ -458,10 +458,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "varbinary";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.Byte[]", cSharpType);
@@ -472,10 +472,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "varchar";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.String", cSharpType);
@@ -486,10 +486,10 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "xml";
-            var service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService(null);
 
             //Act
-            var cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
+            string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
 
             //Assert
             Assert.Equal("System.String", cSharpType);

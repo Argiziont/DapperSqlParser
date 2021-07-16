@@ -72,9 +72,13 @@
                 </Grid>
 
             </TabItem>
-            <TabItem Header="Output">
+            <TabItem Header="Output" Margin="-2,0,-2,0">
                 <Grid>
-                    <RichTextBox Margin="10,10,10,81" IsReadOnly="True" Name="GeneratedOutputRichTextBox" VerticalScrollBarVisibility="Visible">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="49*"/>
+                        <ColumnDefinition Width="142*"/>
+                    </Grid.ColumnDefinitions>
+                    <RichTextBox Margin="10,10,10,81" IsReadOnly="True" Name="GeneratedOutputRichTextBox" VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="2">
                         <FlowDocument>
                             <Paragraph>
                                 <Run Text="Generated stored procedures output"/>
@@ -84,8 +88,8 @@
                             </Paragraph>
                         </FlowDocument>
                     </RichTextBox>
-                    <ProgressBar Margin="219,250,250,321" Name="StoredProcedureParsingProgressBar" Visibility="Hidden"/>
-                    <Button Content="Save to file" Name="SaveOutputToFileButton" Click="SaveOutputToFileButton_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Margin="0,0,10,9" />
+                    <ProgressBar Margin="10,0,382,9" Name="StoredProcedureParsingProgressBar" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom"  />
+                    <Button Content="Save to file" Name="SaveOutputToFileButton" Click="SaveOutputToFileButton_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Margin="0,0,10,9" Grid.Column="1" />
                 </Grid>
 
 

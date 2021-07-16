@@ -13,10 +13,10 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
 
         public TestClientProvider()
         {
-            var projectDir = Directory.GetCurrentDirectory();
-            var configPath = Path.Combine(projectDir, "appsettings.json");
+            string projectDir = Directory.GetCurrentDirectory();
+            string configPath = Path.Combine(projectDir, "appsettings.json");
 
-            var server = new TestServer(new WebHostBuilder()
+            TestServer server = new TestServer(new WebHostBuilder()
                 .ConfigureAppConfiguration((context, conf) =>
                 {
                     conf.AddJsonFile(configPath);

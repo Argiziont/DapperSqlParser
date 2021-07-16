@@ -14,10 +14,10 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
         public async Task GetWithoutParameters_EndpointsReturnSuccessAndCorrectContentType(string url)
         {
             //Arrange
-            var client = new TestClientProvider().Client;
+            HttpClient client = new TestClientProvider().Client;
 
             //Act
-            var response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.GetAsync(url);
             response.EnsureSuccessStatusCode();
 
             //Assert
@@ -32,10 +32,10 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
         public async Task GetWithParameters_EndpointsReturnSuccessAndCorrectContentType(string url, int categoryId)
         {
             //Arrange
-            var client = new TestClientProvider().Client;
+            HttpClient client = new TestClientProvider().Client;
 
             //Act
-            var response = await client.GetAsync($"{url}?categoryId={categoryId}");
+            HttpResponseMessage response = await client.GetAsync($"{url}?categoryId={categoryId}");
             response.EnsureSuccessStatusCode();
 
             //Assert
@@ -53,10 +53,10 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
             await DatabaseExtensions.RestoreDatabase();
 
             //Arrange
-            var client = new TestClientProvider().Client;
+            HttpClient client = new TestClientProvider().Client;
 
             //Act
-            var response = await client.DeleteAsync($"{url}?categoryId={categoryId}");
+            HttpResponseMessage response = await client.DeleteAsync($"{url}?categoryId={categoryId}");
             response.EnsureSuccessStatusCode();
 
             //Assert
@@ -73,11 +73,11 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
             await DatabaseExtensions.RestoreDatabase();
 
             //Arrange
-            var client = new TestClientProvider().Client;
-            var stringContent = new StringContent(jsonPayLod, System.Text.Encoding.UTF8, "application/json");
+            HttpClient client = new TestClientProvider().Client;
+            StringContent stringContent = new StringContent(jsonPayLod, System.Text.Encoding.UTF8, "application/json");
 
             //Act
-            var response = await client.PostAsync($"{url}", stringContent);
+            HttpResponseMessage response = await client.PostAsync($"{url}", stringContent);
             response.EnsureSuccessStatusCode();
 
             //Assert
@@ -94,10 +94,10 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
             await DatabaseExtensions.RestoreDatabase();
 
             //Arrange
-            var client = new TestClientProvider().Client;
+            HttpClient client = new TestClientProvider().Client;
 
             //Act
-            var response = await client.PutAsync($"{url}?categoryId={categoryId}", new StringContent(categoryTitle, System.Text.Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await client.PutAsync($"{url}?categoryId={categoryId}", new StringContent(categoryTitle, System.Text.Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
 
             //Assert

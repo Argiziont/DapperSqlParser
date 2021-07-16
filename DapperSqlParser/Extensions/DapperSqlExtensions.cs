@@ -18,8 +18,8 @@ namespace DapperSqlParser.Extensions
                 return default;
 
             // Concats all json chunks into one single string
-            var sb = new StringBuilder();
-            foreach (var jsonPart in result)
+            StringBuilder sb = new StringBuilder();
+            foreach (string jsonPart in result)
                 sb.Append(jsonPart);
 
             //If needed private fields resolver

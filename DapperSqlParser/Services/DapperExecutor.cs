@@ -27,7 +27,7 @@ namespace DapperSqlParser.Services
             }
             else
             {
-                await using var connection = new SqlConnection(_connectionString);
+                await using SqlConnection connection = new SqlConnection(_connectionString);
                 await connection.ExecuteAsync(spName, inputParams, commandType: CommandType.StoredProcedure);
             }
         }
@@ -40,9 +40,9 @@ namespace DapperSqlParser.Services
              *  We pass this param name through  JsonWrapperAttribute
              *  And create dynamic dictionary wrapper for our object
              */
-            await using var connection = new SqlConnection(_connectionString);
+            await using SqlConnection connection = new SqlConnection(_connectionString);
 
-            var parameters = new DynamicParameters(new Dictionary<string, object>
+            DynamicParameters parameters = new DynamicParameters(new Dictionary<string, object>
             {
                 {
                     JsonWrapperAttributeExtensions.GetAttributeCustom<TInParams>().StoreProcedureJsonInputName,
@@ -67,14 +67,14 @@ namespace DapperSqlParser.Services
 
         public async Task<IEnumerable<TOutParams>> ExecuteAsync(string spName)
         {
-            await using var connection = new SqlConnection(_connectionString);
+            await using SqlConnection connection = new SqlConnection(_connectionString);
 
             return await connection.QueryAsync<TOutParams>(spName, commandType: CommandType.StoredProcedure);
         }
 
         public async Task<IEnumerable<TOutParams>> ExecuteJsonAsync(string spName)
         {
-            await using var connection = new SqlConnection(_connectionString);
+            await using SqlConnection connection = new SqlConnection(_connectionString);
 
             return await Task.FromResult(connection.QueryJson<TOutParams>(spName,
                 commandType: CommandType.StoredProcedure,
@@ -84,7 +84,7 @@ namespace DapperSqlParser.Services
         async Task<IEnumerable<TOutParams>> IDapperExecutor<TInParams, TOutParams>.ExecuteAsync(string spName,
             TInParams inputParams)
         {
-            await using var connection = new SqlConnection(_connectionString);
+            await using SqlConnection connection = new SqlConnection(_connectionString);
 
             if (JsonWrapperAttributeExtensions.ContainsAttribute<TInParams>())
                 return await ExecuteWithJsonInputAsync(spName, inputParams);
@@ -100,7 +100,7 @@ namespace DapperSqlParser.Services
         async Task<IEnumerable<TOutParams>> IDapperExecutor<TInParams, TOutParams>.ExecuteJsonAsync(string spName,
             TInParams inputParams)
         {
-            await using var connection = new SqlConnection(_connectionString);
+            await using SqlConnection connection = new SqlConnection(_connectionString);
 
             if (JsonWrapperAttributeExtensions.ContainsAttribute<TInParams>())
                 return await ExecuteWithJsonInputAndOutputAsync(spName, inputParams);
@@ -121,9 +121,9 @@ namespace DapperSqlParser.Services
              *  We pass this param name through  JsonWrapperAttribute
              *  And create dynamic dictionary wrapper for our object
              */
-            await using var connection = new SqlConnection(_connectionString);
+            await using SqlConnection connection = new SqlConnection(_connectionString);
 
-            var parameters = new DynamicParameters(new Dictionary<string, object>
+            DynamicParameters parameters = new DynamicParameters(new Dictionary<string, object>
             {
                 {
                     JsonWrapperAttributeExtensions.GetAttributeCustom<TInParams>().StoreProcedureJsonInputName,
@@ -144,9 +144,9 @@ namespace DapperSqlParser.Services
              *  We pass this param name through  JsonWrapperAttribute
              *  And create dynamic dictionary wrapper for our object
              */
-            await using var connection = new SqlConnection(_connectionString);
+            await using SqlConnection connection = new SqlConnection(_connectionString);
 
-            var parameters = new DynamicParameters(new Dictionary<string, object>
+            DynamicParameters parameters = new DynamicParameters(new Dictionary<string, object>
             {
                 {
                     JsonWrapperAttributeExtensions.GetAttributeCustom<TInParams>().StoreProcedureJsonInputName,

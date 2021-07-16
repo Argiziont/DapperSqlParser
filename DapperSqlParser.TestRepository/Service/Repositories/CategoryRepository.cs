@@ -23,7 +23,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<EmptyInputParams, Sp_GetAllCategoriesOutput>();
-            var spService = new Sp_GetAllCategories(executor);
+            Sp_GetAllCategories spService = new Sp_GetAllCategories(executor);
 
             var executeResult = await spService.Execute();
             try
@@ -44,7 +44,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task<Category> GetByIdAsync(int categoryId)
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_GetCategoryByIdInput, Sp_GetCategoryByIdOutput>();
-            var spService = new Sp_GetCategoryById(executor);
+            Sp_GetCategoryById spService = new Sp_GetCategoryById(executor);
 
             var executeResult = await spService.Execute(new Sp_GetCategoryByIdInput() { CategoryId = categoryId });
             try
@@ -65,7 +65,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task DeleteByIdAsync(int categoryId)
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_DeleteCategoryByIdInput>();
-            var spService = new Sp_DeleteCategoryById(executor);
+            Sp_DeleteCategoryById spService = new Sp_DeleteCategoryById(executor);
 
             await spService.Execute(new Sp_DeleteCategoryByIdInput() { CategoryId = categoryId });
         }
@@ -73,7 +73,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task InsertAsync(Category category)
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_InsertCategoryInput>();
-            var spService = new Sp_InsertCategory(executor);
+            Sp_InsertCategory spService = new Sp_InsertCategory(executor);
 
             try
             {
@@ -91,7 +91,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
         public async Task UpdateNameByIdAsync(int categoryId, string categoryName)
         {
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_UpdateCategoryNameByIdInput>();
-            var spService = new Sp_UpdateCategoryNameById(executor);
+            Sp_UpdateCategoryNameById spService = new Sp_UpdateCategoryNameById(executor);
 
             await spService.Execute(new Sp_UpdateCategoryNameByIdInput() { CategoryId = categoryId, CategoryName = categoryName });
         }
