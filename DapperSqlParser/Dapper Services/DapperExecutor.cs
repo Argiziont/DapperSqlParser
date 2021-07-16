@@ -7,7 +7,7 @@ using DapperSqlParser.Extensions;
 using Newtonsoft.Json;
 using SpClient;
 
-namespace DapperSqlParser.Services
+namespace DapperSqlParser.Dapper_Services
 {
     public class DapperExecutor<TInParams> : IDapperExecutor<TInParams>
         where TInParams : class

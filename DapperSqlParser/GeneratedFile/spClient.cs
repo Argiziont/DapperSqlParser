@@ -1,4 +1,4 @@
-using DapperSqlParser.Services;
+using DapperSqlParser.Dapper_Services;
 using SpClient;
 
 namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile 

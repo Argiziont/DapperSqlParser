@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DapperSqlParser.Services
+namespace DapperSqlParser.Dapper_Services
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class JsonWrapperAttribute : Attribute

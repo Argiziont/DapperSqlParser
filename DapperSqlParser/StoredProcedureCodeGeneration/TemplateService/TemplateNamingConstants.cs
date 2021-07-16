@@ -1,4 +1,4 @@
-﻿namespace DapperSqlParser.Services.TemplateService
+﻿namespace DapperSqlParser.StoredProcedureCodeGeneration.TemplateService
 {
     public static class TemplateNamingConstants
     {

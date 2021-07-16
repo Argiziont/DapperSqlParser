@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using DapperSqlParser.Services;
+using DapperSqlParser.Dapper_Services;
 
 namespace DapperSqlParser.Extensions
 {

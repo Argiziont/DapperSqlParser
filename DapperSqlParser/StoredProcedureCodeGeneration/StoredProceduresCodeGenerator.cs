@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using DapperSqlParser.Exceptions;
 using DapperSqlParser.Models;
-using DapperSqlParser.Services.Exceptions;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration
 {

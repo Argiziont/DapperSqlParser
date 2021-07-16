@@ -1,5 +1,4 @@
 ﻿using DapperSqlParser.Models;
-using DapperSqlParser.Services;
 using DapperSqlParser.WindowsApplication.Models;
 using Microsoft.Win32;
 using System;

@@ -2,12 +2,12 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DapperSqlParser.Exceptions;
 using DapperSqlParser.Models;
-using DapperSqlParser.Services.Exceptions;
 using NJsonSchema;
 using NJsonSchema.CodeGeneration.CSharp;
 using static DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParseBuilder;
-using static DapperSqlParser.Services.TemplateService.TemplateNamingConstants;
+using static DapperSqlParser.StoredProcedureCodeGeneration.TemplateService.TemplateNamingConstants;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration
 {

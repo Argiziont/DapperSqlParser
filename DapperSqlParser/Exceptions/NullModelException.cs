@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DapperSqlParser.Services.Exceptions
+namespace DapperSqlParser.Exceptions
 {
     public class NullModelException : Exception
     {
