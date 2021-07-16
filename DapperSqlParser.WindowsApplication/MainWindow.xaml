@@ -19,7 +19,7 @@
                     <TextBlock HorizontalAlignment="Left" Margin="33,32,0,0" Text="Connection string" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="3"/>
                     <TextBox HorizontalAlignment="Left" Margin="33,53,0,0" VerticalAlignment="Top" Width="229" Height="23" Name="ConnectionStringTextBlock" Grid.ColumnSpan="3"/>
                     <TextBlock HorizontalAlignment="Left" Margin="33,85,0,0" Text="Namespace name" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="3"/>
-                    <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock" Grid.ColumnSpan="3"/>
+                    <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock" Grid.ColumnSpan="3"/>
                     <TextBlock Text="Search" HorizontalAlignment="Left" Margin="371,320,0,0" VerticalAlignment="Top" Height="25" Width="53" Grid.Column="2"/>
                     <DataGrid AutoGenerateColumns="True" BeginningEdit="StoredProceduresDataGrid_OnBeginningEdit" x:Name="StoredProceduresDataGrid" Margin="10,355,10,47" Grid.ColumnSpan="3">
 

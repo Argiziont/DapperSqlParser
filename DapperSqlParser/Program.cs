@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using DapperSqlParser.Models;
 using DapperSqlParser.StoredProcedureCodeGeneration;
 
-
 namespace DapperSqlParser
 {
     internal static class Program
