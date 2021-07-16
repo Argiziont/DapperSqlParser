@@ -33,14 +33,14 @@ namespace DapperSqlParser
             else
                 return;
 
-            string spNamespace = await StoredProceduresCodeGenerator.CreateSpClient(paramsList, NameSpaceName);
+            string storedProcedureGeneratedCode = await StoredProceduresCodeGenerator.CreateSpClient(paramsList, NameSpaceName);
 
             // This will get the current PROJECT directory
             string projectPath = Directory.GetParent(Environment.CurrentDirectory).Parent?.Parent?.FullName;
             string filePath = Path.Combine(projectPath ?? throw new InvalidOperationException(),
                 @"GeneratedFile\spClient.cs");
 
-            await StoredProceduresCodeGenerator.WriteGeneratedCodeToClientFile(spNamespace, filePath);
+            await StoredProceduresCodeGenerator.WriteGeneratedCodeToClientFile(storedProcedureGeneratedCode, filePath);
         }
     }
 }

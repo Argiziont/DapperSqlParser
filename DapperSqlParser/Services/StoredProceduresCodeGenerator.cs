@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DapperSqlParser.Models;
@@ -11,63 +10,45 @@ namespace DapperSqlParser.Services
 {
     public static class StoredProceduresCodeGenerator
     {
-        public static async Task<string> CreateSpClientClass(StoredProcedureParameters parameters)
-        {
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
-
-            StringBuilder outputClass = new StringBuilder();
-
-            bool spReturnJsonFlag =
-                StoreProcedureInputIsJson(parameters.OutputParametersDataModels?.First().ParameterName);
-
-            outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name} \n\t{{"); //Class name
-
-            StoredProcedureParseBuilder.AppendIDapperExecutorField(parameters, outputClass);
-            StoredProcedureParseBuilder.AppendClientConstructor(parameters, outputClass);
-            StoredProcedureParseBuilder.AppendExecutorMethod(parameters, outputClass, spReturnJsonFlag);
-
-            outputClass.Append("\t}\n");
-            return await Task.FromResult(outputClass.ToString());
-        }
-        
         public static async Task<string> CreateSpClient(List<StoredProcedureParameters> parameters,
             string namespaceName, IProgress<StoreProcedureGenerationProgress> progress = default)
         {
-            StringBuilder outputNamespace = new StringBuilder();
-            outputNamespace.AppendLine($"namespace {namespaceName} \n{{");
+            StringBuilder outputCode = new StringBuilder();
+
+            outputCode.AppendLine($"namespace {namespaceName} \n{{"); // Append name space start
 
             foreach (StoredProcedureParameters spParameter in parameters)
             {
                 ReportAboutStoredProcedureParsingProgress(parameters, progress, spParameter);
 
-                outputNamespace.AppendLine(
-                    $"\n\t#region {spParameter.StoredProcedureInfo.Name}"); //Wrapping every sp into region
+                StoredProcedureParseBuilder.AppendStoredProcedureRegionStart(spParameter.StoredProcedureInfo.Name,
+                    outputCode);
 
                 try
                 {
                     if (spParameter.StoredProcedureInfo.Error != null)
                     {
-                        outputNamespace.AppendLine("//Couldn't parse Stored procedure  with name: " +
-                                                   $"{spParameter.StoredProcedureInfo.Name} because of internal error: " +
-                                                   $"{spParameter.StoredProcedureInfo.Error}\n\t#endregion");
+                        StoredProcedureParseBuilder.AppendStoredProcedureCantParseMessage(
+                            spParameter.StoredProcedureInfo, outputCode);
                         continue;
                     }
 
-                    await StoredProcedureParseBuilder.AppendExtractedCsSharpCode(spParameter, outputNamespace);
+                    await StoredProcedureParseBuilder.AppendExtractedCsSharpCode(spParameter, outputCode);
 
                     //await Task.Delay(200); //Await 200ms for progress bar testing, could be deleted if not needed
                 }
                 catch (NullModelException)
                 {
-                    outputNamespace.AppendLine(
-                        $"//Model for {spParameter.StoredProcedureInfo.Name} was not found, could not parse this Stored Procedure!");
+                    StoredProcedureParseBuilder.AppendStoredProcedureNotFoundMessage(
+                        spParameter.StoredProcedureInfo.Name, outputCode);
                 }
 
-                outputNamespace.AppendLine("\t#endregion");
+                StoredProcedureParseBuilder.AppendStoredProcedureRegionEnd(outputCode);
             }
 
-            outputNamespace.Append("}");
-            return await Task.FromResult(outputNamespace.ToString());
+            outputCode.Append("}"); // Append name space end
+
+            return await Task.FromResult(outputCode.ToString());
         }
 
         public static async Task WriteGeneratedCodeToClientFile(string generatedCode, string filePath)
@@ -77,11 +58,6 @@ namespace DapperSqlParser.Services
 
 
             await File.WriteAllTextAsync(filePath, generatedCode);
-        }
-       
-        private static bool StoreProcedureInputIsJson(string inputParameterName)
-        {
-            return inputParameterName != null && Guid.TryParse(inputParameterName.Replace("JSON_", ""), out _);
         }
 
         private static void ReportAboutStoredProcedureParsingProgress(IList<StoredProcedureParameters> parameters,

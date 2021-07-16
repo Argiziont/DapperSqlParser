@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DapperSqlParser.Extensions;
@@ -9,17 +10,45 @@ namespace DapperSqlParser.Services
     public static class StoredProcedureParseBuilder
     {
         public static async Task AppendExtractedCsSharpCode(StoredProcedureParameters spParameter,
-            StringBuilder outputNamespace)
+            StringBuilder outputGeneratedCode)
         {
             string outputModelClass =
                 await StoredProceduresDataModelExtractor.CreateSpDataModelForOutputParams(spParameter);
             string inputModelClass =
                 await StoredProceduresDataModelExtractor.CreateSpDataModelForInputParams(spParameter);
-            string clientClass = await StoredProceduresCodeGenerator.CreateSpClientClass(spParameter);
 
-            outputNamespace.AppendLine(outputModelClass);
-            outputNamespace.AppendLine(inputModelClass);
-            outputNamespace.AppendLine(clientClass);
+            string clientClass = await AppendSpClientClass(spParameter);
+
+            outputGeneratedCode.AppendLine(outputModelClass);
+            outputGeneratedCode.AppendLine(inputModelClass);
+            outputGeneratedCode.AppendLine(clientClass);
+        }
+
+        public static void AppendStoredProcedureRegionStart(string regionName,
+            StringBuilder outputGeneratedCode)
+        {
+            outputGeneratedCode.AppendLine(
+                $"\n\t#region {regionName}"); //Wrapping every sp into region
+        }
+
+        public static void AppendStoredProcedureRegionEnd(StringBuilder outputGeneratedCode)
+        {
+            outputGeneratedCode.AppendLine("\t#endregion");
+        }
+
+        public static void AppendStoredProcedureCantParseMessage(StoredProcedureInfo storedProcedureInfo,
+            StringBuilder outputGeneratedCode)
+        {
+            outputGeneratedCode.AppendLine("//Couldn't parse Stored procedure  with name: " +
+                                           $"{storedProcedureInfo.Name} because of internal error: " +
+                                           $"{storedProcedureInfo.Error}\n\t#endregion");
+        }
+
+        public static void AppendStoredProcedureNotFoundMessage(string storedProcedureName,
+            StringBuilder outputGeneratedCode)
+        {
+            outputGeneratedCode.AppendLine(
+                $"//Model for {storedProcedureName} was not found, could not parse this Stored Procedure!");
         }
 
         public static void AppendInputParameterPropertyField(StoredProcedureParameters parameters,
@@ -34,7 +63,19 @@ namespace DapperSqlParser.Services
                 "{get; set;} \n"));
         }
 
-        public static void AppendClientConstructor(StoredProcedureParameters parameters, StringBuilder outputClass)
+        public static void AppendOutputParameterPropertyField(StoredProcedureParameters parameters,
+            StringBuilder outputClass,
+            OutputParametersDataModel field)
+        {
+            outputClass.AppendLine(new string(
+                $"\t\t[Newtonsoft.Json.JsonProperty({(field.ParameterName == null ? $"\"{parameters.StoredProcedureInfo.Name}Result\"" : $"\"{field.ParameterName}\"")} " +
+                $", Required = {(field.IsNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]\n" + //If fields isn't nullable -> it's required in any case
+                $"\t\tpublic {field.TypeName} " + //Type name
+                $"{(field.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{field.ParameterName.Replace("-", "_")}")} " + //Param name
+                "{get; set;} \n"));
+        }
+
+        private static void AppendClientConstructor(StoredProcedureParameters parameters, StringBuilder outputClass)
         {
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
                 throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " +
@@ -50,7 +91,7 @@ namespace DapperSqlParser.Services
                 "\n\t\t}");
         }
 
-        public static void AppendExecutorMethod(StoredProcedureParameters parameters, StringBuilder outputClass,
+        private static void AppendExecutorMethod(StoredProcedureParameters parameters, StringBuilder outputClass,
             bool spReturnJsonFlag)
         {
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
@@ -66,7 +107,7 @@ namespace DapperSqlParser.Services
                 "\n\t\t}"); //If input and output
         }
 
-        public static void AppendIDapperExecutorField(StoredProcedureParameters parameters, StringBuilder outputClass)
+        private static void AppendIDapperExecutorField(StoredProcedureParameters parameters, StringBuilder outputClass)
         {
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
                 throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " +
@@ -80,16 +121,28 @@ namespace DapperSqlParser.Services
                 $"{(parameters.OutputParametersDataModels != null ? $", {parameters.StoredProcedureInfo.Name}Output" : "")}> _dapperExecutor;");
         }
 
-        public static void AppendOutputParameterPropertyField(StoredProcedureParameters parameters,
-            StringBuilder outputClass,
-            OutputParametersDataModel field)
+        private static bool StoreProcedureInputIsJson(string inputParameterName)
         {
-            outputClass.AppendLine(new string(
-                $"\t\t[Newtonsoft.Json.JsonProperty({(field.ParameterName == null ? $"\"{parameters.StoredProcedureInfo.Name}Result\"" : $"\"{field.ParameterName}\"")} " +
-                $", Required = {(field.IsNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]\n" + //If fields isn't nullable -> it's required in any case
-                $"\t\tpublic {field.TypeName} " + //Type name
-                $"{(field.ParameterName == null ? $"{parameters.StoredProcedureInfo.Name}Result" : $"{field.ParameterName.Replace("-", "_")}")} " + //Param name
-                "{get; set;} \n"));
+            return inputParameterName != null && Guid.TryParse(inputParameterName.Replace("JSON_", ""), out _);
+        }
+
+        private static async Task<string> AppendSpClientClass(StoredProcedureParameters parameters)
+        {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
+
+            StringBuilder outputClass = new StringBuilder();
+
+            bool spReturnJsonFlag =
+                StoreProcedureInputIsJson(parameters.OutputParametersDataModels?.First().ParameterName);
+
+            outputClass.AppendLine($"\tpublic class {parameters.StoredProcedureInfo.Name} \n\t{{"); //Class name
+
+            AppendIDapperExecutorField(parameters, outputClass);
+            AppendClientConstructor(parameters, outputClass);
+            AppendExecutorMethod(parameters, outputClass, spReturnJsonFlag);
+
+            outputClass.Append("\t}\n");
+            return await Task.FromResult(outputClass.ToString());
         }
     }
 }
