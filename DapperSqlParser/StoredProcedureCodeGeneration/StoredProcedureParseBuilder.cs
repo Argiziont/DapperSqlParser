@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DapperSqlParser.Extensions;
 using DapperSqlParser.Models;
 using DapperSqlParser.StoredProcedureCodeGeneration.Interfaces;
 
@@ -11,11 +10,11 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
     public class StoredProcedureParseBuilder: IStoredProcedureParseBuilder
     {
         private StringBuilder _internalStringBuilder;
-        public IStoredProceduresDataModelExtractor _modelExtractor { get; set; }
+        public IStoredProceduresDataModelExtractor ModelExtractor { get; }
 
-        public StoredProcedureParseBuilder(StoredProceduresDataModelExtractor modelExtractor)
+        public StoredProcedureParseBuilder(IStoredProceduresDataModelExtractor modelExtractor)
         {
-            _modelExtractor = modelExtractor;
+            ModelExtractor = modelExtractor;
         }
         public void SetStringBuilder(StringBuilder stringBuilder)
         {
@@ -27,14 +26,14 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             if (spParameter == null) throw new ArgumentNullException(nameof(spParameter));
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
-            _modelExtractor.Parameters = spParameter;
+            ModelExtractor.Parameters = spParameter;
 
             string outputModelClass =
-                await _modelExtractor.CreateSpDataModelForOutputParams();
+                await ModelExtractor.CreateSpDataModelForOutputParams();
             _internalStringBuilder.AppendLine(outputModelClass);
 
             string inputModelClass =
-                await _modelExtractor.CreateSpDataModelForInputParams();
+                await ModelExtractor.CreateSpDataModelForInputParams();
             _internalStringBuilder.AppendLine(inputModelClass);
 
             AppendStoredProcedureClientClass(spParameter);

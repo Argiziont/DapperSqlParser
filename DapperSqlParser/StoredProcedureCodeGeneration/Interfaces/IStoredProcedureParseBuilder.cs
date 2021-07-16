@@ -6,6 +6,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration.Interfaces
 {
     public interface IStoredProcedureParseBuilder
     {
+        public void SetStringBuilder(StringBuilder stringBuilder);
         public Task AppendExtractedCsSharpCode(StoredProcedureParameters spParameter);
         public void AppendStoredProcedureRegionStart(string regionName);
         public void AppendStoredProcedureRegionEnd();

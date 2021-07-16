@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DapperSqlParser.Exceptions;
 using DapperSqlParser.Models;
+using DapperSqlParser.StoredProcedureCodeGeneration.Interfaces;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
@@ -12,9 +13,9 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         public string NameSpaceName { get; set; }
         public IList<StoredProcedureParameters> Parameters { get; set; }
 
-        private readonly StoredProcedureParseBuilder _storedProcedureCodeBuilder;
+        private readonly IStoredProcedureParseBuilder _storedProcedureCodeBuilder;
 
-        public StoredProceduresCodeGenerator(StoredProcedureParseBuilder storedProcedureCodeBuilder)
+        public StoredProceduresCodeGenerator(IStoredProcedureParseBuilder storedProcedureCodeBuilder)
         {
             _storedProcedureCodeBuilder = storedProcedureCodeBuilder;
         }
