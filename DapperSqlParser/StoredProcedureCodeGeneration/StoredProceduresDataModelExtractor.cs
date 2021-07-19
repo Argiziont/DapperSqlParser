@@ -76,7 +76,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             JsonSchema schema = await JsonSchema.FromJsonAsync(jsonSchemaFromSp);
             CSharpGenerator generator = new CSharpGenerator(schema);
 
-            string trimStart = "#pragma warning disable // Disable all warnings";
+            const string trimStart = "#pragma warning disable // Disable all warnings";
 
             string generatedClasses = generator.GenerateFile();
 
@@ -105,7 +105,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                     StringComparison.Ordinal);
 
             if (jsonSchemaStartIndex != -1 && jsonSchemaEndIndex != -1)
-                return await CreateSpDataModelForInputParamsJson( jsonSchemaStartIndex, jsonSchemaEndIndex);
+                return await CreateSpDataModelForInputParamsJson();
 
             inputClass.AppendLine($"\tpublic class {Parameters.StoredProcedureInfo.Name}Input \n\t{{");
 
@@ -122,8 +122,15 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             return await Task.FromResult(inputClass.ToString());
         }
 
-        public async Task<string> CreateSpDataModelForInputParamsJson(int jsonSchemaStartIndex, int jsonSchemaEndIndex)
+        public async Task<string> CreateSpDataModelForInputParamsJson()
         {
+            int jsonSchemaStartIndex =
+                Parameters.StoredProcedureText.Definition.IndexOf(InputSchemeStartKeyWordSnippet,
+                    StringComparison.Ordinal);
+            int jsonSchemaEndIndex =
+                Parameters.StoredProcedureText.Definition.IndexOf(InputSchemeEndKeyWordSnippet,
+                    StringComparison.Ordinal);
+
             jsonSchemaStartIndex += InputSchemeStartKeyWordSnippet.Length;
             jsonSchemaEndIndex -= jsonSchemaStartIndex;
 
