@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using DapperSqlParser.Models;
 using DapperSqlParser.StoredProcedureCodeGeneration;
 using Xunit;
@@ -28,6 +29,37 @@ namespace DapperSqlParser.Tests
         }
 
         [Fact]
+        public void AppendStoredProcedureRegionStart_ThrowsOnStringBuilderNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = null;
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            const string regionName = "TestRegion";
+            
+            // Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendStoredProcedureRegionStart(regionName));
+
+        }
+
+        [Fact]
+        public void AppendStoredProcedureRegionStart_ThrowsOnRegionNameNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            const string regionName = null;
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendStoredProcedureRegionStart(regionName));
+        }
+
+        [Fact]
         public void AppendStoredProcedureRegionEnd_WorksCorrectly()
         {
             //Arrange
@@ -43,6 +75,19 @@ namespace DapperSqlParser.Tests
 
             //Assert
             Assert.Equal(expected, stringBuilder.ToString());
+        }
+
+        [Fact]
+        public void AppendStoredProcedureRegionEnd_ThrowsOnStringBuilderNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = null;
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendStoredProcedureRegionEnd());
         }
 
         [Fact]
@@ -71,6 +116,41 @@ namespace DapperSqlParser.Tests
         }
 
         [Fact]
+        public void AppendStoredProcedureCantParseMessage_ThrowsOnStringBuilderNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder =null;
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureInfo storedProcedureInfo = new StoredProcedureInfo()
+            {
+                Error = "Error code",
+                Name = "TestCase",
+                Id = 0
+            };
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendStoredProcedureCantParseMessage(storedProcedureInfo));
+        }
+
+        [Fact]
+        public void AppendStoredProcedureCantParseMessage_ThrowsOnStoredProcedureInfoNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureInfo storedProcedureInfo = null;
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendStoredProcedureCantParseMessage(storedProcedureInfo));
+        }
+
+        [Fact]
         public void AppendStoredProcedureNotFoundMessage_WorksCorrectly()
         {
             //Arrange
@@ -88,6 +168,21 @@ namespace DapperSqlParser.Tests
 
             //Assert
             Assert.Equal(expected, stringBuilder.ToString());
+        }
+
+        [Fact]
+        public void AppendStoredProcedureNotFoundMessage_ThrowsOnStoredProcedureNameNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            const string storedProcedureName = null;
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendStoredProcedureNotFoundMessage(storedProcedureName));
         }
 
         [Fact]
@@ -128,6 +223,73 @@ namespace DapperSqlParser.Tests
         }
 
         [Fact]
+        public void AppendClientConstructor_ThrowsOnStringBuilderNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = null;
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = new[]
+                {
+                    new OutputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                InputParametersDataModels = new[]
+                {
+                    new InputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendClientConstructor(storedProcedureParameters));
+        }
+
+        [Fact]
+        public void AppendClientConstructor_ThrowsOnInputParametersDataModelsOrOutputParametersDataModelsNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = null,
+                InputParametersDataModels = null,
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+            
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendClientConstructor(storedProcedureParameters));
+        }
+
+        [Fact]
+        public void AppendClientConstructor_ThrowsOnStoredProcedureParametersNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = null;
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(()=> storedProcedureParseBuilder.AppendClientConstructor(storedProcedureParameters));
+        }
+
+        [Fact]
         public void AppendExecutorMethodWithoutJson_WorksCorrectly()
         {
             //Arrange
@@ -162,6 +324,73 @@ namespace DapperSqlParser.Tests
 
             //Assert
             Assert.Equal(expected, stringBuilder.ToString());
+        }
+
+        [Fact]
+        public void AppendExecutorMethodWithoutJson_ThrowsOnStringBuilderNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = null;
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = new[]
+                {
+                    new OutputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                InputParametersDataModels = new[]
+                {
+                    new InputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendExecutorMethod(storedProcedureParameters,false));
+        }
+
+        [Fact]
+        public void AppendExecutorMethodWithoutJson_ThrowsOnInputParametersDataModelsOrOutputParametersDataModelsNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = null,
+                InputParametersDataModels = null,
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendExecutorMethod(storedProcedureParameters,false));
+        }
+
+        [Fact]
+        public void AppendExecutorMethodWithoutJson_ThrowsOnStoredProcedureParametersNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = null;
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendExecutorMethod(storedProcedureParameters,false));
         }
 
         [Fact]
@@ -202,6 +431,73 @@ namespace DapperSqlParser.Tests
         }
 
         [Fact]
+        public void AppendExecutorMethodWithJson_ThrowsOnStringBuilderNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = null;
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = new[]
+                {
+                    new OutputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                InputParametersDataModels = new[]
+                {
+                    new InputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendExecutorMethod(storedProcedureParameters, true));
+        }
+
+        [Fact]
+        public void AppendExecutorMethodWithJson_ThrowsOnInputParametersDataModelsOrOutputParametersDataModelsNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = null,
+                InputParametersDataModels = null,
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendExecutorMethod(storedProcedureParameters, true));
+        }
+
+        [Fact]
+        public void AppendExecutorMethodWithJson_ThrowsOnStoredProcedureParametersNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = null;
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendExecutorMethod(storedProcedureParameters, true));
+        }
+
+        [Fact]
         public void AppendIDapperExecutorField_WorksCorrectly()
         {
             //Arrange
@@ -233,6 +529,73 @@ namespace DapperSqlParser.Tests
 
             //Assert
             Assert.Equal(expected, stringBuilder.ToString());
+        }
+
+        [Fact]
+        public void AppendIDapperExecutorField_ThrowsOnStringBuilderNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = null;
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = new[]
+                {
+                    new OutputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                InputParametersDataModels = new[]
+                {
+                    new InputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendIDapperExecutorField(storedProcedureParameters));
+        }
+
+        [Fact]
+        public void AppendIDapperExecutorField_ThrowsOnInputParametersDataModelsOrOutputParametersDataModelsNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = null,
+                InputParametersDataModels = null,
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendIDapperExecutorField(storedProcedureParameters));
+        }
+
+        [Fact]
+        public void AppendIDapperExecutorField_ThrowsOnStoredProcedureParametersNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = null;
+
+            //Assert & Act
+            Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendIDapperExecutorField(storedProcedureParameters));
         }
 
         [Fact]
@@ -289,5 +652,48 @@ namespace DapperSqlParser.Tests
             Assert.Equal(expected, stringBuilder.ToString());
         }
 
+        [Fact]
+        public async void AppendExtractedCsSharpCode_ThrowsOnStoredProcedureParametersNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = new StringBuilder();
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = null;
+
+            //Assert & Act
+            await Assert.ThrowsAsync<ArgumentNullException>( async () => await storedProcedureParseBuilder.AppendExtractedCsSharpCode(storedProcedureParameters));
+        }
+        
+        [Fact]
+        public async void AppendExtractedCsSharpCode_ThrowsOnStringBuilderNull()
+        {
+            //Arrange
+            StringBuilder stringBuilder = null;
+
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
+
+            StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = new[]
+                {
+                    new OutputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                InputParametersDataModels = new[]
+                {
+                    new InputParametersDataModel{Name = "Test0",ParameterName = "Test0", IsNullable = false,MaxLength = 100,TypeName = "System.String",InternalId = 0}
+                },
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase"}
+                }
+            };
+
+            //Assert & Act
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await storedProcedureParseBuilder.AppendExtractedCsSharpCode(storedProcedureParameters));
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using DapperSqlParser.Models;
+﻿using System;
+using DapperSqlParser.Models;
 using DapperSqlParser.StoredProcedureCodeGeneration;
 using System.Collections.Generic;
 using Xunit;
@@ -152,6 +153,102 @@ namespace DapperSqlParser.Tests
 
             //Assert
             Assert.Equal(expected, result);
+        }
+       
+        [Fact]
+        public async void CreateSpClient_ThrowsOnNameSpaceNameNull()
+        {
+            //Arrange
+
+            StoredProceduresCodeGenerator storedProceduresCodeGenerator =
+                new StoredProceduresCodeGenerator(
+                    new StoredProcedureParseBuilder(new StoredProceduresDataModelExtractor()))
+                {
+                    NameSpaceName = null,
+                    Parameters = new List<StoredProcedureParameters>()
+                    {
+                        new StoredProcedureParameters()
+                        {
+                            OutputParametersDataModels =
+                                new[]
+                                {
+                                    new OutputParametersDataModel
+                                    {
+                                        Name = "Test0",
+                                        ParameterName = "Test0",
+                                        IsNullable = false,
+                                        MaxLength = 100,
+                                        TypeName = "System.String",
+                                        InternalId = 0
+                                    }
+                                },
+                            InputParametersDataModels = new[]
+                            {
+                                new InputParametersDataModel
+                                {
+                                    Name = "Test0",
+                                    ParameterName = "Test0",
+                                    IsNullable = false,
+                                    MaxLength = 100,
+                                    TypeName = "System.String",
+                                    InternalId = 0
+                                }
+                            },
+                            StoredProcedureInfoArray = new[] {new StoredProcedureInfo {Name = "TestCase0"}},
+                            StoredProcedureTextArray = new[] {new StoredProcedureText() {Definition = "Empty"}}
+                        },
+                        new StoredProcedureParameters()
+                        {
+                            OutputParametersDataModels =
+                                new[]
+                                {
+                                    new OutputParametersDataModel
+                                    {
+                                        Name = "Test1",
+                                        ParameterName = "Test1",
+                                        IsNullable = false,
+                                        MaxLength = 100,
+                                        TypeName = "System.String",
+                                        InternalId = 0
+                                    }
+                                },
+                            InputParametersDataModels = new[]
+                            {
+                                new InputParametersDataModel
+                                {
+                                    Name = "Test1",
+                                    ParameterName = "Test1",
+                                    IsNullable = true,
+                                    TypeName = "System.Int64",
+                                    InternalId = 0
+                                }
+                            },
+                            StoredProcedureInfoArray = new[] {new StoredProcedureInfo {Name = "TestCase1"}},
+                            StoredProcedureTextArray = new[] {new StoredProcedureText() {Definition = "Empty"}}
+                        }
+                    }
+                };
+
+            //Assert & Act
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await storedProceduresCodeGenerator.CreateSpClient());
+        }
+
+        [Fact]
+        public async void CreateSpClient_ThrowsOnParametersNull()
+        {
+            //Arrange
+
+            StoredProceduresCodeGenerator storedProceduresCodeGenerator =
+                new StoredProceduresCodeGenerator(
+                    new StoredProcedureParseBuilder(new StoredProceduresDataModelExtractor()))
+                {
+                    NameSpaceName = "TestNameSpace",
+                    Parameters = null
+                    
+                };
+
+            //Assert & Act
+            await Assert.ThrowsAsync<ArgumentNullException>(async ()=>await storedProceduresCodeGenerator.CreateSpClient());
         }
     }
 }

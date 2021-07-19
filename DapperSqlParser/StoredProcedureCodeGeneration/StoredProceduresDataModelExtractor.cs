@@ -131,6 +131,9 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                 Parameters.StoredProcedureText.Definition.IndexOf(InputSchemeEndKeyWordSnippet,
                     StringComparison.Ordinal);
 
+            if (jsonSchemaStartIndex == -1 && jsonSchemaEndIndex == -1)
+                throw new NullModelException();
+
             jsonSchemaStartIndex += InputSchemeStartKeyWordSnippet.Length;
             jsonSchemaEndIndex -= jsonSchemaStartIndex;
 

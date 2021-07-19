@@ -1,6 +1,7 @@
 ﻿using DapperSqlParser.Models;
 using DapperSqlParser.StoredProcedureCodeGeneration;
 using System;
+using DapperSqlParser.Exceptions;
 using Xunit;
 
 namespace DapperSqlParser.Tests
@@ -41,6 +42,37 @@ namespace DapperSqlParser.Tests
 
             //Assert
             Assert.Equal(expected, generatedCode);
+        }
+
+        [Fact]
+        public async void CreateSpDataModelForOutputParams_ReturnsEmptyStringOnOutputParametersDataModelsNull()
+        {
+            //Arrange
+            StoredProceduresDataModelExtractor storedProceduresDataModelExtractor = new StoredProceduresDataModelExtractor(new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = null,
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase1"}
+                }
+            });
+
+            //Act
+            string generatedCode = await storedProceduresDataModelExtractor.CreateSpDataModelForOutputParams();
+
+
+            //Assert
+            Assert.Equal(string.Empty, generatedCode);
+        }
+
+        [Fact]
+        public async void CreateSpDataModelForOutputParams_ThrowsOnParametersNull()
+        {
+            //Arrange
+            StoredProceduresDataModelExtractor storedProceduresDataModelExtractor = new StoredProceduresDataModelExtractor(null);
+
+            //Assert & Act
+            await Assert.ThrowsAsync<ArgumentNullException>( async ()=> await storedProceduresDataModelExtractor.CreateSpDataModelForOutputParams());
         }
 
         [Fact]
@@ -110,6 +142,26 @@ namespace DapperSqlParser.Tests
         }
 
         [Fact]
+        public async void CreateSpDataModelForOutputJsonParams_ThrowsOnKeywordsMissing()
+        {
+            //Arrange
+            StoredProceduresDataModelExtractor storedProceduresDataModelExtractor = new StoredProceduresDataModelExtractor(new StoredProcedureParameters()
+            {
+                OutputParametersDataModels = new[]
+                {
+                    new OutputParametersDataModel{Name = "Test0",ParameterName = "JSON_"+Guid.NewGuid(), IsNullable = false,TypeName = "System.String",InternalId = 0},
+                },
+                StoredProcedureTextArray = new[]
+                {
+                    new StoredProcedureText{Definition = "DEFINITION TEXT EMPTY"}
+                }
+            });
+
+            //Assert & Act
+            await Assert.ThrowsAsync<NullModelException>(async () => await storedProceduresDataModelExtractor.CreateSpDataModelForOutputParamsJson());
+        }
+
+        [Fact]
         public async void CreateSpDataModelForInputParams_WorksCorrectly()
         {
             //Arrange
@@ -147,6 +199,37 @@ namespace DapperSqlParser.Tests
 
             //Assert
             Assert.Equal(expected, generatedCode);
+        }
+
+        [Fact]
+        public async void CreateSpDataModelForInputParams_ReturnsEmptyStringOnInputParametersDataModelsNull()
+        {
+            //Arrange
+            StoredProceduresDataModelExtractor storedProceduresDataModelExtractor = new StoredProceduresDataModelExtractor(new StoredProcedureParameters()
+            {
+                InputParametersDataModels = null,
+                StoredProcedureInfoArray = new[]
+                {
+                    new StoredProcedureInfo{ Name = "TestCase1"}
+                }
+            });
+
+            //Act
+            string generatedCode = await storedProceduresDataModelExtractor.CreateSpDataModelForInputParams();
+
+
+            //Assert
+            Assert.Equal(string.Empty, generatedCode);
+        }
+
+        [Fact]
+        public async void CreateSpDataModelForInputParams_ThrowsOnParametersNull()
+        {
+            //Arrange
+            StoredProceduresDataModelExtractor storedProceduresDataModelExtractor = new StoredProceduresDataModelExtractor(null);
+
+            //Assert & Act
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await storedProceduresDataModelExtractor.CreateSpDataModelForInputParams());
         }
 
         [Fact]
@@ -216,5 +299,26 @@ namespace DapperSqlParser.Tests
             //Assert
             Assert.Equal(expected, generatedCode);
         }
+
+        [Fact]
+        public async void CreateSpDataModelForInputJsonParams_ThrowsOnKeywordsMissing()
+        {
+            //Arrange
+            StoredProceduresDataModelExtractor storedProceduresDataModelExtractor = new StoredProceduresDataModelExtractor(new StoredProcedureParameters()
+            {
+                InputParametersDataModels = new[]
+                {
+                    new InputParametersDataModel{Name = "Test0",ParameterName = "JSON_"+Guid.NewGuid(), IsNullable = false,TypeName = "System.String",InternalId = 0},
+                },
+                StoredProcedureTextArray = new[]
+                {
+                    new StoredProcedureText{Definition = "DEFINITION TEXT EMPTY"}
+                }
+            });
+
+            //Assert & Act
+            await Assert.ThrowsAsync<NullModelException>(async () => await storedProceduresDataModelExtractor.CreateSpDataModelForInputParamsJson());
+        }
+
     }
 }

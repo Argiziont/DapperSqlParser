@@ -50,16 +50,17 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
         public void AppendStoredProcedureNotFoundMessage(string storedProcedureName)
         {
+            if (storedProcedureName == null) throw new ArgumentNullException(nameof(storedProcedureName));
             _internalStringBuilder.AppendLine(
                 $"//Model for {storedProcedureName} was not found, could not parse this Stored Procedure!");
         }
 
         public void AppendClientConstructor(StoredProcedureParameters parameters)
         {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
                 throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " +
                                                 nameof(parameters.OutputParametersDataModels));
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
 
@@ -72,10 +73,10 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
         public void AppendExecutorMethod(StoredProcedureParameters parameters, bool spReturnJsonFlag)
         {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
                 throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " +
                                                 nameof(parameters.OutputParametersDataModels));
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
             _internalStringBuilder.AppendLine(
@@ -87,10 +88,10 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
         public void AppendIDapperExecutorField(StoredProcedureParameters parameters)
         {
+            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (parameters.InputParametersDataModels == null && parameters.OutputParametersDataModels == null)
                 throw new ArgumentNullException(nameof(parameters.InputParametersDataModels) + " " +
                                                 nameof(parameters.OutputParametersDataModels));
-            if (parameters == null) throw new ArgumentNullException(nameof(parameters));
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
             _internalStringBuilder.AppendLine(
