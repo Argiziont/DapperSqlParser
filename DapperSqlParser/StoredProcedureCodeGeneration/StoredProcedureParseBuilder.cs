@@ -10,35 +10,18 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
     public class StoredProcedureParseBuilder: IStoredProcedureParseBuilder
     {
         private StringBuilder _internalStringBuilder;
-        public IStoredProceduresDataModelExtractor ModelExtractor { get; }
+        private IStoredProceduresDataModelExtractor ModelExtractor { get; }
 
         public StoredProcedureParseBuilder(IStoredProceduresDataModelExtractor modelExtractor)
         {
             ModelExtractor = modelExtractor;
         }
+
         public void SetStringBuilder(StringBuilder stringBuilder)
         {
             _internalStringBuilder = stringBuilder;
         }
-        
-        public async Task AppendExtractedCsSharpCode(StoredProcedureParameters spParameter)
-        {
-            if (spParameter == null) throw new ArgumentNullException(nameof(spParameter));
-            if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
-
-            ModelExtractor.Parameters = spParameter;
-
-            string outputModelClass =
-                await ModelExtractor.CreateSpDataModelForOutputParams();
-            _internalStringBuilder.AppendLine(outputModelClass);
-
-            string inputModelClass =
-                await ModelExtractor.CreateSpDataModelForInputParams();
-            _internalStringBuilder.AppendLine(inputModelClass);
-
-            AppendStoredProcedureClientClass(spParameter);
-        }
-
+       
         public void AppendStoredProcedureRegionStart(string regionName)
         {
             if (regionName == null) throw new ArgumentNullException(nameof(regionName));
@@ -62,7 +45,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
             _internalStringBuilder.AppendLine("//Couldn't parse Stored procedure  with name: " +
                                            $"{storedProcedureInfo.Name} because of internal error: " +
-                                           $"{storedProcedureInfo.Error}\n\t#endregion");
+                                           $"{storedProcedureInfo.Error}\n\t");
         }
 
         public void AppendStoredProcedureNotFoundMessage(string storedProcedureName)
@@ -114,6 +97,24 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                 "\t\tprivate readonly " +
                 $"IDapperExecutor<{(parameters.InputParametersDataModels != null ? $"{parameters.StoredProcedureInfo.Name}Input" : "EmptyInputParams")}" +
                 $"{(parameters.OutputParametersDataModels != null ? $", {parameters.StoredProcedureInfo.Name}Output" : "")}> _dapperExecutor;");
+        }
+        
+        public async Task AppendExtractedCsSharpCode(StoredProcedureParameters spParameter)
+        {
+            if (spParameter == null) throw new ArgumentNullException(nameof(spParameter));
+            if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
+
+            ModelExtractor.Parameters = spParameter;
+
+            string outputModelClass =
+                await ModelExtractor.CreateSpDataModelForOutputParams();
+            _internalStringBuilder.AppendLine(outputModelClass);
+
+            string inputModelClass =
+                await ModelExtractor.CreateSpDataModelForInputParams();
+            _internalStringBuilder.AppendLine(inputModelClass);
+
+            AppendStoredProcedureClientClass(spParameter);
         }
 
         private void AppendStoredProcedureClientClass(StoredProcedureParameters parameters)

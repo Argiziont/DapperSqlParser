@@ -42,6 +42,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                     {
                         _storedProcedureCodeBuilder.AppendStoredProcedureCantParseMessage(
                             spParameter.StoredProcedureInfo);
+                        _storedProcedureCodeBuilder.AppendStoredProcedureRegionEnd();
                         continue;
                     }
 

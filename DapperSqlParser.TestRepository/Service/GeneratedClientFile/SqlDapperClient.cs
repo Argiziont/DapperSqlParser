@@ -326,3 +326,4 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 	}
 	#endregion
 }
+
