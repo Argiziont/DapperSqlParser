@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
-using DapperSqlParser.Models;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration.Interfaces
 {
+    public interface ICodeGenerator
+    {
+        public Task<string> GenerateAsync();
+    }
 }

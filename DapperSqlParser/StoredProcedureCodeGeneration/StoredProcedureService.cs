@@ -44,10 +44,10 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             {
                 int jsonSchemaStartIndex =
                     storedProcedureData.StoredProcedureText.Definition.IndexOf(
-                        TemplateNamingConstants.OutputSchemeStartKeyWordSnippet, StringComparison.Ordinal);
+                        JsonNamingConstants.OutputSchemeStartKeyWordSnippet, StringComparison.Ordinal);
                 int jsonSchemaEndIndex =
                     storedProcedureData.StoredProcedureText.Definition.IndexOf(
-                        TemplateNamingConstants.OutputSchemeEndKeyWordSnippet, StringComparison.Ordinal);
+                        JsonNamingConstants.OutputSchemeEndKeyWordSnippet, StringComparison.Ordinal);
 
                 if (jsonSchemaStartIndex != -1 && jsonSchemaEndIndex != -1)
                 {

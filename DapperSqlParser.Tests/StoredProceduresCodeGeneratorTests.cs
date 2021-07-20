@@ -15,7 +15,7 @@ namespace DapperSqlParser.Tests
 
             StoredProceduresCodeGenerator storedProceduresCodeGenerator =
                 new StoredProceduresCodeGenerator(
-                    new StoredProcedureParseBuilder(new StoredProceduresDataModelExtractor()))
+                    new StoredProcedureParseBuilder())
                 {
                     NameSpaceName = "TestNameSpace",
                     Parameters = new List<StoredProcedureParameters>()
@@ -162,7 +162,7 @@ namespace DapperSqlParser.Tests
 
             StoredProceduresCodeGenerator storedProceduresCodeGenerator =
                 new StoredProceduresCodeGenerator(
-                    new StoredProcedureParseBuilder(new StoredProceduresDataModelExtractor()))
+                    new StoredProcedureParseBuilder())
                 {
                     NameSpaceName = null,
                     Parameters = new List<StoredProcedureParameters>()
@@ -240,7 +240,7 @@ namespace DapperSqlParser.Tests
 
             StoredProceduresCodeGenerator storedProceduresCodeGenerator =
                 new StoredProceduresCodeGenerator(
-                    new StoredProcedureParseBuilder(new StoredProceduresDataModelExtractor()))
+                    new StoredProcedureParseBuilder())
                 {
                     NameSpaceName = "TestNameSpace",
                     Parameters = null

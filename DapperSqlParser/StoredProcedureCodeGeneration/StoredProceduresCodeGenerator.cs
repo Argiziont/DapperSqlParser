@@ -53,7 +53,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                 catch (NullModelException)
                 {
                     _storedProcedureCodeBuilder.AppendStoredProcedureNotFoundMessage(
-                        spParameter.StoredProcedureInfo.Name);
+                        spParameter.StoredProcedureInfo);
                 }
 
                 _storedProcedureCodeBuilder.AppendStoredProcedureRegionEnd();

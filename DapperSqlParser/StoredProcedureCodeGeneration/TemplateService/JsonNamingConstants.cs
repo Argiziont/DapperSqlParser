@@ -1,6 +1,6 @@
 ﻿namespace DapperSqlParser.StoredProcedureCodeGeneration.TemplateService
 {
-    public static class TemplateNamingConstants
+    public static class JsonNamingConstants
     {
         public static string InputSchemeStartKeyWordSnippet => "JSON_INPUT_SCHEMA_STARTS";
         public static string InputSchemeEndKeyWordSnippet => "JSON_INPUT_SCHEMA_ENDS";

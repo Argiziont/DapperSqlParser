@@ -17,6 +17,7 @@ namespace DapperSqlParser
 
         private static async Task Main(string[] args)
         {
+
             StoredProcedureService spService = new StoredProcedureService(ConnectionString);
             List<StoredProcedureParameters> paramsList;
 
@@ -38,8 +39,7 @@ namespace DapperSqlParser
 
             StoredProceduresCodeGenerator storedProcedureCodeGenerator =
                 new StoredProceduresCodeGenerator(
-                        new StoredProcedureParseBuilder(
-                            new StoredProceduresDataModelExtractor()))
+                        new StoredProcedureParseBuilder())
                 { 
                     NameSpaceName = NameSpaceName,
                     Parameters = paramsList

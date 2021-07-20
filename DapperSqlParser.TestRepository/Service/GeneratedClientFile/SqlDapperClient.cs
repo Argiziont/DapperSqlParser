@@ -36,32 +36,43 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	#region Sp_GetAllProducts
 	public class Sp_GetAllProductsOutput
+
 	{
 		[Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.Default)]
 		public System.Int32 Id { get; set; }
 
+
 		[Newtonsoft.Json.JsonProperty("ExternalId", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String ExternalId { get; set; }
+
 
 		[Newtonsoft.Json.JsonProperty("Title", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String Title { get; set; }
 
+
 		[Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String Url { get; set; }
+
 
 		[Newtonsoft.Json.JsonProperty("SyncDate", Required = Newtonsoft.Json.Required.Default)]
 		public System.DateTime SyncDate { get; set; }
 
+
 		[Newtonsoft.Json.JsonProperty("ProductState", Required = Newtonsoft.Json.Required.Default)]
 		public System.Int32 ProductState { get; set; }
+
 
 		[Newtonsoft.Json.JsonProperty("Description", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String Description { get; set; }
 
+
 		[Newtonsoft.Json.JsonProperty("Price", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String Price { get; set; }
 
+
+
 	}
+
 
 
 	public class Sp_GetAllProducts
@@ -80,38 +91,54 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	#region Sp_GetProductById
 	public class Sp_GetProductByIdOutput
+
 	{
 		[Newtonsoft.Json.JsonProperty("Id", Required = Newtonsoft.Json.Required.Default)]
 		public System.Int32 Id { get; set; }
 
+
 		[Newtonsoft.Json.JsonProperty("ExternalId", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String ExternalId { get; set; }
+
 
 		[Newtonsoft.Json.JsonProperty("Title", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String Title { get; set; }
 
+
 		[Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String Url { get; set; }
+
 
 		[Newtonsoft.Json.JsonProperty("SyncDate", Required = Newtonsoft.Json.Required.Default)]
 		public System.DateTime SyncDate { get; set; }
 
+
 		[Newtonsoft.Json.JsonProperty("ProductState", Required = Newtonsoft.Json.Required.Default)]
 		public System.Int32 ProductState { get; set; }
+
 
 		[Newtonsoft.Json.JsonProperty("Description", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String Description { get; set; }
 
+
 		[Newtonsoft.Json.JsonProperty("Price", Required = Newtonsoft.Json.Required.DisallowNull)]
 		public System.String Price { get; set; }
 
+
+
 	}
+
 
 	public class Sp_GetProductByIdInput
+
 	{
-		[Newtonsoft.Json.JsonProperty("productId")] public System.Int32 ProductId { get; set; }
+		[Newtonsoft.Json.JsonProperty("productId", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.Int32 ProductId { get; set; }
+
+
 
 	}
+
 
 	public class Sp_GetProductById
 	{
@@ -168,22 +195,39 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 	#region Sp_InsertProduct
 
 	public class Sp_InsertProductInput
+
 	{
-		[Newtonsoft.Json.JsonProperty("ExternalId")] public System.String ExternalId { get; set; }
+		[Newtonsoft.Json.JsonProperty("ExternalId", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String ExternalId { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("Title")] public System.String Title { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("Url")] public System.String Url { get; set; }
+		[Newtonsoft.Json.JsonProperty("Title", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String Title { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("SyncDate")] public System.DateTime SyncDate { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("ProductState")] public System.Int32 ProductState { get; set; }
+		[Newtonsoft.Json.JsonProperty("Url", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String Url { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("Description")] public System.String Description { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("Price")] public System.String Price { get; set; }
+		[Newtonsoft.Json.JsonProperty("SyncDate", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.DateTime SyncDate { get; set; }
+
+
+		[Newtonsoft.Json.JsonProperty("ProductState", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.Int32 ProductState { get; set; }
+
+
+		[Newtonsoft.Json.JsonProperty("Description", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String Description { get; set; }
+
+
+		[Newtonsoft.Json.JsonProperty("Price", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String Price { get; set; }
+
+
 
 	}
+
 
 	public class Sp_InsertProduct
 	{
@@ -230,12 +274,19 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 	#region Sp_UpdateProductTitleById
 
 	public class Sp_UpdateProductTitleByIdInput
-	{
-		[Newtonsoft.Json.JsonProperty("productId")] public System.Int32 ProductId { get; set; }
 
-		[Newtonsoft.Json.JsonProperty("productTitle")] public System.String ProductTitle { get; set; }
+	{
+		[Newtonsoft.Json.JsonProperty("productId", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.Int32 ProductId { get; set; }
+
+
+		[Newtonsoft.Json.JsonProperty("productTitle", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.String ProductTitle { get; set; }
+
+
 
 	}
+
 
 	public class Sp_UpdateProductTitleById
 	{
@@ -307,10 +358,15 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 	#region Sp_DeleteProductById
 
 	public class Sp_DeleteProductByIdInput
+
 	{
-		[Newtonsoft.Json.JsonProperty("productId")] public System.Int32 ProductId { get; set; }
+		[Newtonsoft.Json.JsonProperty("productId", Required = Newtonsoft.Json.Required.DisallowNull)]
+		public System.Int32 ProductId { get; set; }
+
+
 
 	}
+
 
 	public class Sp_DeleteProductById
 	{

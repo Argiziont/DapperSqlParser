@@ -1,25 +1,21 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DapperSqlParser.Models;
 using DapperSqlParser.StoredProcedureCodeGeneration.Interfaces;
+using DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParsers;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
     public class StoredProcedureParseBuilder: IStoredProcedureParseBuilder
     {
         private StringBuilder _internalStringBuilder;
-        private IStoredProceduresDataModelExtractor ModelExtractor { get; }
-
-        public StoredProcedureParseBuilder(IStoredProceduresDataModelExtractor modelExtractor)
-        {
-            ModelExtractor = modelExtractor;
-        }
 
         public void SetStringBuilder(StringBuilder stringBuilder)
         {
-            _internalStringBuilder = stringBuilder;
+            _internalStringBuilder = stringBuilder ?? throw new ArgumentNullException(nameof(stringBuilder));
         }
        
         public void AppendStoredProcedureRegionStart(string regionName)
@@ -27,15 +23,14 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             if (regionName == null) throw new ArgumentNullException(nameof(regionName));
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
-            _internalStringBuilder.AppendLine(
-                $"\n\t#region {regionName}"); //Wrapping every sp into region
+            _internalStringBuilder.AppendLine(CodeGeneratorUtils.CreateRegionWithName(regionName)); //Wrapping every sp into region
         }
 
         public void AppendStoredProcedureRegionEnd()
         {
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
-            _internalStringBuilder.AppendLine("\t#endregion");
+            _internalStringBuilder.AppendLine(CodeGeneratorUtils.CreateEndRegion());
         }
 
         public void AppendStoredProcedureCantParseMessage(StoredProcedureInfo storedProcedureInfo)
@@ -43,16 +38,14 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             if (storedProcedureInfo == null) throw new ArgumentNullException(nameof(storedProcedureInfo));
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
-            _internalStringBuilder.AppendLine("//Couldn't parse Stored procedure  with name: " +
-                                           $"{storedProcedureInfo.Name} because of internal error: " +
-                                           $"{storedProcedureInfo.Error}\n\t");
+            _internalStringBuilder.AppendLine(CodeGeneratorUtils.CreateStoredProcedureErrorComment(storedProcedureInfo.Name, storedProcedureInfo.Error));
         }
 
-        public void AppendStoredProcedureNotFoundMessage(string storedProcedureName)
+        public void AppendStoredProcedureNotFoundMessage(StoredProcedureInfo storedProcedureInfo)
         {
-            if (storedProcedureName == null) throw new ArgumentNullException(nameof(storedProcedureName));
-            _internalStringBuilder.AppendLine(
-                $"//Model for {storedProcedureName} was not found, could not parse this Stored Procedure!");
+            if (storedProcedureInfo == null) throw new ArgumentNullException(nameof(storedProcedureInfo));
+            if (storedProcedureInfo.Name == null) throw new ArgumentNullException(nameof(storedProcedureInfo.Name));
+            _internalStringBuilder.AppendLine(CodeGeneratorUtils.CreateStoredProcedureNotFoundComment(storedProcedureInfo.Name));
         }
 
         public void AppendClientConstructor(StoredProcedureParameters parameters)
@@ -63,7 +56,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                                                 nameof(parameters.OutputParametersDataModels));
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
-
+           
             _internalStringBuilder.AppendLine(
                 $"\t\tpublic {parameters.StoredProcedureInfo.Name}(IDapperExecutor<{(parameters.InputParametersDataModels != null ? $"{parameters.StoredProcedureInfo.Name}Input" : "EmptyInputParams")}" +
                 $"{(parameters.OutputParametersDataModels != null ? $", {parameters.StoredProcedureInfo.Name}Output" : "")}> dapperExecutor)\n\t\t{{" + //Ctor 
@@ -105,14 +98,17 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             if (spParameter == null) throw new ArgumentNullException(nameof(spParameter));
             if (_internalStringBuilder == null) throw new ArgumentNullException(nameof(_internalStringBuilder));
 
-            ModelExtractor.Parameters = spParameter;
+            StoredProcedureInputModelGenerator storedProcedureInputModelGenerator =
+                new StoredProcedureInputModelGenerator(spParameter.InputParametersDataModels, spParameter.StoredProcedureInfo.Name, spParameter.StoredProcedureText.Definition);
+            StoredProcedureOutputModelGenerator storedProcedureOutputModelGenerator =
+                new StoredProcedureOutputModelGenerator(spParameter.OutputParametersDataModels, spParameter.StoredProcedureInfo.Name, spParameter.StoredProcedureText.Definition);
 
             string outputModelClass =
-                await ModelExtractor.CreateSpDataModelForOutputParams();
+                await storedProcedureOutputModelGenerator.GenerateAsync();
             _internalStringBuilder.AppendLine(outputModelClass);
 
             string inputModelClass =
-                await ModelExtractor.CreateSpDataModelForInputParams();
+                await storedProcedureInputModelGenerator.GenerateAsync();
             _internalStringBuilder.AppendLine(inputModelClass);
 
             AppendStoredProcedureClientClass(spParameter);

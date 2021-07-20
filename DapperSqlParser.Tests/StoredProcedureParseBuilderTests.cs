@@ -14,7 +14,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             const string regionName = "TestRegion";
@@ -34,7 +34,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = null;
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             const string regionName = "TestRegion";
@@ -50,7 +50,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             const string regionName = null;
@@ -65,7 +65,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             const string expected = "\t#endregion\r\n";
@@ -83,7 +83,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = null;
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             //Assert & Act
@@ -96,7 +96,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureInfo storedProcedureInfo = new StoredProcedureInfo()
@@ -121,7 +121,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder =null;
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureInfo storedProcedureInfo = new StoredProcedureInfo()
@@ -141,7 +141,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureInfo storedProcedureInfo = null;
@@ -156,15 +156,15 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
-            const string storedProcedureName = "TestCase";
+            StoredProcedureInfo storedProcedureInfo = new StoredProcedureInfo() { Name = "TestCase" };
 
             const string expected = "//Model for TestCase was not found, could not parse this Stored Procedure!\r\n";
 
             //Act
-            storedProcedureParseBuilder.AppendStoredProcedureNotFoundMessage(storedProcedureName);
+            storedProcedureParseBuilder.AppendStoredProcedureNotFoundMessage(storedProcedureInfo);
 
             //Assert
             Assert.Equal(expected, stringBuilder.ToString());
@@ -176,10 +176,10 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
-            const string storedProcedureName = null;
+            const StoredProcedureInfo storedProcedureName = null;
 
             //Assert & Act
             Assert.Throws<ArgumentNullException>(() => storedProcedureParseBuilder.AppendStoredProcedureNotFoundMessage(storedProcedureName));
@@ -191,7 +191,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -228,7 +228,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = null;
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -257,7 +257,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -280,7 +280,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = null;
@@ -295,7 +295,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -332,7 +332,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = null;
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -361,7 +361,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -384,7 +384,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = null;
@@ -399,7 +399,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -436,7 +436,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = null;
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -465,7 +465,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -488,7 +488,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = null;
@@ -503,7 +503,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -537,7 +537,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = null;
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -566,7 +566,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -589,7 +589,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = null;
@@ -604,7 +604,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(new StoredProceduresDataModelExtractor());
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
@@ -658,7 +658,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = new StringBuilder();
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = null;
@@ -673,7 +673,7 @@ namespace DapperSqlParser.Tests
             //Arrange
             StringBuilder stringBuilder = null;
 
-            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(null);
+            StoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder();
             storedProcedureParseBuilder.SetStringBuilder(stringBuilder);
 
             StoredProcedureParameters storedProcedureParameters = new StoredProcedureParameters()
