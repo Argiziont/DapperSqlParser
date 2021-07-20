@@ -22,9 +22,9 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParsers
             _storedProcedureDefinition = storedProcedureDefinition ?? throw new ArgumentNullException(nameof(storedProcedureDefinition));
         }
 
-        public Task<string> GenerateAsync()
+        public async Task<string> GenerateAsync()
         {
-            return CreateSpDataModelForOutputParams();
+            return await CreateSpDataModelForOutputParams();
         }
 
         private async Task<string> CreateSpDataModelForOutputParams()
