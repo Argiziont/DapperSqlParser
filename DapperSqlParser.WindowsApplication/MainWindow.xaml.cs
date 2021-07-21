@@ -178,8 +178,8 @@ namespace DapperSqlParser.WindowsApplication
 
             var progressIndicator = GetProgressIndicatorForStoreProcedureExtractor();
 
-            StoredProceduresCodeGenerator storedProcedureCodeGenerator = new StoredProceduresCodeGenerator(new StoredProcedureParseBuilder())
-                {NameSpaceName = nameSpaceName, Parameters = checkedStoredProceduresDetails};
+            StoredProceduresCodeGenerator storedProcedureCodeGenerator =
+                new StoredProceduresCodeGenerator(checkedStoredProceduresDetails, nameSpaceName);
             string generatedStoreProcedureOutput =
                 await storedProcedureCodeGenerator.CreateSpClient(progressIndicator);
             return generatedStoreProcedureOutput;

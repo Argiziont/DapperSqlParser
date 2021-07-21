@@ -16,7 +16,6 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
     {
         private readonly string _connectionString;
 
-
         public StoredProcedureService(string connectionString)
         {
             _connectionString = connectionString;

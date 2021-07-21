@@ -12,6 +12,11 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
     {
         private StringBuilder _internalStringBuilder;
 
+        public StoredProcedureParseBuilder(StringBuilder internalStringBuilder)
+        {
+            _internalStringBuilder = internalStringBuilder ?? throw new ArgumentNullException(nameof(internalStringBuilder));
+        }
+
         public void SetStringBuilder(StringBuilder stringBuilder)
         {
             _internalStringBuilder = stringBuilder ?? throw new ArgumentNullException(nameof(stringBuilder));

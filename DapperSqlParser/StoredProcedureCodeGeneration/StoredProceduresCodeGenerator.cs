@@ -10,50 +10,47 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
     public class StoredProceduresCodeGenerator
     {
-        public string NameSpaceName { get; set; }
-        public IList<StoredProcedureParameters> Parameters { get; set; }
+        private readonly string _nameSpaceName;
+        private readonly IList<StoredProcedureParameters> _parameters;
 
-        private readonly IStoredProcedureParseBuilder _storedProcedureCodeBuilder;
-
-        public StoredProceduresCodeGenerator(IStoredProcedureParseBuilder storedProcedureCodeBuilder)
+        public StoredProceduresCodeGenerator(IList<StoredProcedureParameters> parameters, string nameSpaceName)
         {
-            _storedProcedureCodeBuilder = storedProcedureCodeBuilder;
+            _parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
+            _nameSpaceName = nameSpaceName ?? throw new ArgumentNullException(nameof(nameSpaceName));
         }
+        
         public async Task<string> CreateSpClient(IProgress<StoreProcedureGenerationProgress> progress = default)
         {
-            if (Parameters == null) throw new ArgumentNullException(nameof(Parameters));
-            if (NameSpaceName == null) throw new ArgumentNullException(nameof(NameSpaceName));
-
             StringBuilder outputCode = new StringBuilder();
 
-            _storedProcedureCodeBuilder.SetStringBuilder(outputCode);
+            IStoredProcedureParseBuilder storedProcedureParseBuilder = new StoredProcedureParseBuilder(outputCode);
 
-            foreach (StoredProcedureParameters spParameter in Parameters)
+            foreach (StoredProcedureParameters spParameter in _parameters)
             {
-                ReportAboutStoredProcedureParsingProgress(Parameters, progress, spParameter);
+                ReportAboutStoredProcedureParsingProgress(_parameters, progress, spParameter);
 
                 try
                 {
                     if (spParameter.StoredProcedureInfo.Error != null)
                     {
-                       await _storedProcedureCodeBuilder.AppendStoredProcedureCantParseMessage(
+                       await storedProcedureParseBuilder.AppendStoredProcedureCantParseMessage(
                             spParameter.StoredProcedureInfo);
 
                         continue;
                     }
 
-                    await _storedProcedureCodeBuilder.AppendExtractedCsSharpCode(spParameter);
+                    await storedProcedureParseBuilder.AppendExtractedCsSharpCode(spParameter);
 
                     //await Task.Delay(200); //Await 200ms for progress bar testing, could be deleted if not needed
                 }
                 catch (NullModelException)
                 {
-                    await _storedProcedureCodeBuilder.AppendStoredProcedureNotFoundMessage(
+                    await storedProcedureParseBuilder.AppendStoredProcedureNotFoundMessage(
                         spParameter.StoredProcedureInfo);
                 }
             }
 
-            string generatedCode=CodeGeneratorUtils.CreateNamespaceWithName(NameSpaceName, outputCode.ToString());
+            string generatedCode=CodeGeneratorUtils.CreateNamespaceWithName(_nameSpaceName, outputCode.ToString());
             return await Task.FromResult(generatedCode);
         }
 
