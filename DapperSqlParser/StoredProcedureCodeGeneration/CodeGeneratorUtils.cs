@@ -15,13 +15,24 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{Environment.NewLine}{TextLevel.FirstLevel}#region {regionName}");
+            stringBuilder.AppendLine($"{Environment.NewLine}{TextLevel.FirstLevel}{SpecialKeyWord.Region} {regionName}");
             stringBuilder.AppendLine($"{regionDefinition}");
-            stringBuilder.AppendLine($"{TextLevel.FirstLevel}#endregion");
+            stringBuilder.AppendLine($"{TextLevel.FirstLevel}{SpecialKeyWord.Endregion}");
 
             return stringBuilder.ToString();
         }
-        
+
+        public static string CreateNamespaceWithName(string namespaceName, string namespaceDefinition)
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+
+            stringBuilder.AppendLine($"{SpecialKeyWord.Namespace} {namespaceName}");
+            stringBuilder.AppendLine("{");
+            stringBuilder.AppendLine($"{namespaceDefinition}");
+            stringBuilder.AppendLine("}");
+
+            return stringBuilder.ToString();
+        }
         
         public static string CreateStoredProcedureErrorComment(string storedProcedureName, string errorMessage)
         {
@@ -128,7 +139,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{TextLevel.SecondLevel}public System.Threading.Tasks.Task{(outputParameter != null ? $"<System.Collections.Generic.IEnumerable<{storedProcedureName}Output>>" : " ")}Execute({(inputParameter != null ? $"{storedProcedureName}Input request" : "")} ){{");
+            stringBuilder.AppendLine($"{TextLevel.SecondLevel}{AccessModifier.Public} System.Threading.Tasks.Task{(outputParameter != null ? $"<System.Collections.Generic.IEnumerable<{storedProcedureName}Output>>" : " ")}Execute({(inputParameter != null ? $"{storedProcedureName}Input request" : "")} ){{");
             stringBuilder.AppendLine($"{TextLevel.ThirdLevel}return _dapperExecutor.{(isReturnTypeJson ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{storedProcedureName}\"{(inputParameter != null ? ", request" : "")});");
             stringBuilder.AppendLine($"{TextLevel.SecondLevel}}}");
 

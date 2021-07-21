@@ -4,16 +4,14 @@ using DapperSqlParser.Models;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration.Interfaces
 {
-    public interface IStoredProcedureParseBuilder
+    public interface IStoredProcedureParseBuilder: IStoredProcedureStringBuilder
+    {
+        public Task AppendExtractedCsSharpCode(StoredProcedureParameters storedProcedureParameters);
+        public Task AppendStoredProcedureCantParseMessage(StoredProcedureInfo storedProcedureInfo);
+        public Task AppendStoredProcedureNotFoundMessage(StoredProcedureInfo storedProcedureInfo);
+    }
+    public interface IStoredProcedureStringBuilder
     {
         public void SetStringBuilder(StringBuilder stringBuilder);
-        public Task AppendExtractedCsSharpCode(StoredProcedureParameters spParameter);
-        public void AppendStoredProcedureRegionStart(string regionName);
-        public void AppendStoredProcedureRegionEnd();
-        public void AppendStoredProcedureCantParseMessage(StoredProcedureInfo storedProcedureInfo);
-        public void AppendStoredProcedureNotFoundMessage(StoredProcedureInfo storedProcedureName);
-        public void AppendClientConstructor(StoredProcedureParameters parameters);
-        public void AppendExecutorMethod(StoredProcedureParameters parameters, bool spReturnJsonFlag);
-        public void AppendIDapperExecutorField(StoredProcedureParameters parameters);
     }
 }

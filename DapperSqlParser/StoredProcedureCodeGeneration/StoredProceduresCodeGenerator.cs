@@ -26,23 +26,19 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
             StringBuilder outputCode = new StringBuilder();
 
-            outputCode.AppendLine($"namespace {NameSpaceName} \n{{"); // Append name space start
-
             _storedProcedureCodeBuilder.SetStringBuilder(outputCode);
 
             foreach (StoredProcedureParameters spParameter in Parameters)
             {
                 ReportAboutStoredProcedureParsingProgress(Parameters, progress, spParameter);
 
-                _storedProcedureCodeBuilder.AppendStoredProcedureRegionStart(spParameter.StoredProcedureInfo.Name);
-
                 try
                 {
                     if (spParameter.StoredProcedureInfo.Error != null)
                     {
-                        _storedProcedureCodeBuilder.AppendStoredProcedureCantParseMessage(
+                       await _storedProcedureCodeBuilder.AppendStoredProcedureCantParseMessage(
                             spParameter.StoredProcedureInfo);
-                        _storedProcedureCodeBuilder.AppendStoredProcedureRegionEnd();
+
                         continue;
                     }
 
@@ -52,16 +48,13 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                 }
                 catch (NullModelException)
                 {
-                    _storedProcedureCodeBuilder.AppendStoredProcedureNotFoundMessage(
+                    await _storedProcedureCodeBuilder.AppendStoredProcedureNotFoundMessage(
                         spParameter.StoredProcedureInfo);
                 }
-
-                _storedProcedureCodeBuilder.AppendStoredProcedureRegionEnd();
             }
 
-            outputCode.Append("}"); // Append name space end
-
-            return await Task.FromResult(outputCode.ToString());
+            string generatedCode=CodeGeneratorUtils.CreateNamespaceWithName(NameSpaceName, outputCode.ToString());
+            return await Task.FromResult(generatedCode);
         }
 
         private void ReportAboutStoredProcedureParsingProgress(IList<StoredProcedureParameters> parameters,
