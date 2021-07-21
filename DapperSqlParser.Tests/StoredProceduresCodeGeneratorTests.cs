@@ -82,69 +82,89 @@ namespace DapperSqlParser.Tests
                     }
                 };
 
-            const string expected = "namespace TestNameSpace \n{\r\n\n\t#region TestCase0\r\n\tpublic class TestCase0Output \n\t{\r\n\t\t[Newtonsoft.Json.JsonProperty(\"Test0\" , Required = Newtonsoft.Json.Required.Default)]\n\t\tpublic System.String Test0 {get; set;} \n\r\n\t}\n\r\n\tpublic class TestCase0Input \n\t{\r\n\t\t[Newtonsoft.Json.JsonProperty(\"Test0\")] [System.ComponentModel.DataAnnotations.Required()] public System.String Test0 {get; set;} \n\r\n\t}\n\r\n\tpublic class TestCase0 \n\t{\r\n\t\tprivate readonly IDapperExecutor<TestCase0Input, TestCase0Output> _dapperExecutor;\r\n\t\tpublic TestCase0(IDapperExecutor<TestCase0Input, TestCase0Output> dapperExecutor)\n\t\t{\n\t\t\tthis._dapperExecutor = dapperExecutor;\n\t\t}\r\n\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TestCase0Output>> Execute(TestCase0Input request )\n\t\t{\n\t\t\treturn _dapperExecutor.ExecuteAsync(\"TestCase0\", request);\n\t\t}\r\n\t}\n\t#endregion\r\n\n\t#region TestCase1\r\n\tpublic class TestCase1Output \n\t{\r\n\t\t[Newtonsoft.Json.JsonProperty(\"Test1\" , Required = Newtonsoft.Json.Required.Default)]\n\t\tpublic System.String Test1 {get; set;} \n\r\n\t}\n\r\n\tpublic class TestCase1Input \n\t{\r\n\t\t[Newtonsoft.Json.JsonProperty(\"Test1\")] public System.Int64 Test1 {get; set;} \n\r\n\t}\n\r\n\tpublic class TestCase1 \n\t{\r\n\t\tprivate readonly IDapperExecutor<TestCase1Input, TestCase1Output> _dapperExecutor;\r\n\t\tpublic TestCase1(IDapperExecutor<TestCase1Input, TestCase1Output> dapperExecutor)\n\t\t{\n\t\t\tthis._dapperExecutor = dapperExecutor;\n\t\t}\r\n\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TestCase1Output>> Execute(TestCase1Input request )\n\t\t{\n\t\t\treturn _dapperExecutor.ExecuteAsync(\"TestCase1\", request);\n\t\t}\r\n\t}\n\t#endregion\r\n}";
+            const string expected = "namespace TestNameSpace\r\n{\r\n\r\n\t#region TestCase0\r\n\tpublic class TestCase0Output\r\n\t{\r\n\t\t [Newtonsoft.Json.JsonProperty(\"Test0\" , Required = Newtonsoft.Json.Required.Default)]\r\n public System.String Test0 {get; set;}\r\n\r\n\r\n\t}\r\n\r\n\tpublic class TestCase0Input\r\n\t{\r\n\t\t [Newtonsoft.Json.JsonProperty(\"Test0\" , Required = Newtonsoft.Json.Required.Default)]\r\n public System.String Test0 {get; set;}\r\n\r\n\r\n\t}\r\n\r\n\tpublic class TestCase0\r\n\t{\r\nprivate readonly IDapperExecutor<TestCase0Input, TestCase0Output> _dapperExecutor;\r\n\r\n\t\tpublic TestCase0(IDapperExecutor<TestCase0Input, TestCase0Output> dapperExecutor){\r\n\t\t\tthis._dapperExecutor = dapperExecutor;\r\n\t\t}\r\n\r\n\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TestCase0Output>>Execute(TestCase0Input request ){\r\n\t\t\treturn _dapperExecutor.ExecuteAsync(\"TestCase0\", request);\r\n\t\t}\r\n\r\n\r\n\t}\r\n\r\n\r\n\t#endregion\r\n\r\n\r\n\r\n\t#region TestCase1\r\n\tpublic class TestCase1Output\r\n\t{\r\n\t\t [Newtonsoft.Json.JsonProperty(\"Test1\" , Required = Newtonsoft.Json.Required.Default)]\r\n public System.String Test1 {get; set;}\r\n\r\n\r\n\t}\r\n\r\n\tpublic class TestCase1Input\r\n\t{\r\n\t\t [Newtonsoft.Json.JsonProperty(\"Test1\" , Required = Newtonsoft.Json.Required.DisallowNull)]\r\n public System.Int64 Test1 {get; set;}\r\n\r\n\r\n\t}\r\n\r\n\tpublic class TestCase1\r\n\t{\r\nprivate readonly IDapperExecutor<TestCase1Input, TestCase1Output> _dapperExecutor;\r\n\r\n\t\tpublic TestCase1(IDapperExecutor<TestCase1Input, TestCase1Output> dapperExecutor){\r\n\t\t\tthis._dapperExecutor = dapperExecutor;\r\n\t\t}\r\n\r\n\t\tpublic System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TestCase1Output>>Execute(TestCase1Input request ){\r\n\t\t\treturn _dapperExecutor.ExecuteAsync(\"TestCase1\", request);\r\n\t\t}\r\n\r\n\r\n\t}\r\n\r\n\r\n\t#endregion\r\n\r\n\r\n\r\n}\r\n";
 
             #region Expected result (escaped text)
 
-            /*namespace TestNameSpace 
+            /*namespace TestNameSpace
             {
 
 	            #region TestCase0
-	            public class TestCase0Output 
+	            public class TestCase0Output
 	            {
-		            [Newtonsoft.Json.JsonProperty("Test0" , Required = Newtonsoft.Json.Required.Default)]
-		            public System.String Test0 {get; set;} 
+		             [Newtonsoft.Json.JsonProperty("Test0" , Required = Newtonsoft.Json.Required.Default)]
+             public System.String Test0 {get; set;}
+
 
 	            }
 
-	            public class TestCase0Input 
+	            public class TestCase0Input
 	            {
-		            [Newtonsoft.Json.JsonProperty("Test0")] [System.ComponentModel.DataAnnotations.Required()] public System.String Test0 {get; set;} 
+		             [Newtonsoft.Json.JsonProperty("Test0" , Required = Newtonsoft.Json.Required.Default)]
+             public System.String Test0 {get; set;}
+
 
 	            }
 
-	            public class TestCase0 
+	            public class TestCase0
 	            {
-		            private readonly IDapperExecutor<TestCase0Input, TestCase0Output> _dapperExecutor;
-		            public TestCase0(IDapperExecutor<TestCase0Input, TestCase0Output> dapperExecutor)
-		            {
+            private readonly IDapperExecutor<TestCase0Input, TestCase0Output> _dapperExecutor;
+
+		            public TestCase0(IDapperExecutor<TestCase0Input, TestCase0Output> dapperExecutor){
 			            this._dapperExecutor = dapperExecutor;
 		            }
-		            public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TestCase0Output>> Execute(TestCase0Input request )
-		            {
+
+		            public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TestCase0Output>>Execute(TestCase0Input request ){
 			            return _dapperExecutor.ExecuteAsync("TestCase0", request);
 		            }
+
+
 	            }
+
+
 	            #endregion
+
+
 
 	            #region TestCase1
-	            public class TestCase1Output 
+	            public class TestCase1Output
 	            {
-		            [Newtonsoft.Json.JsonProperty("Test1" , Required = Newtonsoft.Json.Required.Default)]
-		            public System.String Test1 {get; set;} 
+		             [Newtonsoft.Json.JsonProperty("Test1" , Required = Newtonsoft.Json.Required.Default)]
+             public System.String Test1 {get; set;}
+
 
 	            }
 
-	            public class TestCase1Input 
+	            public class TestCase1Input
 	            {
-		            [Newtonsoft.Json.JsonProperty("Test1")] public System.Int64 Test1 {get; set;} 
+		             [Newtonsoft.Json.JsonProperty("Test1" , Required = Newtonsoft.Json.Required.DisallowNull)]
+             public System.Int64 Test1 {get; set;}
+
 
 	            }
 
-	            public class TestCase1 
+	            public class TestCase1
 	            {
-		            private readonly IDapperExecutor<TestCase1Input, TestCase1Output> _dapperExecutor;
-		            public TestCase1(IDapperExecutor<TestCase1Input, TestCase1Output> dapperExecutor)
-		            {
+            private readonly IDapperExecutor<TestCase1Input, TestCase1Output> _dapperExecutor;
+
+		            public TestCase1(IDapperExecutor<TestCase1Input, TestCase1Output> dapperExecutor){
 			            this._dapperExecutor = dapperExecutor;
 		            }
-		            public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TestCase1Output>> Execute(TestCase1Input request )
-		            {
+
+		            public System.Threading.Tasks.Task<System.Collections.Generic.IEnumerable<TestCase1Output>>Execute(TestCase1Input request ){
 			            return _dapperExecutor.ExecuteAsync("TestCase1", request);
 		            }
+
+
 	            }
+
+
 	            #endregion
-            }*/
+
+
+
+            }
+            */
 
             #endregion
 

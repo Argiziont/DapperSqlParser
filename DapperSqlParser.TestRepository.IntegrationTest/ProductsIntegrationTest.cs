@@ -5,6 +5,7 @@ using Xunit;
 
 namespace DapperSqlParser.TestRepository.IntegrationTest
 {
+    [Collection("Sequential")]
     public class ProductsIntegrationTest
     {
         private const string ControllerApiPath = "/api/Products";
