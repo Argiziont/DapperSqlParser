@@ -10,7 +10,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "bigint";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -24,7 +24,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "binary";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -38,7 +38,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "bit";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -52,7 +52,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "char";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -66,7 +66,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "date";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -80,7 +80,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "datetime";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -94,7 +94,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "datetime2";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -108,7 +108,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "datetimeoffset";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -122,7 +122,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "decimal";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -136,7 +136,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "filestream";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -150,7 +150,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "float";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -164,7 +164,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "geography";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -178,7 +178,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "geometry";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -192,7 +192,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "hierarchyid";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -206,7 +206,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "image";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -220,7 +220,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "int";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -234,7 +234,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "money";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -248,7 +248,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "nchar";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -262,7 +262,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "ntext";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -276,7 +276,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "numeric";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -290,7 +290,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "nvarchar";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -304,7 +304,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "real";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -318,7 +318,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "rowversion";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -332,7 +332,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "smalldatetime";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -346,7 +346,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "smallint";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -360,7 +360,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "smallmoney";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -374,7 +374,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "sql_variant";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -388,7 +388,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "text";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -402,7 +402,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "time";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -416,7 +416,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "timestamp";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -430,7 +430,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "tinyint";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -444,7 +444,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "uniqueidentifier";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -458,7 +458,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "varbinary";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -472,7 +472,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "varchar";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);
@@ -486,7 +486,7 @@ namespace DapperSqlParser.Tests
         {
             //Arrange
             const string testType = "xml";
-            StoredProcedureService service = new StoredProcedureService(null);
+            StoredProcedureService service = new StoredProcedureService("");
 
             //Act
             string cSharpType = SqlCsSharpTypesConverter.ConvertSqlServerFormatToCSharp(testType);

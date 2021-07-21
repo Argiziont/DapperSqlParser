@@ -18,7 +18,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
         public StoredProcedureService(string connectionString)
         {
-            _connectionString = connectionString;
+            _connectionString = connectionString ?? throw new ArgumentNullException(nameof(connectionString));
         }
 
         public async Task<StoredProcedureParameters> GetSpDataAsync(string spName)
