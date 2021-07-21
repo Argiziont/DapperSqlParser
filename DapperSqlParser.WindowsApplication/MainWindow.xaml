@@ -10,37 +10,49 @@
             <TabItem Header="Settings">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="19*"/>
-                        <ColumnDefinition Width="5*"/>
-                        <ColumnDefinition Width="167*"/>
+                        <ColumnDefinition Width="19*" />
+                        <ColumnDefinition Width="5*" />
+                        <ColumnDefinition Width="167*" />
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Settings" Margin="10,10,10,0" Height="294" VerticalAlignment="Top" Grid.ColumnSpan="3"/>
-                    <Button Content="Generate output" Margin="0,0,10,10" Click="GenerateOutputButton_Click" HorizontalAlignment="Right" Width="100" Height="32" VerticalAlignment="Bottom" Grid.Column="2"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="33,32,0,0" Text="Connection string" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="3"/>
-                    <TextBox HorizontalAlignment="Left" Margin="33,53,0,0" VerticalAlignment="Top" Width="229" Height="23" Name="ConnectionStringTextBlock" Grid.ColumnSpan="3"/>
-                    <TextBlock HorizontalAlignment="Left" Margin="33,85,0,0" Text="Namespace name" TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="3"/>
-                    <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock" Grid.ColumnSpan="3"/>
-                    <TextBlock Text="Search" HorizontalAlignment="Left" Margin="371,320,0,0" VerticalAlignment="Top" Height="25" Width="53" Grid.Column="2"/>
-                    <DataGrid AutoGenerateColumns="True" BeginningEdit="StoredProceduresDataGrid_OnBeginningEdit" x:Name="StoredProceduresDataGrid" Margin="10,355,10,47" Grid.ColumnSpan="3">
+                    <GroupBox Header="Settings" Margin="10,10,10,0" Height="294" VerticalAlignment="Top"
+                              Grid.ColumnSpan="3" />
+                    <Button Content="Generate output" Margin="0,0,10,10" Click="GenerateOutputButton_Click"
+                            HorizontalAlignment="Right" Width="100" Height="32" VerticalAlignment="Bottom"
+                            Grid.Column="2" />
+                    <TextBlock HorizontalAlignment="Left" Margin="33,32,0,0" Text="Connection string"
+                               TextWrapping="Wrap" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="3" />
+                    <TextBox HorizontalAlignment="Left" Margin="33,53,0,0" VerticalAlignment="Top" Width="229"
+                             Height="23" Name="ConnectionStringTextBlock" Grid.ColumnSpan="3" />
+                    <TextBlock HorizontalAlignment="Left" Margin="33,85,0,0" Text="Namespace name" TextWrapping="Wrap"
+                               VerticalAlignment="Top" Width="219" Grid.ColumnSpan="3" />
+                    <TextBox HorizontalAlignment="Left" Margin="33,106,0,0" TextWrapping="NoWrap"
+                             VerticalAlignment="Top" Width="229" Height="23" Name="NamespaceNameTextBlock"
+                             Grid.ColumnSpan="3" />
+                    <TextBlock Text="Search" HorizontalAlignment="Left" Margin="371,320,0,0" VerticalAlignment="Top"
+                               Height="25" Width="53" Grid.Column="2" />
+                    <DataGrid AutoGenerateColumns="True" BeginningEdit="StoredProceduresDataGrid_OnBeginningEdit"
+                              x:Name="StoredProceduresDataGrid" Margin="10,355,10,47" Grid.ColumnSpan="3">
 
                         <DataGrid.Columns>
                             <DataGridCheckBoxColumn Header="IsChecked"
-                                        Binding="{Binding IsChecked}"
-                                    Width="85">
+                                                    Binding="{Binding IsChecked}"
+                                                    Width="85">
                                 <DataGridCheckBoxColumn.HeaderTemplate>
                                     <DataTemplate>
-                                        <CheckBox Name="CheckAllStoreProceduresCheckBox" Content="IsChecked" Checked="IsCheckedStoreProcedureSelector_OnChecked" Unchecked="IsCheckedStoreProcedureSelector_OnUnchecked"/>
+                                        <CheckBox Name="CheckAllStoreProceduresCheckBox" Content="IsChecked"
+                                                  Checked="IsCheckedStoreProcedureSelector_OnChecked"
+                                                  Unchecked="IsCheckedStoreProcedureSelector_OnUnchecked" />
                                     </DataTemplate>
                                 </DataGridCheckBoxColumn.HeaderTemplate>
                             </DataGridCheckBoxColumn>
                             <DataGridTextColumn Header="Title"
-                                    Binding="{Binding Title}"
-                                    Width="*" 
-                                    IsReadOnly="True"/>
+                                                Binding="{Binding Title}"
+                                                Width="*"
+                                                IsReadOnly="True" />
 
                             <DataGridTextColumn Header="Number of input parameters"
-                                        Binding="{Binding InputCount}"
-                                        Width="*"  IsReadOnly="True">
+                                                Binding="{Binding InputCount}"
+                                                Width="*" IsReadOnly="True">
 
                                 <DataGridTextColumn.CellStyle>
                                     <Style TargetType="DataGridCell">
@@ -49,8 +61,8 @@
                                 </DataGridTextColumn.CellStyle>
                             </DataGridTextColumn>
                             <DataGridTextColumn Header="Number of output parameters"
-                                    Binding="{Binding OutputCount}"
-                                    Width="*"  IsReadOnly="True">
+                                                Binding="{Binding OutputCount}"
+                                                Width="*" IsReadOnly="True">
 
                                 <DataGridTextColumn.CellStyle>
                                     <Style TargetType="DataGridCell">
@@ -68,10 +80,13 @@
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                     </DataGrid>
-                    <Button Margin="10,312,0,0" Click="LoadStoreProcedures_OnClick" Height="38" VerticalAlignment="Top" HorizontalAlignment="Left" Width="101" Grid.ColumnSpan="3">
-                        <TextBlock Text="Load stored procedures" TextWrapping="Wrap" TextAlignment="Center"/>
+                    <Button Margin="10,312,0,0" Click="LoadStoreProcedures_OnClick" Height="38" VerticalAlignment="Top"
+                            HorizontalAlignment="Left" Width="101" Grid.ColumnSpan="3">
+                        <TextBlock Text="Load stored procedures" TextWrapping="Wrap" TextAlignment="Center" />
                     </Button>
-                    <TextBox Margin="424,319,10,0" Name="StoredProcedureGridSearchBox" Height="23" VerticalAlignment="Top" TextChanged="StoredProcedureDataGridSearchBox_OnTextChanged" Grid.Column="2"/>
+                    <TextBox Margin="424,319,10,0" Name="StoredProcedureGridSearchBox" Height="23"
+                             VerticalAlignment="Top" TextChanged="StoredProcedureDataGridSearchBox_OnTextChanged"
+                             Grid.Column="2" />
 
 
                 </Grid>
@@ -80,21 +95,23 @@
             <TabItem Header="Output" Margin="-2,0,-2,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="49*"/>
-                        <ColumnDefinition Width="142*"/>
+                        <ColumnDefinition Width="49*" />
+                        <ColumnDefinition Width="142*" />
                     </Grid.ColumnDefinitions>
-                    <RichTextBox Margin="10,10,10,81" IsReadOnly="True" Name="GeneratedOutputRichTextBox" VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="2">
+                    <RichTextBox Margin="10,10,10,81" IsReadOnly="True" Name="GeneratedOutputRichTextBox"
+                                 VerticalScrollBarVisibility="Visible" Grid.ColumnSpan="2">
                         <FlowDocument>
                             <Paragraph>
-                                <Run Text="Generated stored procedures output"/>
-                                <InlineUIContainer>
-
-                                </InlineUIContainer>
+                                <Run Text="Generated stored procedures output" />
+                                <InlineUIContainer />
                             </Paragraph>
                         </FlowDocument>
                     </RichTextBox>
-                    <ProgressBar Margin="10,0,382,9" Name="StoredProcedureParsingProgressBar" Grid.ColumnSpan="2" Height="32" VerticalAlignment="Bottom"  />
-                    <Button Content="Save to file" Name="SaveOutputToFileButton" Click="SaveOutputToFileButton_Click" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100" Margin="0,0,10,9" Grid.Column="1" />
+                    <ProgressBar Margin="10,0,382,9" Name="StoredProcedureParsingProgressBar" Grid.ColumnSpan="2"
+                                 Height="32" VerticalAlignment="Bottom" />
+                    <Button Content="Save to file" Name="SaveOutputToFileButton" Click="SaveOutputToFileButton_Click"
+                            Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="100"
+                            Margin="0,0,10,9" Grid.Column="1" />
                 </Grid>
 
 

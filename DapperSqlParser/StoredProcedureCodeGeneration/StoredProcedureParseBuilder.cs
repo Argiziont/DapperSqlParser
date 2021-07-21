@@ -8,20 +8,21 @@ using DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParsers;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration
 {
-    public class StoredProcedureParseBuilder: IStoredProcedureParseBuilder
+    public class StoredProcedureParseBuilder : IStoredProcedureParseBuilder
     {
         private StringBuilder _internalStringBuilder;
 
         public StoredProcedureParseBuilder(StringBuilder internalStringBuilder)
         {
-            _internalStringBuilder = internalStringBuilder ?? throw new ArgumentNullException(nameof(internalStringBuilder));
+            _internalStringBuilder =
+                internalStringBuilder ?? throw new ArgumentNullException(nameof(internalStringBuilder));
         }
 
         public void SetStringBuilder(StringBuilder stringBuilder)
         {
             _internalStringBuilder = stringBuilder ?? throw new ArgumentNullException(nameof(stringBuilder));
         }
-        
+
         public async Task AppendStoredProcedureCantParseMessage(StoredProcedureInfo storedProcedureInfo)
         {
             if (storedProcedureInfo == null) throw new ArgumentNullException(nameof(storedProcedureInfo));
@@ -29,7 +30,8 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
             StoredProcedureRegionGenerator storedProcedureRegionGenerator =
                 new StoredProcedureRegionGenerator(storedProcedureInfo.Name,
-                    CodeGeneratorUtils.CreateStoredProcedureErrorComment(storedProcedureInfo.Name, storedProcedureInfo.Error));
+                    CodeGeneratorUtils.CreateStoredProcedureErrorComment(storedProcedureInfo.Name,
+                        storedProcedureInfo.Error));
 
             _internalStringBuilder.AppendLine(await storedProcedureRegionGenerator.GenerateAsync());
         }
@@ -44,24 +46,29 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                     CodeGeneratorUtils.CreateStoredProcedureNotFoundComment(storedProcedureInfo.Name));
 
             _internalStringBuilder.AppendLine(await storedProcedureRegionGenerator.GenerateAsync());
-
         }
 
         public async Task AppendExtractedCsSharpCode(StoredProcedureParameters storedProcedureParameters)
         {
-            if (storedProcedureParameters == null) 
+            if (storedProcedureParameters == null)
                 throw new ArgumentNullException(nameof(storedProcedureParameters));
 
             StoredProcedureInputModelGenerator storedProcedureInputModelGenerator =
-                new StoredProcedureInputModelGenerator(storedProcedureParameters.InputParametersDataModels, storedProcedureParameters.StoredProcedureInfo.Name, storedProcedureParameters.StoredProcedureText.Definition);
+                new StoredProcedureInputModelGenerator(storedProcedureParameters.InputParametersDataModels,
+                    storedProcedureParameters.StoredProcedureInfo.Name,
+                    storedProcedureParameters.StoredProcedureText.Definition);
 
             StoredProcedureOutputModelGenerator storedProcedureOutputModelGenerator =
-                new StoredProcedureOutputModelGenerator(storedProcedureParameters.OutputParametersDataModels, storedProcedureParameters.StoredProcedureInfo.Name, storedProcedureParameters.StoredProcedureText.Definition);
+                new StoredProcedureOutputModelGenerator(storedProcedureParameters.OutputParametersDataModels,
+                    storedProcedureParameters.StoredProcedureInfo.Name,
+                    storedProcedureParameters.StoredProcedureText.Definition);
 
             StoredProcedureClientClassGenerator storedProcedureClientClassGenerator =
                 new StoredProcedureClientClassGenerator(storedProcedureParameters.InputParametersDataModels,
-                    storedProcedureParameters.OutputParametersDataModels, storedProcedureParameters.StoredProcedureInfo.Name,
-                    StoreProcedureInputIsJson(storedProcedureParameters.OutputParametersDataModels?.First().ParameterName));
+                    storedProcedureParameters.OutputParametersDataModels,
+                    storedProcedureParameters.StoredProcedureInfo.Name,
+                    StoreProcedureInputIsJson(storedProcedureParameters.OutputParametersDataModels?.First()
+                        .ParameterName));
 
             StringBuilder storedProcedureLogicBuilder = new StringBuilder();
 

@@ -17,7 +17,6 @@ namespace DapperSqlParser
 
         private static async Task Main(string[] args)
         {
-
             StoredProcedureService spService = new StoredProcedureService(ConnectionString);
             List<StoredProcedureParameters> paramsList;
 

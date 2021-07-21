@@ -1,12 +1,12 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using DapperSqlParser.TestRepository.Service.Automapping_Profiles;
 using DapperSqlParser.TestRepository.Service.DapperExecutor;
 using DapperSqlParser.TestRepository.Service.Repositories;
 using DapperSqlParser.TestRepository.Service.Repositories.Interfaces;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace DapperSqlParser.TestRepository
 {
@@ -26,7 +26,7 @@ namespace DapperSqlParser.TestRepository
             });
             services.AddSingleton(mapperConfig.CreateMapper());
 
-            mapperConfig.AssertConfigurationIsValid();//Check if map profiles is valid
+            mapperConfig.AssertConfigurationIsValid(); //Check if map profiles is valid
 
             //Dapper repository wrappers
             services.AddTransient<IDapperExecutorFactory, DapperExecutorFactory>();
@@ -51,10 +51,7 @@ namespace DapperSqlParser.TestRepository
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

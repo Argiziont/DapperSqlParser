@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using DapperSqlParser.StoredProcedureCodeGeneration.TemplateService;
@@ -15,7 +14,8 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{Environment.NewLine}{TextLevel.FirstLevel}{SpecialKeyWord.Region} {regionName}");
+            stringBuilder.AppendLine(
+                $"{Environment.NewLine}{TextLevel.FirstLevel}{SpecialKeyWord.Region} {regionName}");
             stringBuilder.AppendLine($"{regionDefinition}");
             stringBuilder.AppendLine($"{TextLevel.FirstLevel}{SpecialKeyWord.Endregion}");
 
@@ -33,14 +33,14 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
             return stringBuilder.ToString();
         }
-        
+
         public static string CreateStoredProcedureErrorComment(string storedProcedureName, string errorMessage)
         {
             return "//Couldn't parse Stored procedure  with className: " +
                    $"{storedProcedureName} because of internal error: " +
                    $"{errorMessage}\n\t";
         }
-        
+
         public static string CreateStoredProcedureNotFoundComment(string storedProcedureName)
         {
             return $"//Model for {storedProcedureName} was not found, could not parse this Stored Procedure!";
@@ -58,7 +58,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
 
             int nameSpaceBracketIndex = generatedClasses.IndexOf(trimStart, StringComparison.Ordinal) +
                                         trimStart.Length + 2;
-            
+
             return generatedClasses.Substring(nameSpaceBracketIndex,
                 generatedClasses.Length - 2 - nameSpaceBracketIndex);
         }
@@ -67,31 +67,35 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{TextLevel.FirstLevel}{AccessModifier.Public} {SpecialKeyWord.Class} {className}");
+            stringBuilder.AppendLine(
+                $"{TextLevel.FirstLevel}{AccessModifier.Public} {SpecialKeyWord.Class} {className}");
             stringBuilder.AppendLine($"{TextLevel.FirstLevel}{{");
             stringBuilder.AppendLine($"{classDefinition}");
             stringBuilder.AppendLine($"{TextLevel.FirstLevel}}}");
 
             return stringBuilder.ToString();
         }
-        
+
         public static string CreateClass(string className, IEnumerable<string> classDefinitions)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{TextLevel.FirstLevel}{AccessModifier.Public} {SpecialKeyWord.Class} {className}");
+            stringBuilder.AppendLine(
+                $"{TextLevel.FirstLevel}{AccessModifier.Public} {SpecialKeyWord.Class} {className}");
             stringBuilder.AppendLine($"{TextLevel.FirstLevel}{{");
             foreach (string classDefinition in classDefinitions) stringBuilder.AppendLine($"{classDefinition}");
             stringBuilder.AppendLine($"{TextLevel.FirstLevel}}}");
 
             return stringBuilder.ToString();
         }
-        
-        public static string CreateProperty(string propertyType, string propertyName, string propertyAttribute=default)
+
+        public static string CreateProperty(string propertyType, string propertyName,
+            string propertyAttribute = default)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{TextLevel.SecondLevel} {propertyAttribute} {AccessModifier.Public} {propertyType} {propertyName} {SpecialKeyWord.PropertyGetSetAccessor}");
+            stringBuilder.AppendLine(
+                $"{TextLevel.SecondLevel} {propertyAttribute} {AccessModifier.Public} {propertyType} {propertyName} {SpecialKeyWord.PropertyGetSetAccessor}");
 
             return stringBuilder.ToString();
         }
@@ -100,7 +104,8 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"[Newtonsoft.Json.JsonProperty({(propertyName == null ? "\"Result\"" : $"\"{propertyName}\"")} , Required = {(isNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]");
+            stringBuilder.AppendLine(
+                $"[Newtonsoft.Json.JsonProperty({(propertyName == null ? "\"Result\"" : $"\"{propertyName}\"")} , Required = {(isNullable ? "Newtonsoft.Json.Required.DisallowNull" : "Newtonsoft.Json.Required.Default")})]");
 
             return stringBuilder.ToString();
         }
@@ -109,25 +114,29 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{TextLevel.FirstLevel}[JsonWrapper(\"{ propertyName}\")]");
+            stringBuilder.AppendLine($"{TextLevel.FirstLevel}[JsonWrapper(\"{propertyName}\")]");
 
             return stringBuilder.ToString();
         }
 
-        public static string CreateIDapperExecutorField(object inputParameter, object outputParameter, string storedProcedureName)
+        public static string CreateIDapperExecutorField(object inputParameter, object outputParameter,
+            string storedProcedureName)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{AccessModifier.Private} {SpecialKeyWord.Readonly} IDapperExecutor<{(inputParameter != null ? $"{storedProcedureName}Input" : "EmptyInputParams")}{(outputParameter != null ? $", {storedProcedureName}Output" : "")}> _dapperExecutor;");
+            stringBuilder.AppendLine(
+                $"{AccessModifier.Private} {SpecialKeyWord.Readonly} IDapperExecutor<{(inputParameter != null ? $"{storedProcedureName}Input" : "EmptyInputParams")}{(outputParameter != null ? $", {storedProcedureName}Output" : "")}> _dapperExecutor;");
 
             return stringBuilder.ToString();
         }
-        
-        public static string CreateDapperClientConstructor(object inputParameter, object outputParameter, string storedProcedureName)
+
+        public static string CreateDapperClientConstructor(object inputParameter, object outputParameter,
+            string storedProcedureName)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{TextLevel.SecondLevel}{AccessModifier.Public} {storedProcedureName}(IDapperExecutor<{(inputParameter != null ? $"{storedProcedureName}Input" : "EmptyInputParams")}{(outputParameter != null ? $", {storedProcedureName}Output" : "")}> dapperExecutor){{");
+            stringBuilder.AppendLine(
+                $"{TextLevel.SecondLevel}{AccessModifier.Public} {storedProcedureName}(IDapperExecutor<{(inputParameter != null ? $"{storedProcedureName}Input" : "EmptyInputParams")}{(outputParameter != null ? $", {storedProcedureName}Output" : "")}> dapperExecutor){{");
             stringBuilder.AppendLine($"{TextLevel.ThirdLevel}{SpecialKeyWord.This}._dapperExecutor = dapperExecutor;");
             stringBuilder.AppendLine($"{TextLevel.SecondLevel}}}");
 
@@ -135,12 +144,15 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             return stringBuilder.ToString();
         }
 
-        public static string CreateDapperClientMethod(object inputParameter, object outputParameter, string storedProcedureName, bool isReturnTypeJson)
+        public static string CreateDapperClientMethod(object inputParameter, object outputParameter,
+            string storedProcedureName, bool isReturnTypeJson)
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine($"{TextLevel.SecondLevel}{AccessModifier.Public} System.Threading.Tasks.Task{(outputParameter != null ? $"<System.Collections.Generic.IEnumerable<{storedProcedureName}Output>>" : " ")}Execute({(inputParameter != null ? $"{storedProcedureName}Input request" : "")} ){{");
-            stringBuilder.AppendLine($"{TextLevel.ThirdLevel}return _dapperExecutor.{(isReturnTypeJson ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{storedProcedureName}\"{(inputParameter != null ? ", request" : "")});");
+            stringBuilder.AppendLine(
+                $"{TextLevel.SecondLevel}{AccessModifier.Public} System.Threading.Tasks.Task{(outputParameter != null ? $"<System.Collections.Generic.IEnumerable<{storedProcedureName}Output>>" : " ")}Execute({(inputParameter != null ? $"{storedProcedureName}Input request" : "")} ){{");
+            stringBuilder.AppendLine(
+                $"{TextLevel.ThirdLevel}return _dapperExecutor.{(isReturnTypeJson ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{storedProcedureName}\"{(inputParameter != null ? ", request" : "")});");
             stringBuilder.AppendLine($"{TextLevel.SecondLevel}}}");
 
             return stringBuilder.ToString();

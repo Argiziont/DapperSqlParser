@@ -18,7 +18,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             _parameters = parameters ?? throw new ArgumentNullException(nameof(parameters));
             _nameSpaceName = nameSpaceName ?? throw new ArgumentNullException(nameof(nameSpaceName));
         }
-        
+
         public async Task<string> CreateSpClient(IProgress<StoreProcedureGenerationProgress> progress = default)
         {
             StringBuilder outputCode = new StringBuilder();
@@ -33,7 +33,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                 {
                     if (spParameter.StoredProcedureInfo.Error != null)
                     {
-                       await storedProcedureParseBuilder.AppendStoredProcedureCantParseMessage(
+                        await storedProcedureParseBuilder.AppendStoredProcedureCantParseMessage(
                             spParameter.StoredProcedureInfo);
 
                         continue;
@@ -50,7 +50,8 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                 }
             }
 
-            string generatedCode=CodeGeneratorUtils.CreateNamespaceWithName(_nameSpaceName, outputCode.ToString());
+            string generatedCode = CodeGeneratorUtils.CreateNamespaceWithName(_nameSpaceName, outputCode.ToString());
+
             return await Task.FromResult(generatedCode);
         }
 

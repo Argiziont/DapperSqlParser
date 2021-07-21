@@ -11,6 +11,5 @@ namespace DapperSqlParser.TestRepository.Service.Repositories.Interfaces
         public Task DeleteByIdAsync(int productId);
         public Task InsertAsync(Product product);
         public Task UpdateTitleByIdAsync(int productId, string productTitle);
-
     }
 }

@@ -4,7 +4,7 @@ using DapperSqlParser.TestRepository.Service.GeneratedClientFile;
 
 namespace DapperSqlParser.TestRepository.Service.Automapping_Profiles
 {
-    public class CategoryMappingProfile:Profile
+    public class CategoryMappingProfile : Profile
     {
         public CategoryMappingProfile()
         {

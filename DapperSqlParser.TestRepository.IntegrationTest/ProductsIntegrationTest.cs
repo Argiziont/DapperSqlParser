@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -65,9 +66,12 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
         }
 
         [Theory]
-        [InlineData(ControllerApiPath + "/Insert", "{\n  \"id\": 0,\n  \"externalId\": \"Test1\",\n  \"title\": \"Test1\",\n  \"url\": \"Test1\",\n  \"syncDate\": \"2021-06-23T10:07:08.566Z\",\n  \"productState\": 0,\n  \"description\": \"Test1\",\n  \"price\": \"Test1\"\n}")]
-        [InlineData(ControllerApiPath + "/Insert", "{\n  \"id\": 0,\n  \"externalId\": \"Test2\",\n  \"title\": \"Test2\",\n  \"url\": \"Test2\",\n  \"syncDate\": \"2021-06-23T10:07:08.566Z\",\n  \"productState\": 0,\n  \"description\": \"Test2\",\n  \"price\": \"Test2\"\n}")]
-        [InlineData(ControllerApiPath + "/Insert", "{\n  \"id\": 0,\n  \"externalId\": \"Test3\",\n  \"title\": \"Test3\",\n  \"url\": \"Test3\",\n  \"syncDate\": \"2021-06-23T10:07:08.566Z\",\n  \"productState\": 0,\n  \"description\": \"Test3\",\n  \"price\": \"Test3\"\n}")]
+        [InlineData(ControllerApiPath + "/Insert",
+            "{\n  \"id\": 0,\n  \"externalId\": \"Test1\",\n  \"title\": \"Test1\",\n  \"url\": \"Test1\",\n  \"syncDate\": \"2021-06-23T10:07:08.566Z\",\n  \"productState\": 0,\n  \"description\": \"Test1\",\n  \"price\": \"Test1\"\n}")]
+        [InlineData(ControllerApiPath + "/Insert",
+            "{\n  \"id\": 0,\n  \"externalId\": \"Test2\",\n  \"title\": \"Test2\",\n  \"url\": \"Test2\",\n  \"syncDate\": \"2021-06-23T10:07:08.566Z\",\n  \"productState\": 0,\n  \"description\": \"Test2\",\n  \"price\": \"Test2\"\n}")]
+        [InlineData(ControllerApiPath + "/Insert",
+            "{\n  \"id\": 0,\n  \"externalId\": \"Test3\",\n  \"title\": \"Test3\",\n  \"url\": \"Test3\",\n  \"syncDate\": \"2021-06-23T10:07:08.566Z\",\n  \"productState\": 0,\n  \"description\": \"Test3\",\n  \"price\": \"Test3\"\n}")]
         public async Task Insert_EndpointsReturnSuccessAndCorrectContentType(string url, string jsonPayLoad)
         {
             //Restore
@@ -75,7 +79,7 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
 
             //Arrange
             HttpClient client = new TestClientProvider().Client;
-            StringContent stringContent = new StringContent(jsonPayLoad, System.Text.Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent(jsonPayLoad, Encoding.UTF8, "application/json");
 
             //Act
             HttpResponseMessage response = await client.PostAsync($"{url}", stringContent);
@@ -89,7 +93,8 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
         [InlineData(ControllerApiPath + "/UpdateTitleById", 10, "\"Test1\"")]
         [InlineData(ControllerApiPath + "/UpdateTitleById", 20, "\"Test2\"")]
         [InlineData(ControllerApiPath + "/UpdateTitleById", 30, "\"Test3\"")]
-        public async Task Update_EndpointsReturnSuccessAndCorrectContentType(string url, int productId, string productName)
+        public async Task Update_EndpointsReturnSuccessAndCorrectContentType(string url, int productId,
+            string productName)
         {
             //Restore
             await DatabaseExtensions.RestoreDatabase();
@@ -98,7 +103,8 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
             HttpClient client = new TestClientProvider().Client;
 
             //Act
-            HttpResponseMessage response = await client.PutAsync($"{url}?productId={productId}", new StringContent(productName, System.Text.Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await client.PutAsync($"{url}?productId={productId}",
+                new StringContent(productName, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
 
             //Assert

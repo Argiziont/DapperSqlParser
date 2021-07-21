@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -75,7 +76,7 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
 
             //Arrange
             HttpClient client = new TestClientProvider().Client;
-            StringContent stringContent = new StringContent(jsonPayLod, System.Text.Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent(jsonPayLod, Encoding.UTF8, "application/json");
 
             //Act
             HttpResponseMessage response = await client.PostAsync($"{url}", stringContent);
@@ -89,7 +90,8 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
         [InlineData(ControllerApiPath + "/UpdateTitleById", 10, "\"Test1\"")]
         [InlineData(ControllerApiPath + "/UpdateTitleById", 20, "\"Test2\"")]
         [InlineData(ControllerApiPath + "/UpdateTitleById", 30, "\"Test3\"")]
-        public async Task Update_EndpointsReturnSuccessAndCorrectContentType(string url, int categoryId, string categoryTitle)
+        public async Task Update_EndpointsReturnSuccessAndCorrectContentType(string url, int categoryId,
+            string categoryTitle)
         {
             //Restore
             await DatabaseExtensions.RestoreDatabase();
@@ -98,12 +100,12 @@ namespace DapperSqlParser.TestRepository.IntegrationTest
             HttpClient client = new TestClientProvider().Client;
 
             //Act
-            HttpResponseMessage response = await client.PutAsync($"{url}?categoryId={categoryId}", new StringContent(categoryTitle, System.Text.Encoding.UTF8, "application/json"));
+            HttpResponseMessage response = await client.PutAsync($"{url}?categoryId={categoryId}",
+                new StringContent(categoryTitle, Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
 
             //Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
-
     }
 }

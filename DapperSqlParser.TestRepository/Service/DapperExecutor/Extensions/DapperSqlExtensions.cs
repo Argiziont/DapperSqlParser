@@ -30,7 +30,7 @@ namespace DapperSqlParser.TestRepository.Service.DapperExecutor.Extensions
             //};
             return sb[0] == '['
                 ? JsonConvert.DeserializeObject<IEnumerable<T>>(sb.ToString())
-                : new[] { JsonConvert.DeserializeObject<T>(sb.ToString()) };
+                : new[] {JsonConvert.DeserializeObject<T>(sb.ToString())};
 
             // Using Newtonsoft.Json to de-serialize objects
         }

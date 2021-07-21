@@ -1,7 +1,4 @@
-﻿using DapperSqlParser.Models;
-using DapperSqlParser.WindowsApplication.Models;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -10,7 +7,10 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using DapperSqlParser.Models;
 using DapperSqlParser.StoredProcedureCodeGeneration;
+using DapperSqlParser.WindowsApplication.Models;
+using Microsoft.Win32;
 
 namespace DapperSqlParser.WindowsApplication
 {
@@ -19,7 +19,8 @@ namespace DapperSqlParser.WindowsApplication
     /// </summary>
     public partial class MainWindow
     {
-        private ObservableCollection<StoredProcedureGridModel> _gridModels = new ObservableCollection<StoredProcedureGridModel>();
+        private ObservableCollection<StoredProcedureGridModel> _gridModels =
+            new ObservableCollection<StoredProcedureGridModel>();
 
         public MainWindow()
         {
@@ -48,7 +49,8 @@ namespace DapperSqlParser.WindowsApplication
         private void RefreshDataGridWithNewItems(IEnumerable<StoredProcedureGridModel> storedProcedureModels)
         {
             ClearDataGrid();
-            foreach (StoredProcedureGridModel dataChunk in storedProcedureModels) StoredProceduresDataGrid.Items.Add(dataChunk);
+            foreach (StoredProcedureGridModel dataChunk in storedProcedureModels)
+                StoredProceduresDataGrid.Items.Add(dataChunk);
         }
 
         private void ClearDataGrid()
@@ -59,13 +61,15 @@ namespace DapperSqlParser.WindowsApplication
 
         private void UnCheckAllCheckboxesInDataGrid()
         {
-            foreach (object storedProcedureDetails in StoredProceduresDataGrid.Items) ((StoredProcedureGridModel) storedProcedureDetails).IsChecked = false;
+            foreach (object storedProcedureDetails in StoredProceduresDataGrid.Items)
+                ((StoredProcedureGridModel) storedProcedureDetails).IsChecked = false;
             RefreshDataGridWithNewItems(GetCurrentGridItemCollection());
         }
 
         private void CheckAllCheckboxesInDataGrid()
         {
-            foreach (object storedProcedureDetails in StoredProceduresDataGrid.Items) ((StoredProcedureGridModel)storedProcedureDetails).IsChecked = true;
+            foreach (object storedProcedureDetails in StoredProceduresDataGrid.Items)
+                ((StoredProcedureGridModel) storedProcedureDetails).IsChecked = true;
             RefreshDataGridWithNewItems(GetCurrentGridItemCollection());
         }
 
@@ -102,7 +106,6 @@ namespace DapperSqlParser.WindowsApplication
                 MessageBox.Show("Couldn't get stored procedures names!", "Error", MessageBoxButton.OK,
                     MessageBoxImage.Error);
                 throw new ArgumentException("Couldn't get stored procedures names!");
-
             }
 
             StoredProcedureService storedProcedureService = new StoredProcedureService(connectionString);
@@ -127,13 +130,17 @@ namespace DapperSqlParser.WindowsApplication
                     OutputCount = storedProcedure.OutputParametersDataModels != null
                         ? storedProcedure.OutputParametersDataModels.Length.ToString()
                         : "0",
-                    InputTooltip = StoredProcedureParametersStringFormatter.FormatInputStoredProcedureParameters(storedProcedure.InputParametersDataModels),
-                    OutputTooltip = StoredProcedureParametersStringFormatter.FormatOutputStoredProcedureParameters(storedProcedure.OutputParametersDataModels),
-                    GeneralDetails = StoredProcedureParametersStringFormatter.FormatStoreProcedureInfo(storedProcedure.StoredProcedureInfo)
-
+                    InputTooltip =
+                        StoredProcedureParametersStringFormatter.FormatInputStoredProcedureParameters(storedProcedure
+                            .InputParametersDataModels),
+                    OutputTooltip =
+                        StoredProcedureParametersStringFormatter.FormatOutputStoredProcedureParameters(storedProcedure
+                            .OutputParametersDataModels),
+                    GeneralDetails =
+                        StoredProcedureParametersStringFormatter.FormatStoreProcedureInfo(storedProcedure
+                            .StoredProcedureInfo)
                 });
         }
-
 
 
         private async void GenerateOutputButton_Click(object sender, RoutedEventArgs e)
@@ -173,7 +180,7 @@ namespace DapperSqlParser.WindowsApplication
             }
 
             StoredProcedureService storedProcedureService = await GetStoreConnectedStoredProcedureService();
-            
+
             var checkedStoredProceduresDetails = await GetStoreProcedureGeneratedPureCode(storedProcedureService);
 
             var progressIndicator = GetProgressIndicatorForStoreProcedureExtractor();
@@ -190,7 +197,7 @@ namespace DapperSqlParser.WindowsApplication
             var progressIndicator = new Progress<StoreProcedureGenerationProgress>(ReportProgress);
             progressIndicator.ProgressChanged += (sender, progress) =>
             {
-                if (progress.CurrentProgressAmount== progress.TotalProgressAmount) HideProgressIndicator();
+                if (progress.CurrentProgressAmount == progress.TotalProgressAmount) HideProgressIndicator();
             };
 
             return progressIndicator;
@@ -205,6 +212,7 @@ namespace DapperSqlParser.WindowsApplication
         {
             StoredProcedureParsingProgressBar.Visibility = Visibility.Visible;
         }
+
         private void ReportProgress(StoreProcedureGenerationProgress progress)
         {
             StoredProcedureParsingProgressBar.Maximum = progress.TotalProgressAmount;
@@ -212,7 +220,8 @@ namespace DapperSqlParser.WindowsApplication
         }
 
 
-        private async Task<List<StoredProcedureParameters>> GetStoreProcedureGeneratedPureCode(StoredProcedureService storedProcedureService)
+        private async Task<List<StoredProcedureParameters>> GetStoreProcedureGeneratedPureCode(
+            StoredProcedureService storedProcedureService)
         {
             string[] checkedStoredProceduresNames = GetCheckedStoreProcedureNames();
             return await storedProcedureService.GenerateModelsListAsync(checkedStoredProceduresNames);
@@ -259,10 +268,7 @@ namespace DapperSqlParser.WindowsApplication
             // Have to do this in the unusual case where the border of the cell gets selected.
             // and causes a crash 'EditItem is not allowed'
 
-            if (e.Column is DataGridCheckBoxColumn)
-            {
-                EditCheckBoxColumn(e);
-            }
+            if (e.Column is DataGridCheckBoxColumn) EditCheckBoxColumn(e);
         }
 
         private void EditCheckBoxColumn(DataGridBeginningEditEventArgs e)
@@ -284,6 +290,7 @@ namespace DapperSqlParser.WindowsApplication
         {
             CheckAllCheckboxesInDataGrid();
         }
+
         private void IsCheckedStoreProcedureSelector_OnUnchecked(object sender, RoutedEventArgs e)
         {
             UnCheckAllCheckboxesInDataGrid();
@@ -292,15 +299,14 @@ namespace DapperSqlParser.WindowsApplication
 
         private async void LoadStoreProcedures_OnClick(object sender, RoutedEventArgs e)
         {
-           await InitializeStoreProceduresGrid();
+            await InitializeStoreProceduresGrid();
         }
 
         private void StoredProcedureDataGridSearchBox_OnTextChanged(object sender, TextChangedEventArgs e)
         {
             if (sender is TextBox searchTextBox)
-            {
-                RefreshDataGridWithNewItems(_gridModels.Where(storedProcedure => storedProcedure.Title.Contains(searchTextBox.Text)));
-            }
+                RefreshDataGridWithNewItems(_gridModels.Where(storedProcedure =>
+                    storedProcedure.Title.Contains(searchTextBox.Text)));
         }
     }
 }

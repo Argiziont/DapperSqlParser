@@ -2,7 +2,7 @@
 
 namespace DapperSqlParser.TestRepository.Service.DapperExecutor
 {
-    public class DapperExecutorFactory: IDapperExecutorFactory
+    public class DapperExecutorFactory : IDapperExecutorFactory
     {
         private readonly string _connectionString;
 
@@ -10,13 +10,14 @@ namespace DapperSqlParser.TestRepository.Service.DapperExecutor
         {
             _connectionString = configuration.GetConnectionString("UserDb");
         }
-        public IDapperExecutor<TIn, TOut> CreateDapperExecutor<TIn, TOut>() 
+
+        public IDapperExecutor<TIn, TOut> CreateDapperExecutor<TIn, TOut>()
             where TOut : class
             where TIn : class
         {
             return new DapperExecutor<TIn, TOut>(_connectionString);
-
         }
+
         public IDapperExecutor<TIn> CreateDapperExecutor<TIn>()
             where TIn : class
         {

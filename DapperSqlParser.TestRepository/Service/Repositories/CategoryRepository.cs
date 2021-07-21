@@ -9,7 +9,7 @@ using DapperSqlParser.TestRepository.Service.Repositories.Interfaces;
 
 namespace DapperSqlParser.TestRepository.Service.Repositories
 {
-    public class CategoryRepository: ICategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly IDapperExecutorFactory _dapperExecutorFactory;
         private readonly IMapper _mapper;
@@ -43,10 +43,11 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
 
         public async Task<Category> GetByIdAsync(int categoryId)
         {
-            var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_GetCategoryByIdInput, Sp_GetCategoryByIdOutput>();
+            var executor = _dapperExecutorFactory
+                .CreateDapperExecutor<Sp_GetCategoryByIdInput, Sp_GetCategoryByIdOutput>();
             Sp_GetCategoryById spService = new Sp_GetCategoryById(executor);
 
-            var executeResult = await spService.Execute(new Sp_GetCategoryByIdInput() { CategoryId = categoryId });
+            var executeResult = await spService.Execute(new Sp_GetCategoryByIdInput {CategoryId = categoryId});
             try
             {
                 return _mapper.Map<IEnumerable<Sp_GetCategoryByIdOutput>, IEnumerable<Category>>(executeResult).First();
@@ -67,7 +68,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_DeleteCategoryByIdInput>();
             Sp_DeleteCategoryById spService = new Sp_DeleteCategoryById(executor);
 
-            await spService.Execute(new Sp_DeleteCategoryByIdInput() { CategoryId = categoryId });
+            await spService.Execute(new Sp_DeleteCategoryByIdInput {CategoryId = categoryId});
         }
 
         public async Task InsertAsync(Category category)
@@ -93,7 +94,8 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_UpdateCategoryNameByIdInput>();
             Sp_UpdateCategoryNameById spService = new Sp_UpdateCategoryNameById(executor);
 
-            await spService.Execute(new Sp_UpdateCategoryNameByIdInput() { CategoryId = categoryId, CategoryName = categoryName });
+            await spService.Execute(new Sp_UpdateCategoryNameByIdInput
+                {CategoryId = categoryId, CategoryName = categoryName});
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using DapperSqlParser.Models;
-using System.Linq;
+﻿using System.Linq;
+using DapperSqlParser.Models;
 using DapperSqlParser.StoredProcedureCodeGeneration;
 
 namespace DapperSqlParser.WindowsApplication
@@ -12,7 +12,8 @@ namespace DapperSqlParser.WindowsApplication
                 ? "Input parameters are empty"
                 : inputParameters.Aggregate("",
                     (current, inputParameter) =>
-                        current + inputParameter.ParameterName + " " + SqlCsSharpTypesConverter.ConvertCSharpToSqlServerFormat(inputParameter.TypeName) + " \n");
+                        current + inputParameter.ParameterName + " " +
+                        SqlCsSharpTypesConverter.ConvertCSharpToSqlServerFormat(inputParameter.TypeName) + " \n");
         }
 
         public static string FormatOutputStoredProcedureParameters(OutputParametersDataModel[] outputParameters)
@@ -21,16 +22,16 @@ namespace DapperSqlParser.WindowsApplication
                 ? "Output parameters are empty"
                 : outputParameters.Aggregate("",
                     (current, outputParameter) =>
-                        current + outputParameter.ParameterName + " " + SqlCsSharpTypesConverter.ConvertCSharpToSqlServerFormat(outputParameter.TypeName) + " \n");
+                        current + outputParameter.ParameterName + " " +
+                        SqlCsSharpTypesConverter.ConvertCSharpToSqlServerFormat(outputParameter.TypeName) + " \n");
         }
 
         public static string FormatStoreProcedureInfo(StoredProcedureInfo storedProcedureParameters)
         {
             return storedProcedureParameters == null
                 ? "No details"
-                : storedProcedureParameters.Error ?? $"Store procedure has Id: {storedProcedureParameters.Id} and Name: {storedProcedureParameters.Name}";
-
-
+                : storedProcedureParameters.Error ??
+                  $"Store procedure has Id: {storedProcedureParameters.Id} and Name: {storedProcedureParameters.Name}";
         }
     }
 }

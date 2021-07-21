@@ -21,7 +21,9 @@ namespace DapperSqlParser.TestRepository.Service.DapperExecutor
         public async Task ExecuteAsync(string spName, TInParams inputParams)
         {
             if (JsonWrapperAttributeExtensions.ContainsAttribute<TInParams>())
+            {
                 await ExecuteWithJsonInputAsync(spName, inputParams);
+            }
             else
             {
                 await using SqlConnection connection = new SqlConnection(_connectionString);
@@ -127,11 +129,9 @@ namespace DapperSqlParser.TestRepository.Service.DapperExecutor
                     JsonConvert.SerializeObject(inputParams)
                 }
             });
-            
-            return await connection.QueryAsync<TOutParams>(spName, parameters,
-                    commandType: CommandType.StoredProcedure);
-            
 
+            return await connection.QueryAsync<TOutParams>(spName, parameters,
+                commandType: CommandType.StoredProcedure);
         }
 
         public async Task<IEnumerable<TOutParams>> ExecuteWithJsonInputAndOutputAsync(string spName,

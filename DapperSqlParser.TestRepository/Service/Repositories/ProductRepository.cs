@@ -9,7 +9,7 @@ using DapperSqlParser.TestRepository.Service.Repositories.Interfaces;
 
 namespace DapperSqlParser.TestRepository.Service.Repositories
 {
-    public class ProductRepository: IProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly IDapperExecutorFactory _dapperExecutorFactory;
         private readonly IMapper _mapper;
@@ -43,10 +43,11 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
 
         public async Task<Product> GetByIdAsync(int productId)
         {
-            var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_GetProductByIdInput, Sp_GetProductByIdOutput>();
+            var executor =
+                _dapperExecutorFactory.CreateDapperExecutor<Sp_GetProductByIdInput, Sp_GetProductByIdOutput>();
             Sp_GetProductById spService = new Sp_GetProductById(executor);
 
-            var executeResult = await spService.Execute(new Sp_GetProductByIdInput(){ProductId = productId });
+            var executeResult = await spService.Execute(new Sp_GetProductByIdInput {ProductId = productId});
             try
             {
                 return _mapper.Map<IEnumerable<Sp_GetProductByIdOutput>, IEnumerable<Product>>(executeResult).First();
@@ -67,7 +68,7 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_DeleteProductByIdInput>();
             Sp_DeleteProductById spService = new Sp_DeleteProductById(executor);
 
-            await spService.Execute(new Sp_DeleteProductByIdInput() {  ProductId= productId });
+            await spService.Execute(new Sp_DeleteProductByIdInput {ProductId = productId});
         }
 
         public async Task InsertAsync(Product product)
@@ -93,7 +94,8 @@ namespace DapperSqlParser.TestRepository.Service.Repositories
             var executor = _dapperExecutorFactory.CreateDapperExecutor<Sp_UpdateProductTitleByIdInput>();
             Sp_UpdateProductTitleById spService = new Sp_UpdateProductTitleById(executor);
 
-            await spService.Execute(new Sp_UpdateProductTitleByIdInput() { ProductId = productId,ProductTitle = productTitle });
+            await spService.Execute(new Sp_UpdateProductTitleByIdInput
+                {ProductId = productId, ProductTitle = productTitle});
         }
     }
 }

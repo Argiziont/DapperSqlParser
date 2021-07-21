@@ -9,17 +9,19 @@ using static DapperSqlParser.StoredProcedureCodeGeneration.TemplateService.JsonN
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParsers
 {
-    public class StoredProcedureOutputModelGenerator:ICodeGenerator
+    public class StoredProcedureOutputModelGenerator : ICodeGenerator
     {
         private readonly OutputParametersDataModel[] _outputModels;
-        private readonly string _storedProcedureName;
         private readonly string _storedProcedureDefinition;
+        private readonly string _storedProcedureName;
 
-        public StoredProcedureOutputModelGenerator(OutputParametersDataModel[] outputModels, string storedProcedureName, string storedProcedureDefinition)
+        public StoredProcedureOutputModelGenerator(OutputParametersDataModel[] outputModels, string storedProcedureName,
+            string storedProcedureDefinition)
         {
             _outputModels = outputModels;
             _storedProcedureName = storedProcedureName ?? throw new ArgumentNullException(nameof(storedProcedureName));
-            _storedProcedureDefinition = storedProcedureDefinition ?? throw new ArgumentNullException(nameof(storedProcedureDefinition));
+            _storedProcedureDefinition = storedProcedureDefinition ??
+                                         throw new ArgumentNullException(nameof(storedProcedureDefinition));
         }
 
         public async Task<string> GenerateAsync()
@@ -38,9 +40,12 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParsers
 
             foreach (OutputParametersDataModel field in _outputModels)
                 outputProperties.AppendLine(CodeGeneratorUtils.CreateProperty(
-                    field.TypeName,//Append property type
-                    (field.ParameterName == null ? $"{_storedProcedureName}Result" : $"{field.ParameterName.Replace("-", "_")}"),//Append property name
-                    CodeGeneratorUtils.CreateJsonPropertyAttribute(field.ParameterName, field.IsNullable)//Append property attribute
+                    field.TypeName, //Append property type
+                    field.ParameterName == null
+                        ? $"{_storedProcedureName}Result"
+                        : $"{field.ParameterName.Replace("-", "_")}", //Append property name
+                    CodeGeneratorUtils.CreateJsonPropertyAttribute(field.ParameterName,
+                        field.IsNullable) //Append property attribute
                 ));
 
             return CodeGeneratorUtils.CreateClass(_storedProcedureName + "Output", outputProperties.ToString());
@@ -65,7 +70,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParsers
 
             return await CodeGeneratorUtils.CreateCsSharpClassFromJsonSchema(jsonSchema);
         }
-       
+
         private static bool CheckStringForOutputJsonSnippets(string jsonParameterName)
         {
             return jsonParameterName != null && Guid.TryParse(

@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DapperSqlParser.TestRepository.Models;
 using DapperSqlParser.TestRepository.Service.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace DapperSqlParser.TestRepository.Controllers
 {
@@ -101,7 +100,7 @@ namespace DapperSqlParser.TestRepository.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(Exception), StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> UpdateTitleByIdAsync(int categoryId, [FromBody]string categoryName)
+        public async Task<IActionResult> UpdateTitleByIdAsync(int categoryId, [FromBody] string categoryName)
         {
             try
             {

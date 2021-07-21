@@ -9,7 +9,7 @@ namespace DapperSqlParser.TestRepository.Service.DapperExecutor.Extensions
         {
             try
             {
-                return (JsonWrapperAttribute)typeof(T).GetCustomAttributes(typeof(JsonWrapperAttribute), false)
+                return (JsonWrapperAttribute) typeof(T).GetCustomAttributes(typeof(JsonWrapperAttribute), false)
                     .FirstOrDefault();
             }
             catch (SystemException)
