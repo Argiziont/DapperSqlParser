@@ -37,7 +37,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_GetAllProducts
 	public class Sp_GetAllProductsOutput
@@ -87,7 +90,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_GetProductById
 	public class Sp_GetProductByIdOutput
@@ -144,7 +150,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_GetCategoryById
 	[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "10.4.4.0 (Newtonsoft.Json v13.0.0.0)")]
@@ -187,7 +196,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_InsertProduct
 
@@ -234,7 +246,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_InsertCategory
 
@@ -267,7 +282,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_UpdateProductTitleById
 
@@ -299,7 +317,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_UpdateCategoryNameById
 
@@ -332,7 +353,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_DeleteCategoryById
 
@@ -362,7 +386,10 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
 
 	#region Sp_DeleteProductById
 
@@ -391,5 +418,9 @@ namespace DapperSqlParser.TestRepository.Service.GeneratedClientFile
 
 	}
 
+
 	#endregion
+
+
+
 }
