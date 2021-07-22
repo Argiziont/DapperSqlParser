@@ -165,7 +165,7 @@ namespace DapperSqlParser.Tests
                                     "\r\n";
 
             //Act
-            await storedProcedureParseBuilder.AppendExtractedCsSharpCode(storedProcedureParameters);
+            await storedProcedureParseBuilder.AppendStoredProcedureExtractedCode(storedProcedureParameters);
 
             //Assert
             Assert.Equal(expected, stringBuilder.ToString());
@@ -184,7 +184,7 @@ namespace DapperSqlParser.Tests
 
             //Assert & Act
             await Assert.ThrowsAsync<ArgumentNullException>(async () =>
-                await storedProcedureParseBuilder.AppendExtractedCsSharpCode(storedProcedureParameters));
+                await storedProcedureParseBuilder.AppendStoredProcedureExtractedCode(storedProcedureParameters));
         }
     }
 }

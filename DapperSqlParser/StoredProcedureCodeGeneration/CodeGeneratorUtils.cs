@@ -14,8 +14,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine(
-                $"{Environment.NewLine}{TextLevel.FirstLevel}{SpecialKeyWord.Region} {regionName}");
+            stringBuilder.AppendLine($"{Environment.NewLine}{TextLevel.FirstLevel}{SpecialKeyWord.Region} {regionName}");
             stringBuilder.AppendLine($"{regionDefinition}");
             stringBuilder.AppendLine($"{TextLevel.FirstLevel}{SpecialKeyWord.Endregion}");
 
@@ -46,7 +45,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             return $"//Model for {storedProcedureName} was not found, could not parse this Stored Procedure!";
         }
 
-        public static async Task<string> CreateCsSharpClassFromJsonSchema(string jsonSchemaFromSp)
+        public static async Task<string> CreateClassFromJsonSchema(string jsonSchemaFromSp)
         {
             const string trimStart = "#pragma warning disable // Disable all warnings"; //Not necessary warning disable
 
@@ -149,9 +148,9 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
         {
             StringBuilder stringBuilder = new StringBuilder();
 
-            stringBuilder.AppendLine(
+            /*Append method name*/stringBuilder.AppendLine(
                 $"{TextLevel.SecondLevel}{AccessModifier.Public} System.Threading.Tasks.Task{(outputParameter != null ? $"<System.Collections.Generic.IEnumerable<{storedProcedureName}Output>>" : " ")}Execute({(inputParameter != null ? $"{storedProcedureName}Input request" : "")} ){{");
-            stringBuilder.AppendLine(
+            /*Append method body*/stringBuilder.AppendLine(
                 $"{TextLevel.ThirdLevel}return _dapperExecutor.{(isReturnTypeJson ? "ExecuteJsonAsync" : "ExecuteAsync")}(\"{storedProcedureName}\"{(inputParameter != null ? ", request" : "")});");
             stringBuilder.AppendLine($"{TextLevel.SecondLevel}}}");
 

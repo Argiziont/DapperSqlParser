@@ -4,15 +4,10 @@ using DapperSqlParser.Models;
 
 namespace DapperSqlParser.StoredProcedureCodeGeneration.Interfaces
 {
-    public interface IStoredProcedureParseBuilder : IStoredProcedureStringBuilder
+    public interface IStoredProcedureParseBuilder
     {
-        public Task AppendExtractedCsSharpCode(StoredProcedureParameters storedProcedureParameters);
+        public Task AppendStoredProcedureExtractedCode(StoredProcedureParameters storedProcedureParameters);
         public Task AppendStoredProcedureCantParseMessage(StoredProcedureInfo storedProcedureInfo);
         public Task AppendStoredProcedureNotFoundMessage(StoredProcedureInfo storedProcedureInfo);
-    }
-
-    public interface IStoredProcedureStringBuilder
-    {
-        public void SetStringBuilder(StringBuilder stringBuilder);
     }
 }

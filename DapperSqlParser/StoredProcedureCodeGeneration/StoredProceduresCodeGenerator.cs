@@ -39,7 +39,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                         continue;
                     }
 
-                    await storedProcedureParseBuilder.AppendExtractedCsSharpCode(spParameter);
+                    await storedProcedureParseBuilder.AppendStoredProcedureExtractedCode(spParameter);
 
                     //await Task.Delay(200); //Await 200ms for progress bar testing, could be deleted if not needed
                 }
@@ -55,7 +55,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             return await Task.FromResult(generatedCode);
         }
 
-        private void ReportAboutStoredProcedureParsingProgress(IList<StoredProcedureParameters> parameters,
+        private static void ReportAboutStoredProcedureParsingProgress(IList<StoredProcedureParameters> parameters,
             IProgress<StoreProcedureGenerationProgress> progress,
             StoredProcedureParameters spParameter)
         {

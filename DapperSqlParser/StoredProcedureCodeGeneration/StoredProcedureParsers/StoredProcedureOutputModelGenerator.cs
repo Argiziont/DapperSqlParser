@@ -68,7 +68,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration.StoredProcedureParsers
 
             string jsonSchema = storedProcedureDefinition.Substring(jsonSchemaStartIndex, jsonSchemaEndIndex);
 
-            return await CodeGeneratorUtils.CreateCsSharpClassFromJsonSchema(jsonSchema);
+            return await CodeGeneratorUtils.CreateClassFromJsonSchema(jsonSchema);
         }
 
         private static bool CheckStringForOutputJsonSnippets(string jsonParameterName)

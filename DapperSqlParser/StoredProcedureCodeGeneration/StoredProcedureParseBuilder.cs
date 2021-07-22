@@ -18,11 +18,6 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
                 internalStringBuilder ?? throw new ArgumentNullException(nameof(internalStringBuilder));
         }
 
-        public void SetStringBuilder(StringBuilder stringBuilder)
-        {
-            _internalStringBuilder = stringBuilder ?? throw new ArgumentNullException(nameof(stringBuilder));
-        }
-
         public async Task AppendStoredProcedureCantParseMessage(StoredProcedureInfo storedProcedureInfo)
         {
             if (storedProcedureInfo == null) throw new ArgumentNullException(nameof(storedProcedureInfo));
@@ -48,7 +43,7 @@ namespace DapperSqlParser.StoredProcedureCodeGeneration
             _internalStringBuilder.AppendLine(await storedProcedureRegionGenerator.GenerateAsync());
         }
 
-        public async Task AppendExtractedCsSharpCode(StoredProcedureParameters storedProcedureParameters)
+        public async Task AppendStoredProcedureExtractedCode(StoredProcedureParameters storedProcedureParameters)
         {
             if (storedProcedureParameters == null)
                 throw new ArgumentNullException(nameof(storedProcedureParameters));
