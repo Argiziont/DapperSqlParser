@@ -1,8 +1,11 @@
 using AutoMapper;
+using DapperSqlParser.TestRepository.GraphQlServices;
+using DapperSqlParser.TestRepository.GraphQlServices.PlaygroundService;
 using DapperSqlParser.TestRepository.Service.Automapping_Profiles;
 using DapperSqlParser.TestRepository.Service.DapperExecutor;
 using DapperSqlParser.TestRepository.Service.Repositories;
 using DapperSqlParser.TestRepository.Service.Repositories.Interfaces;
+using HotChocolate.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +20,7 @@ namespace DapperSqlParser.TestRepository
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            services.AddGraphQL();
             //AutoMapper
             MapperConfiguration mapperConfig = new MapperConfiguration(mc =>
             {
@@ -32,6 +35,15 @@ namespace DapperSqlParser.TestRepository
             services.AddTransient<IDapperExecutorFactory, DapperExecutorFactory>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
+
+            services.AddHttpClient<CategoriesClient>();
+            services.AddHttpClient<ProductsClient>();
+            services
+                .AddRouting()
+                .AddGraphQLServer()
+                //.AddDefaultTransactionScopeHandler()
+                .AddQueryType<QueryService>()
+                .AddMutationType<MutationService>();
 
             // Register the Swagger services
             services.AddSwaggerDocument();
@@ -51,7 +63,14 @@ namespace DapperSqlParser.TestRepository
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                endpoints.MapGraphQL().WithOptions(new GraphQLServerOptions
+                {
+                    AllowedGetOperations = AllowedGetOperations.QueryAndMutation
+                });
+            });
         }
     }
 }
